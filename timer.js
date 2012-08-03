@@ -6,7 +6,6 @@
  {
     mins=5;
     secs=0;
-	totalSecs = 0;
     StopTimer();
     StartTimer();
  }
@@ -16,7 +15,6 @@
     if(TimerRunning)
        clearInterval(TimerID);
     TimerRunning=false;
-	alert(totalSecs);
  }
  
  function loopTimer() {
@@ -33,7 +31,6 @@
        secs=60;
     }
     secs--;
-	totalSecs++;
  
 	 
  }
