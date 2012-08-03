@@ -60,6 +60,7 @@
 <head>
 	<title>Typing Test Alpha 0.0.1</title>
 	<script type="text/javascript" src="timer.js"></script>
+    <script type="text/javascript" src="canvas.js"></script>
     <script type="text/javascript" src="checker.js"></script>
     <script type="text/javascript" src="copyPaste.js"></script>
     <script type="text/javascript">
@@ -132,6 +133,11 @@
                  <input type="submit" name="done" id="done" value="Done" />
           <?}?>
       </form>
+    </div>
+    <div id="canvasDiv">
+				<div>terrible:<input type="text" id="terribleWPM" value="10"/>  expected:<input type="text" id="expectedWPM" value="30"/>  awesome:<input type="text" id="awesomeWPM" value="50"/>  </div>
+                WPM:<input type="text" id="testWPM" value="30"/><br /><input type="button" value="finish" id="fButton" />
+    	<canvas id="canvas" style="border:thick; border-style:solid"></canvas>
     </div>
 </body>
 </html>
