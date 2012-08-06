@@ -169,7 +169,7 @@ $was_start=0;
 
 ?>
 <hr />
-<div class="ac">
+<div class="ac"><?php echo $total_time; ?>
 	<form method='post' action="original.php">
     	Your Name: <input class="in" style="width:200px" type="text" name="name" value="<?=$name?>" />
         max. 25 chars)
@@ -179,26 +179,118 @@ $was_start=0;
             	<?if($num_type==0){?>
                 	selected="selected"<?}?>>
                 	100-200 chars
-                </option>
-                <option value="1" <?if($num_type==1){?>selected="selected"<?}?>>200-300 chars</option> <option value="2" <?if($num_type==2){?>selected="selected"<?}?>>300-400 chars</option> <option value="3" <?if($num_type==3){?>selected="selected"<?}?>>400-500 chars</option></select> # <select name="num" style="width:35px"> <option value="0" <?if($num==0){?>selected="selected"<?}?>>1</option> <option value="1" <?if($num==1){?>selected="selected"<?}?>>2</option> <option value="2" <?if($num==2){?>selected="selected"<?}?>>3</option> <option value="3" <?if($num==3){?>selected="selected"<?}?>>4</option> <option value="4" <?if($num==4){?>selected="selected"<?}?>>5</option>
-<option value="5" <?if($num==5){?>selected="selected"<?}?>>6</option> <option value="6" <?if($num==6){?>selected="selected"<?}?>>7</option> <option value="7" <?if($num==7){?>selected="selected"<?}?>>8</option> <option value="8" <?if($num==8){?>selected="selected"<?}?>>9</option></select> <input type="submit" name="update" value="Update Text" /> <br /><br /><?if(isset($_POST["done"])){?> <input class="in" type="submit" name="start" value="To Repeat Test" /><br /><table class="ta" cellspacing="0" cellpadding="6"><tr><th class="th" style="width: 50%">Parameter</th><th class="th" style="width: 50%">Your result</th></tr><tr> <td class="td"><b>WPM</b> (word per minutes)</td> <td class="td"><b><?=$wpm?></b></td></tr><tr> <td class="td"><b>CPM</b> (char per minutes)</td> <td class="td"><b><?=$cpm?></b></td></tr><tr> <td class="td"><b>Accuracy</b> (%)</td> <td class="td"><b><?=$accuracy?></b></td></tr></table>
-<?}else{?>
-	<textarea id="area1" onselectstart="return false" onpaste="return false" style="-moz-user-select: none;-khtml-user-select: none; user-select: none;" readonly="readonly" rows="5" cols="72"><?=$les_text?>
-	</textarea>
-	<br />
-	<input class="in" type="submit" name="start" value="Start Test" />
-	<br />
-	<textarea <?=$style_text.$readonly?> rows="5" cols="72" name="user_text"><?=$welcome?>
-    </textarea>
-    <br /> 
-    <input type="submit" name="done" value="Done" />
-    <?}?>
-     	<input type="hidden" name="was_start" value="<?=$was_start?>" />
-      	<input type="hidden" name="vnum" value="<?=$num?>" />
-       	<input type="hidden" name="vnumtype" value="<?=$num_type?>" />
-        <input type="hidden" name="vstart" value="<?=$time_start?>" />
+             </option>
+             <option value="1" 
+             	<?if($num_type==1){?>
+                selected="selected"<?}?>>
+                200-300 chars
+             </option> 
+             <option value="2" 
+             	<?if($num_type==2){?>
+                selected="selected"<?}?>>
+                300-400 chars
+             </option>
+             <option value="3"
+             	<?if($num_type==3){?>
+             	selected="selected"<?}?>>
+                400-500 chars
+             </option>
+             </select> 
+             # <select name="num" style="width:35px"> 
+             <option value="0" 
+             	<?if($num==0){?>
+                selected="selected"<?}?>>
+                1
+             </option>
+             <option value="1" 
+             	<?if($num==1){?>
+                selected="selected"<?}?>>
+                2
+             </option> 
+             <option value="2" 
+             	<?if($num==2){?>
+                selected="selected"<?}?>>
+                3
+             </option>
+             <option value="3" 
+             	<?if($num==3){?>
+                selected="selected"<?}?>>
+                4
+             </option>
+             <option value="4"
+                  <?if($num==4){?>
+                  selected="selected"<?}?>>
+                  5
+             </option>
+             <option value="5" 
+                  <?if($num==5){?>
+                  selected="selected"<?}?>>
+                  6
+             </option> 
+             <option value="6" 
+                  <?if($num==6){?>
+                  selected="selected"<?}?>>
+                  7
+             </option> 
+             <option value="7" 
+                  <?if($num==7){?>
+                  selected="selected"<?}?>>
+                  8
+             </option> 
+             <option value="8" 
+                  <?if($num==8){?>
+                  selected="selected"<?}?>>
+                  9
+              </option>
+              </select> 
+              <input type="submit" name="update" value="Update Text" /> 
+              <br />
+              <br />
+              <?if(isset($_POST["done"])){?> 
+			  		<?php echo $total_time?>
+              		<input class="in" type="submit" name="start" value="To Repeat Test" />
+                    <br />
+                    <table class="ta" cellspacing="0" cellpadding="6">
+                    	<tr>
+                    		<th class="th" style="width: 50%">Parameter
+                            </th>
+                            <th class="th" style="width: 50%">Your result
+                            </th>
+                        </tr>
+                        <tr> 
+                        	<td class="td"><b>WPM</b> (word per minutes)
+                            </td>
+                            <td class="td"><b><?=$wpm?></b>
+                            </td>
+                        </tr>
+                        <tr> 
+                        	<td class="td"><b>CPM</b> (char per minutes)
+                            </td> 
+                            <td class="td"><b><?=$cpm?></b>
+                            </td>
+                        </tr>
+                        <tr> 
+                        	<td class="td"><b>Accuracy</b> (%)
+                            </td>
+                            <td class="td"><b><?=$accuracy?></b>
+                            </td>
+                        </tr>
+                   </table>
+		<?}else{?>
+			<textarea id="area1" onselectstart="return false" onpaste="return false" style="-moz-user-select: none;-khtml-user-select: none; user-select: none;" readonly="readonly" rows="5" cols="72"><?=$les_text?></textarea>
+			<br />
+			<input class="in" type="submit" name="start" value="Start Test" />
+			<br />
+			<textarea <?=$style_text.$readonly?> rows="5" cols="72" name="user_text"><?=$welcome?></textarea>
+    		<br /> 
+    		<input type="submit" name="done" value="Done" />
+    	<?}?>
+     		<input type="hidden" name="was_start" value="<?=$was_start?>" />
+      		<input type="hidden" name="vnum" value="<?=$num?>" />
+       		<input type="hidden" name="vnumtype" value="<?=$num_type?>" />
+        	<input type="hidden" name="vstart" value="<?=$time_start?>" />
         </form>
-        </div>
+    </div>
 <?
 $LT=file($_SERVER['DOCUMENT_ROOT']."/typingtest/last_typist.txt");
 echo"<hr /><h3>Latest</h3>";
