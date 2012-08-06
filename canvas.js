@@ -5,6 +5,8 @@ var window_Height, window_Width;
 
 var imageCount = 0;
 
+var startButton;
+
 var  startFinishImg, roadImg, playerCarImg, opponentCarImg;
 
 var startFinishImgPath = "Images/startFinish.png";
@@ -31,7 +33,7 @@ var WPMCount, tCount, eCount, aCount;
 var finishEl;
 var fadeCanvas = false, alpha = 1;
 
-function init () {
+function initGame () {
 	
 	startFinishImg = new Image();
 	eventRegistrar(startFinishImg,'load',onImage);
@@ -96,7 +98,9 @@ function setup () {
 	
 	finishEl = document.getElementById("fButton");
 	eventRegistrar(finishEl, 'click', setFinish);	
-		
+	
+	startButton = document.getElementById("vStart");
+	eventRegistrar(startButton, 'click', startRace);	
 		
 	eventRegistrar(WPM, 'change', setWPMVariable);
 		
@@ -186,7 +190,7 @@ function initDrawing () {
 *
 *************************************/
 function startRace () {
-	var startButton = document.getElementById("startButton");
+	
 	startButton.setAttribute('disabled','disabled');
 	
 	

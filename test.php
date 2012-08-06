@@ -59,13 +59,13 @@
 <html>
 <head>
 	<title>Typing Test Alpha 0.0.1</title>
+    <script type="text/javascript">
+	 var checkTimerStart = "insert code here";
+	</script>
 	<script type="text/javascript" src="timer.js"></script>
     <script type="text/javascript" src="canvas.js"></script>
     <script type="text/javascript" src="checker.js"></script>
     <script type="text/javascript" src="copyPaste.js"></script>
-    <script type="text/javascript">
-	var startClicked = <?PHP echo (isset($_POST['vstart']))?"true":"false"; ?>;
-	</script>
 	<script type="text/javascript"> 
 		var message="Sorry, right-click has been disabled"; 
 		function clickIE() {if (document.all) {(message);return false;}} 
@@ -78,7 +78,7 @@
 		document.oncontextmenu=new Function("return false") 
 	</script>    
 </head>
-<body onLoad="detectStart();">
+<body onLoad="">
 <div id="testDiv"></div>
     <div class="ac">
         <form method='post' action="test.php">
@@ -122,7 +122,7 @@
                 <textarea id="area1"  onkeydown="reutrn disableCtrlKeyCombination(event)" onKeyUp="return disableCtrlKeyCombination(event);" readonly rows="5" cols="72"><?=$les_text?>
                 </textarea>	
                 <br /> 
-                <input class="in" type="submit" name="vstart" value="Start Test"/>
+                <input class="in" type="submit" name="vstart" id="vStart" value="Start Test"/>
                 <br /> 
                 <object shape="rect" align="top" id="box" name="box"
                 </object>

@@ -41,9 +41,9 @@
 	 }
  function StartTimer()
  {
-	//alert(mins + "   " + secs);
     TimerRunning=true;
 	TheElement = document.getElementById("txt");
+	alert(TheElement);
     TimerID = window.setInterval("loopTimer();",1000);
  }
  
