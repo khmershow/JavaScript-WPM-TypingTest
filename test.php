@@ -93,33 +93,33 @@
                     </tr>
                     <tr> 
                         <td class="td"><b>Total Words</b> (#)</td> 
-                        <td class="td"><b><?=$totalWords?></b></td>
+                        <td class="td"><b><?PHP $totalWords?></b></td>
                   </tr>
                         <tr>
                         <td class="td"><b>GWPM</b> (gross word per minutes)</td>
-                        <td class="td"><b><?=$wpm?></b></td>
+                        <td class="td"><b><?PHP $wpm?></b></td>
                         </tr>
                         <tr> 
                         <td class="td"><b>Errors</b> (#)</td> 
-                        <td class="td"><b><?=$totalError?></b></td>
+                        <td class="td"><b><?PHP $totalError?></b></td>
                         </tr>
                         <tr>
                         <td class="td"><b>CWPM</b> (correct words per minutes)</td> 
-                        <td class="td"><b><?=$cpm?></b></td>
+                        <td class="td"><b><?PHP $cpm?></b></td>
                         </tr>
                   <tr>
                         <td class="td"><b>Accuracy</b> (%)</td> 
-                        <td class="td"><b><?=$accuracy?></b></td>
+                        <td class="td"><b><?PHP $accuracy?></b></td>
                         </tr>
                         
                     <tr></tr>
                       <td>&nbsp;</td>
           </table>
-              <?}else{?>
+              <?PHP }else{?>
             Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
             
           <br />
-                <textarea id="area1"  onkeydown="reutrn disableCtrlKeyCombination(event)" onKeyUp="return disableCtrlKeyCombination(event);" readonly rows="5" cols="72"><?=$les_text?>
+                <textarea id="area1"  onkeydown="reutrn disableCtrlKeyCombination(event)" onKeyUp="return disableCtrlKeyCombination(event);" readonly rows="5" cols="72"><?PHP $les_text?>
                 </textarea>	
                 <br /> 
                 <input class="in" type="submit" name="vstart" value="Start Test"/>
@@ -131,7 +131,7 @@
                 
           <br />  
                  <input type="submit" name="done" id="done" value="Done" />
-          <?}?>
+          <?PHP }?>
       </form>
     </div>
     <div id="canvasDiv">
