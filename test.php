@@ -1,3 +1,4 @@
+
 <?PHP
 	$error=0;
 	function GetError($str1,$str2){
@@ -23,7 +24,6 @@
 	$cor_text=file_get_contents( "typingtext/0/0.txt" );
 	$time_start=0;
 	$user_text="";
-	$style_text='id="area2"';
 	$start_time=0;
 	if(isset($_POST["startTime"])){
 		$start_time=$_POST["startTime"];
@@ -32,7 +32,6 @@
 		$time_start=microtime(true);
 		$readonly="";
 		$welcome="";
-		$style_text="id=\"area3\"";
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 	}
 	if(isset($_POST["done"])){
@@ -52,12 +51,18 @@
 ?>
 <html>
 <head>
-	<title>Typing Test Alpha 0.0.1</title>
-	<script type="text/javascript" src="timer.js"></script>
+	<title>Typing Test Alpha 0.0.1</title> 
+    <script type="text/javascript" src="timer.js"></script>
     <script type="text/javascript" src="checker.js"></script>
     <script type="text/javascript" src="copyPaste.js"></script>
     <script type="text/javascript" src="htmlOverlay.js"></script>
 	<script type="text/javascript"> 
+		var startClicked = <?PHP echo (isset($_POST['vstart']))?"true":"false"; ?>;
+		if (startClicked==true){
+			InitTimer();
+			textCorrect();
+		}
+		
 		var message="Sorry, right-click has been disabled"; 
 		function clickIE() {if (document.all) {(message);return false;}} 
 		function clickNS(e) {if 
@@ -67,10 +72,9 @@
 		{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
 		else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;} 
 		document.oncontextmenu=new Function("return false") 
-	</script>    
+	</script> 
 </head>
-<body onLoad="onLoadFunc();">
-<div id="testDiv"></div>
+<body onLoad="">
     <div class="ac">
         <form method='post' action="test.php">
         <br />	
@@ -106,9 +110,7 @@
                     <tr></tr>
                       <td>&nbsp;</td>
               </table>
-			 
-			  <?php echo $total_time;?><br />
-             
+			              
           <?PHP }else{?>
            	    Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
             	<br />
@@ -117,9 +119,8 @@
                 <br /> 
                 <input class="in" type="submit" name="vstart" id="vStart" value="Start Test"/>
                 <br /> 
-                <textarea <?PHP echo $style_text.$readonly; ?> id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value)"  rows="5" cols="72" name="user_text"><?PHP echo $welcome; ?></textarea>
-                <div style="position: absolute; z-index:1; left: 10px; top: 10px; width:200px; height:100px;">
-       				abcd
+                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value)" onFocus="this.blur()" rows="5" cols="72" name="user_text" <?PHP echo $style_text.$readonly; ?>><?PHP echo $welcome; ?></textarea>
+                <div id="textCorrection" style="position: absolute; z-index:1; left: 10px; top: 10px; width:200px; height:100px;">
     			</div>
                 <br />  
                 <input type="submit" name="done" id="done" value="Done" />
@@ -129,3 +130,4 @@
     </div>
 </body>
 </html>
+ 

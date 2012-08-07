@@ -56,7 +56,8 @@ function diffString1( o, n ) {
     }
   }
   
-  document.getElementById("testDiv").innerHTML = str;
+	var test = document.getElementById("textCorrection");
+	test.innerHTML = str;
 }
 
 function diff( o, n ) {
