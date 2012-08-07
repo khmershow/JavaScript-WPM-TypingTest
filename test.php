@@ -1,12 +1,4 @@
 <?PHP
-	function _Cmp($a,$b){
-		$line1=explode("|",$a);
-		$line2=explode("|",$b);
-		if ($line1[5] ==$line2[5])
-		return 0;
-		return ($line1[5] >$line2[5]) ? -1 : 1;
-	}
-	
 	$error=0;
 	function GetError($str1,$str2){
 		$error=0;
@@ -33,7 +25,9 @@
 	$user_text="";
 	$style_text='id="area2"';
 	$start_time=0;
-
+	if(isset($_POST["startTime"])){
+		$start_time=$_POST["startTime"];
+	}
 	if(isset($_POST["vstart"])){
 		$time_start=microtime(true);
 		$readonly="";
@@ -45,11 +39,11 @@
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 		$user_text=str_replace("\r\n","",$_POST["user_text"]); 
 		$user_text=str_replace("\n","",$user_text);
-		/*$total_time=microtime(true)-$time_start;*/
+		$total_time=microtime(true)-$start_time;
 		$char=strlen($les_text);
 		$word=substr_count($les_text,' ') + 1;
-		/*$wpm=round(($char/5)/($total_time / 60));
-		$cpm=round((($char/5)-$totalError)/($total_time / 60));*/
+		$wpm=round(($char/5)/($total_time / 60));
+		$cpm=round((($char/5)-$totalError)/($total_time / 60));
 		$totalError = (GetError($les_text,$user_text));
 		$totalWords = ($word);
 		$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
@@ -62,6 +56,7 @@
 	<script type="text/javascript" src="timer.js"></script>
     <script type="text/javascript" src="checker.js"></script>
     <script type="text/javascript" src="copyPaste.js"></script>
+    <script type="text/javascript" src="htmlOverlay.js"></script>
 	<script type="text/javascript"> 
 		var message="Sorry, right-click has been disabled"; 
 		function clickIE() {if (document.all) {(message);return false;}} 
@@ -111,26 +106,25 @@
                     <tr></tr>
                       <td>&nbsp;</td>
               </table>
-			  <?php echo $total_time?>
+			 
+			  <?php echo $total_time;?><br />
+             
           <?PHP }else{?>
-          		<?php echo (isset($_POST['vstart']))?"true":"false";?>
-            	Time remaining:<input id="txt" readonly type="text" value="5:00" border="0" name="disp">
+           	    Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
             	<br />
                 <textarea id="area1"  onkeydown="reutrn disableCtrlKeyCombination(event)" onKeyUp="return disableCtrlKeyCombination(event);" readonly rows="5" cols="72"><?PHP echo $les_text?>
                 </textarea>	
                 <br /> 
                 <input class="in" type="submit" name="vstart" id="vStart" value="Start Test"/>
                 <br /> 
-                <object shape="rect" align="top" id="box" name="box"
-                </object>
                 <textarea <?PHP echo $style_text.$readonly; ?> id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value)"  rows="5" cols="72" name="user_text"><?PHP echo $welcome; ?></textarea>
+                <div style="position: absolute; z-index:1; left: 10px; top: 10px; width:200px; height:100px;">
+       				abcd
+    			</div>
                 <br />  
                 <input type="submit" name="done" id="done" value="Done" />
-                <?php echo (isset($_POST['done']))?"true":"false";?>
-                <script type="text/javascript">
-				<?PHP $total_time?> = secDiff;
-				</script>
-          <?PHP }?>
+                <input type="hidden" name="startTime" value="<?PHP echo $time_start ?>" />
+           <?PHP }?>
       </form>
     </div>
 </body>

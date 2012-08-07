@@ -20,7 +20,7 @@ function StopTimer()
 	//alert("stop time" + stopTime);
 	//alert("stoptime:"+ typeof stopTime);
 	secCount= secCount*1;
-	alert(typeof secCount + "   " + secCount);
+	//alert(typeof secCount + "   " + secCount);
  }
 function loopTimer() {
 
