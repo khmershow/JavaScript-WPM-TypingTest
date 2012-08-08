@@ -9,23 +9,23 @@ function textCorrect(){
 function adjustPosition(){
 	//typingTextArea = document.getElementById("userText");
 	
-	alert( document.getElementById("userText").width);
+	alert( document.getElementById('userText').width);
 	//get the width
-	areaWidth = document.getElementById("userText").width;
-	areaHeight = document.getElementById("userText").height;
+	areaWidth = document.getElementById('userText').width;
+	areaHeight = document.getElementById('userText').height;
 	
 	//get the position
 	
-	areaX = getElementById("userText").offsetWidth;
-	areaY = getElementById("userText").offsetHeight;
+	areaX = getElementById('userText').offsetWidth;
+	areaY = getElementById('userText').offsetHeight;
 	
 	//set overLay div to position and width
 	
 	//alert(areaWidth + "  " + areaHeight + "  " + areaX + "  " + areaY);
 }
 function moveText(){
-	document.getElementById("textCorrection").width= areaWidth;
-	document.getElementById("textCorrection").height= areaHeight;
-	document.getElementById("textCorrection").offsetHeight= areaY;
-	document.getElementById("textCorrection").offsetWidth= areaX;
+	document.getElementById('textCorrection').width= areaWidth;
+	document.getElementById('textCorrection').height= areaHeight;
+	document.getElementById('textCorrection').offsetHeight= areaY;
+	document.getElementById('textCorrection').offsetWidth= areaX;
 }
