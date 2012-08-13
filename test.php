@@ -78,7 +78,7 @@
     <div class="ac">
         <form method='post' action="test.php">
         <br />	
-        
+        	
              <?php if(isset($_POST["done"])){ ?> 
           						
                 <table width="449" cellpadding="6" cellspacing="0" class="ta">
@@ -119,7 +119,7 @@
                 <br /> 
                 <input class="in" type="submit" name="vstart" id="vStart" value="Start Test"/>
                 <br /> 
-                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value)"  rows="5" cols="72" name="user_text" <?PHP echo $style_text.$readonly; ?>><?PHP echo $welcome; ?></textarea>
+                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value)"  rows="5" cols="72" name="user_text" ><?PHP echo $welcome; ?></textarea>
                 <div id="textCorrection" style="position: absolute; z-index:1; left: 10px; top: 10px; width:200px; height:100px;">
     			</div>
                 <br />  
