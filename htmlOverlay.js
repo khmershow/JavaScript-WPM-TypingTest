@@ -16,8 +16,8 @@ function adjustPosition(){
 	
 	//get the position
 	
-	areaX = getElementById('userText').offsetWidth;
-	areaY = getElementById('userText').offsetHeight;
+	areaX = document.getElementById('userText').offsetWidth;
+	areaY = document.getElementById('userText').offsetHeight;
 	
 	//set overLay div to position and width
 	

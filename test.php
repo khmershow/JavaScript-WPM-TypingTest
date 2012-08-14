@@ -114,12 +114,11 @@
           <?PHP }else{?>
            	    Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
             	<br />
-                <textarea id="area1"  onkeydown="reutrn disableCtrlKeyCombination(event)" onKeyUp="return disableCtrlKeyCombination(event);" readonly rows="5" cols="72"><?PHP echo $les_text?>
-                </textarea>	
+                <textarea id="area1"  onkeydown="return disableCtrlKeyCombination(event);" onKeyUp="return disableCtrlKeyCombination(event);" readonly rows="5" cols="72"><?PHP echo $les_text?></textarea>	
                 <br /> 
                 <input class="in" type="submit" name="vstart" id="vStart" value="Start Test"/>
                 <br /> 
-                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value)"  rows="5" cols="72" name="user_text" ><?PHP echo $welcome; ?></textarea>
+                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);"  rows="5" cols="72" name="user_text" ><?PHP echo $welcome; ?></textarea>
                 <div id="textCorrection" style="position: absolute; z-index:1; left: 10px; top: 10px; width:200px; height:100px;">
     			</div>
                 <br />  
