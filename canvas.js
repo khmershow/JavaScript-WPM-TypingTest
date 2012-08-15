@@ -160,7 +160,7 @@ function eventRegistrar(element, eventType, handlerFunction) {
 function setCanvas () { 
 	var typingDivHeight;
 
-	typingDivHeight = document.getElementById("typingDiv").offsetHeight;
+	//typingDivHeight = document.getElementById("typingDiv").offsetHeight;
 			
 	canvas = document.getElementById("canvas");
 	ctx = canvas.getContext('2d');

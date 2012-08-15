@@ -1,4 +1,4 @@
-<?PHP
+ <?PHP
 	function _Cmp($a,$b){
 		$line1=explode("|",$a);
 		$line2=explode("|",$b);
@@ -78,7 +78,7 @@
 		document.oncontextmenu=new Function("return false") 
 	</script>    
 </head>
-<body onLoad="">
+<body onLoad="initGame()">
 <div id="testDiv"></div>
     <div class="ac">
         <form method='post' action="test.php">
@@ -136,7 +136,7 @@
     </div>
     <div id="canvasDiv">
 				<div>terrible:<input type="text" id="terribleWPM" value="10"/>  expected:<input type="text" id="expectedWPM" value="30"/>  awesome:<input type="text" id="awesomeWPM" value="50"/>  </div>
-                WPM:<input type="text" id="testWPM" value="30"/><br /><input type="button" value="finish" id="fButton" />
+                WPM:<input type="text" id="testWPM" value="30"/><br /><input type="button" value="finish" id="fButton" /><br>
     	<canvas id="canvas" style="border:thick; border-style:solid"></canvas>
     </div>
 </body>
