@@ -71,7 +71,6 @@
     <script type="text/javascript" src="copyPaste.js"></script>
     <script type="text/javascript" src="htmlOverlay.js"></script>
     <script type="text/javascript" src="canvas.js"></script>
-    <script type="text/javascript" src="realTimeWPMFinder.js"></script>
 	<script type="text/javascript"> 
 		var startClicked = <?PHP echo (isset($_POST['vstart']))?"true":"false"; ?>;
 		if (startClicked==true){
@@ -146,7 +145,7 @@
                     expected:<input type="text" id="expectedWPM" value="30"/>  
                     awesome:<input type="text" id="awesomeWPM" value="50"/>  
               		</div>
-               WPM:<input type="text" id="testWPM" value=<?PHP echo $wpm ?>/>
+               WPM:<input type="text" id="testWPM" value="">
                <br />
                <input type="button" value="finish" id="fButton" />
 			   <canvas id="canvas" style="border:thick; border-style:solid"></canvas>

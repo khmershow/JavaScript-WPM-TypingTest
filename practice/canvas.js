@@ -1,4 +1,6 @@
 // JavaScript Document
+var numberOfCInWord = 5;
+
 
 var canvas, ctx;
 var window_Height, window_Width;
@@ -32,25 +34,26 @@ var WPMCount, tCount, eCount, aCount;
 /******testing******/
 var finishEl;
 var fadeCanvas = false, alpha = 1;
+var textArea = "", cCount = 0, elapsedTime = 0, timeInterval;
 
 function initGame () {
-	
+
 	startFinishImg = new Image();
 	eventRegistrar(startFinishImg,'load',onImage);
 	startFinishImg.src = startFinishImgPath;
-	
+
 	roadImg = new Image();
 	eventRegistrar(roadImg, 'load',onImage,false);
 	roadImg.src = roadImgPath;
-	
+
 	playerCarImg = new Image();
 	eventRegistrar(playerCarImg, 'load',onImage);
 	playerCarImg.src = playerCarPath;
-	
+
 	opponentCarImg = new Image();
 	opponentCarImg.src = oppenentCarPath;
 	eventRegistrar(opponentCarImg, 'load',onImage);
-	
+
 }
 
 /********************************
@@ -75,35 +78,33 @@ function onImage () {
 ********************************/
 function setup () {
 	var size;
-	
+
 	size = get_window_size();
-	
+
 	window_Height = size[0];
 	window_Width = size[1];
-	
+
 	roadImgRatio = roadImg.height/roadImg.width;
 	carImgRatio = playerCarImg.width/playerCarImg.height;
-	
+
 	tInput = document.getElementById("terribleWPM");
 	tCount = 1 * tInput.value;
-	
+
 	eInput = document.getElementById("expectedWPM");
 	eCount = 1 * eInput.value;
-	
+
 	aInput = document.getElementById("awesomeWPM");
 	aCount = 1 * aInput.value;
-	
+
 	WPM = document.getElementById("testWPM");
 	WPMCount = 1 * WPM.value;
-	
+
 	finishEl = document.getElementById("fButton");
 	eventRegistrar(finishEl, 'click', setFinish);	
-	
+
 	startButton = document.getElementById("vStart");
 	eventRegistrar(startButton, 'click', startRace);	
-		
-	eventRegistrar(WPM, 'change', setWPMVariable);
-		
+
 	setCanvas();
 	initDrawing();
 }
@@ -118,9 +119,11 @@ function setFinish(e){
 *attached via a listener to WPM. Whenever the WPM changes, the javascript value is updated
 *
 *************************************/
-function setWPMVariable(e) {
-		var theEl = getTarget(e);
-		WPMCount = 1 * theEl.value;	
+function setWPMVariable() {
+	elapsedTime += .1;
+	cCount = textArea.value.length;
+	WPMCount = (cCount/numberOfCInWord)/ (elapsedTime/60);
+	WPM.value = WPMCount;	
 }
 
 /*************************************
@@ -129,7 +132,7 @@ function setWPMVariable(e) {
 *
 *************************************/
 function getTarget(e){
-	
+
 	var targetElement;
 	if (!e) var e = window.event;
 	if (e.target) targetElement = e.target;
@@ -161,7 +164,7 @@ function setCanvas () {
 	var typingDivHeight;
 
 	//typingDivHeight = document.getElementById("typingDiv").offsetHeight;
-			
+
 	canvas = document.getElementById("canvas");
 	ctx = canvas.getContext('2d');
 
@@ -169,7 +172,7 @@ function setCanvas () {
 		canvas.width = 1000;
 	else
 		canvas.width = window_Width*.95;
-	
+
 	canvas.height = canvas.width * roadImgRatio;
 }
 
@@ -190,13 +193,18 @@ function initDrawing () {
 *
 *************************************/
 function startRace () {
+
+	textArea = document.getElementById("userText");
+	textArea.value = "";
+	cCount = textArea.value.length;
 	
 	startButton.setAttribute('disabled','disabled');
-	
-	
-	roadTimer = window.setInterval("moveRoad()", 16);
-	carTimer = window.setInterval("moveCar()", 16);
+
+	timeInterval = setInterval("setWPMVariable()",100);
+	roadTimer = setInterval("moveRoad()", 16);
+	carTimer = setInterval("moveCar()", 16);
 }
+
 
 /*************************************
 *
@@ -208,9 +216,9 @@ function startRace () {
 *************************************/
 function moveRoad () {
 	var roadWidthRatio = startFinishImg.width/canvas.width;
-	
+
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	
+
 	if(roadOffset < canvas.width){
 		if(startingLine)
 			roadOffset *= 1.02;
@@ -223,12 +231,12 @@ function moveRoad () {
 			enterFinish1 =true;
 	}
 
-	
+
 	if(startingLine){
 		ctx.drawImage(startFinishImg, roadOffset * roadWidthRatio, 0, startFinishImg.width - roadOffset*roadWidthRatio, startFinishImg.height, 0, 0, canvas.width - roadOffset, canvas.height);
 		ctx.drawImage(roadImg, 0, 0, roadOffset * roadWidthRatio, startFinishImg.height, canvas.width - roadOffset, 0, roadOffset, canvas.height);
 	}else if(enterFinish1){
-		
+
 		ctx.drawImage(roadImg, roadOffset * roadWidthRatio, 0, startFinishImg.width - roadOffset*roadWidthRatio, startFinishImg.height, 0, 0, canvas.width - roadOffset, canvas.height);
 		ctx.drawImage(startFinishImg, 0, 0, roadOffset * roadWidthRatio, startFinishImg.height, canvas.width - roadOffset, 0, roadOffset, canvas.height);
 		if(roadOffset  >= canvas.width){
@@ -261,7 +269,7 @@ function moveRoad () {
 function endOfGame() {
 	clearInterval(roadTimer);
 	clearInterval(carTimer);
-	
+
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.globalAlpha = 1;
 	ctx.font        = "normal 36px Arial";
@@ -277,6 +285,7 @@ function endOfGame() {
 *
 *************************************/
 function moveCar () {
+	
 	var roadWidthRatio = playerCarImg.width/canvas.width;
 	var playerPosition = carOffset;
 	var opponentPosition = oppOffset;
@@ -291,34 +300,38 @@ function moveCar () {
 		opponentRand *= -1;
 		switchRand = false;
 	}
-	
+
 	/*****stops the cars at half the canvas*****/
 	if(carOffset >(canvas.width*.5 - (canvas.height *.25 * carImgRatio))){
 		moveStart= false;
 	}
-	
-	if(moveStart)
-	
+
+	if(moveStart){
+
 		/*****creates acceleration*****/
-		
+
 		oppOffset = carOffset *= 1.015;
-	else{
-		
+	}else{
+
 		/*****movement backward and forward based on updated WPMCount*****/
-		
+
 		if(WPMCount >= tCount && WPMCount <= aCount)
 			destination = canvas.width - ((WPMCount-tCount)/(aCount-tCount))*canvas.width - (canvas.height *.25 * carImgRatio);
 		else if(WPMCount < tCount)
 			destination = canvas.width - (canvas.height *.25 * carImgRatio);
 		else if (WPMCount > aCount)
 			destination = (-1*(canvas.height *.25 * carImgRatio));
-		
+
 		if(destination > oppOffset)
 			oppOffset++;
 		else if(destination < oppOffset)
 			oppOffset--;
 	}
 	
+	ctx.drawImage(opponentCarImg, oppOffset, canvas.height * .25 + opponentRand, canvas.height * .5 * carImgRatio, canvas.height*.5);
+	ctx.drawImage(playerCarImg, carOffset, canvas.height * .35 + playerRand, canvas.height * .5 * carImgRatio, canvas.height*.5);
+	
+
 }
 
 /***** 
