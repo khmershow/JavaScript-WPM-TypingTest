@@ -91,7 +91,7 @@
 		document.oncontextmenu=new Function("return false") 
 	</script> 
 </head>
-<body onLoad="">
+<body onLoad="initGame();">
     <div class="ac">
         <form method='post' action="practiceTest.php">
         <br />	
