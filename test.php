@@ -59,9 +59,6 @@
 <html>
 <head>
 	<title>Typing Test Alpha 0.0.1</title>
-    <script type="text/javascript">
-	 var checkTimerStart = "insert code here";
-	</script>
 	<script type="text/javascript" src="timer.js"></script>
     <script type="text/javascript" src="canvas.js"></script>
     <script type="text/javascript" src="checker.js"></script>
@@ -76,7 +73,10 @@
 		{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
 		else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;} 
 		document.oncontextmenu=new Function("return false") 
-	</script>    
+	</script>   
+	<script type="text/javascript">	
+		var startClicked = <?PHP echo (isset($_POST['vstart']))?"true":"false"; ?>;
+	</script> 
 </head>
 <body onLoad="initGame()">
 <div id="testDiv"></div>
