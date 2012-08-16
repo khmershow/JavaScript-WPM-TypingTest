@@ -194,8 +194,8 @@ function startRace () {
 	startButton.setAttribute('disabled','disabled');
 	
 	
-	roadTimer = setInterval("moveRoad()", 16);
-	carTimer = setInterval("moveCar()", 16);
+	roadTimer = window.setInterval("moveRoad()", 16);
+	carTimer = window.setInterval("moveCar()", 16);
 }
 
 /*************************************
@@ -281,7 +281,7 @@ function moveCar () {
 	var playerPosition = carOffset;
 	var opponentPosition = oppOffset;
 	
-	/*****this is what does the up and down "rumble"*****/
+	/*****this is what does the up and down creating the "rumble"*****/
 	if(!switchRand){
 		playerRand = -Math.floor(Math.random()+1);
 		opponentRand = Math.floor(Math.random()+1);
@@ -292,6 +292,7 @@ function moveCar () {
 		switchRand = false;
 	}
 	
+	/*****stops the cars at half the canvas*****/
 	if(carOffset >(canvas.width*.5 - (canvas.height *.25 * carImgRatio))){
 		moveStart= false;
 	}
@@ -317,11 +318,6 @@ function moveCar () {
 		else if(destination < oppOffset)
 			oppOffset--;
 	}
-		
-	
-	/*****acrual drawing of the cars*****/
-	ctx.drawImage(opponentCarImg, oppOffset, canvas.height * .25 + opponentRand, canvas.height * .5 * carImgRatio, canvas.height*.5);
-	ctx.drawImage(playerCarImg, carOffset, canvas.height * .35 + playerRand, canvas.height * .5 * carImgRatio, canvas.height*.5);
 	
 }
 
