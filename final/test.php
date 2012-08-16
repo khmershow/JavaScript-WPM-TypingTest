@@ -18,7 +18,7 @@
 	$cpm="Not value";
 	$accuracy="Not value";
 	$readonly='readonly="readonly"';
-	$welcome='Press button "Start Test"';
+	$welcome='Press "Start Test"';
 	$les_text='Type the text that appears here in the box below.';
 	$cor_text=file_get_contents( "typingtext/0/0.txt" );
 	$time_start=0;
@@ -55,12 +55,14 @@
     <script type="text/javascript" src="timer.js"></script>
     <script type="text/javascript" src="checker.js"></script>
     <script type="text/javascript" src="copyPaste.js"></script>
-    <script type="text/javascript" src="htmlOverlay.js"></script>
-	<script type="text/javascript"> 
+    <script type="text/javascript"> 
 		var startClicked = <?PHP echo (isset($_POST['vstart']))?"true":"false"; ?>;
 		if (startClicked==true){
 			InitTimer();
-			textCorrect();
+		}
+		function textClick(){
+		var textButton = document.getElementById('userText');
+	 	textButton.focus();	
 		}
 		
 		var message="Sorry, right-click has been disabled"; 
@@ -114,15 +116,18 @@
           <?PHP }else{?>
            	    Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
             	<br />
-                <textarea id="area1"  onkeydown="return disableCtrlKeyCombination(event);" onKeyUp="return disableCtrlKeyCombination(event);" readonly rows="5" cols="72"><?PHP echo $les_text?></textarea>	
+                <div id="inputText" style="position:static; width:823px; height:166px;">
+                <textarea id="area1"  onkeydown="return disableCtrlKeyCombination(event);" onKeyUp="return disableCtrlKeyCombination(event);"  style="font-family:Arial, Helvetica, sans-serif;" readonly rows="10" cols="133"><?PHP echo $les_text?></textarea>	
+                	<div id="textCorrection" style="position:relative ; z-index:999; top:-175px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;" onClick="textClick();">
+    				</div>
+                </div>
                 <br /> 
                 <input class="in" type="submit" name="vstart" id="vStart" value="Start Test"/>
-                <br /> 
-                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);"  rows="5" cols="72" name="user_text" ><?PHP echo $welcome; ?></textarea>
-                <div id="textCorrection" style="position: absolute; z-index:1; left: 10px; top: 10px; width:200px; height:100px;">
-    			</div>
-                <br />  
                 <input type="submit" name="done" id="done" value="Done" />
+                <br /> 
+                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);" rows="10" cols="100" name="user_text" ><?PHP echo $welcome; ?></textarea>
+                <br />  
+                
                 <input type="hidden" name="startTime" value="<?PHP echo $time_start ?>" />
            <?PHP }?>
       </form>

@@ -3,17 +3,20 @@ var typingTextArea;
 var areaWidth = 0, areaHeight = 0, areaX = 0; areaY = 0;
 
 function textCorrect(){
+	alert( "This is working");
 	adjustPosition();
+	alert( "This is working");
 	moveText();
+	alert( "This is working");
 }
 function adjustPosition(){
 	//typingTextArea = document.getElementById("userText");
 	
-	alert( document.getElementById('userText').width);
+	alert( areaWidth);
 	//get the width
 	areaWidth = document.getElementById('userText').width;
 	areaHeight = document.getElementById('userText').height;
-	
+	alert( areaWidth + " " + areaHeight);
 	//get the position
 	
 	areaX = document.getElementById('userText').offsetWidth;

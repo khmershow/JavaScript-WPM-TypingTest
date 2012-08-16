@@ -9,10 +9,9 @@ function escape(s) {
 }
 
 function diffString1( o, n ) {
-	alert ("I'm in");
   o = o.replace(/\s+$/, '');
   n = n.replace(/\s+$/, '');
-
+  
   var out = diff(o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
   var str = "";
   var colors = new Array();
@@ -20,6 +19,7 @@ function diffString1( o, n ) {
 	  colors[1] = "87FF8B";
 
   var oSpace = o.match(/\s+/g);
+  
   if (oSpace == null) {
     oSpace = ["\n"];
   } else {
@@ -34,12 +34,12 @@ function diffString1( o, n ) {
 
   if (out.n.length == 0) {
       for (var i = 0; i < out.o.length; i++) {
-        str += '<span style="background-color: '+ colors[0] + '">'+ escape(out.o[i]) + oSpace[i] +"</span>" ;
+        str += '<span style="color:#'+ colors[0] + '">'+ escape(out.o[i]) + oSpace[i] +"</span>" ;
       }
   } else {
     if (out.n[0].text == null) {
       for (n = 0; n < out.o.length && out.o[n].text == null; n++) {
-        str +=  '<span style="background-color: '+ colors[0] + '">'+ escape(out.o[n]) + oSpace[n] + "</span>";
+        str +=  '<span style="color:#'+ colors[0] + '">'+ escape(out.o[n]) + oSpace[n] + "</span>";
       }
     }
 
@@ -50,16 +50,16 @@ function diffString1( o, n ) {
         var pre = "";
 
         for (n = out.n[i].row + 1; n < out.o.length && out.o[n].text == null; n++ ) {
-          pre += '<span style="background-color: ' + colors[0] + '">'+ escape(out.o[n]) + oSpace[n] +"</span>" ;
+          pre += '<span style="color:#' + colors[0] + '">'+ escape(out.o[n]) + oSpace[n] +"</span>" ;
         }
         str += " " + out.n[i].text + nSpace[i] + pre;
       }
     }
   }
   
-	var test = document.getElementById("testDiv");
-	test.innerHTML = str;
 	document.getElementById("textCorrection").innerHTML = str;
+	/*test;
+	document.getElementById("textCorrection").innerHTML ;*/
 }
 
 function diff( o, n ) {
