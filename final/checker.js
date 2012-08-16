@@ -9,6 +9,7 @@ function escape(s) {
 }
 
 function diffString1( o, n ) {
+	alert ("I'm in");
   o = o.replace(/\s+$/, '');
   n = n.replace(/\s+$/, '');
 
