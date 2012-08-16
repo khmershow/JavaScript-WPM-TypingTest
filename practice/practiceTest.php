@@ -47,6 +47,20 @@
 		$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
 		$readonly='readonly="readonly"';			
 	}
+	if(isset($_POST["update"])){
+		$les_text=file_get_contents( "typingtext/0/0.txt" );
+		$user_text=str_replace("\r\n","",$_POST["user_text"]); 
+		$user_text=str_replace("\n","",$user_text);
+		$total_time=microtime(true)-$start_time;
+		$char=strlen($les_text);
+		$word=substr_count($les_text,' ') + 1;
+		$wpm=round(($char/5)/($total_time / 60));
+		$cpm=round((($char/5)-$totalError)/($total_time / 60));
+		$totalError = (GetError($les_text,$user_text));
+		$totalWords = ($word);
+		$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
+		$readonly='readonly="readonly"';			
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,11 +71,13 @@
     <script type="text/javascript" src="copyPaste.js"></script>
     <script type="text/javascript" src="htmlOverlay.js"></script>
     <script type="text/javascript" src="canvas.js"></script>
+    <script type="text/javascript" src="realTimeWPMFinder.js"></script>
 	<script type="text/javascript"> 
 		var startClicked = <?PHP echo (isset($_POST['vstart']))?"true":"false"; ?>;
 		if (startClicked==true){
 			InitTimer();
 			textCorrect();
+			WPMfinder();
 		}
 		
 		var message="Sorry, right-click has been disabled"; 
@@ -77,9 +93,8 @@
 </head>
 <body onLoad="">
     <div class="ac">
-        <form method='post' action="test.php">
+        <form method='post' action="practiceTest.php">
         <br />	
-        	
              <?php if(isset($_POST["done"])){ ?> 
           						
                 <table width="449" cellpadding="6" cellspacing="0" class="ta">
@@ -125,12 +140,15 @@
                 <br />  
                 <input type="submit" name="done" id="done" value="Done" />
                 <input type="hidden" name="startTime" value="<?PHP echo $time_start ?>" />
+                <input type="hidden" name="update" id="update" />
                 <div id="canvasDiv">
 					<div>terrible:<input type="text" id="terribleWPM" value="10"/>  
                     expected:<input type="text" id="expectedWPM" value="30"/>  
                     awesome:<input type="text" id="awesomeWPM" value="50"/>  
               		</div>
-               WPM:<input type="text" id="testWPM" value="30"/><br /><input type="button" value="finish" id="fButton" />
+               WPM:<input type="text" id="testWPM" value=<?PHP echo $wpm ?>/>
+               <br />
+               <input type="button" value="finish" id="fButton" />
 			   <canvas id="canvas" style="border:thick; border-style:solid"></canvas>
    			   </div>
 
