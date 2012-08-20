@@ -57,6 +57,7 @@
     <script type="text/javascript" src="timer.js"></script>
     <script type="text/javascript" src="checker.js"></script>
     <script type="text/javascript" src="copyPaste.js"></script>
+    <script type="text/javascript" src="ScormGrader.js"></script>
     <script type="text/javascript"> 
 		var startClicked = <?PHP echo (isset($_POST['vstart']))?"true":"false"; ?>;
 		if (startClicked==true){
@@ -66,7 +67,10 @@
 		var textButton = document.getElementById('userText');
 	 	textButton.focus();	
 		}
-		
+		var doneClicked = <?PHP echo (isset($_POST['done']))?"true":"false"; ?>;
+		if (doneClicked==true){
+			SetScore(<?PHP echo $cpm ?>);
+		}
 		var message="Sorry, right-click has been disabled"; 
 		function clickIE() {if (document.all) {(message);return false;}} 
 		function clickNS(e) {if 
@@ -114,7 +118,7 @@
                     <tr></tr>
                       <td>&nbsp;</td>
               </table>
-			              
+             			              
           <?PHP }else{?>
            	    Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
             	<br />
