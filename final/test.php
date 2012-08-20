@@ -14,6 +14,7 @@
 	$totalError=0;
 	$total_time=0;
 	$char=0;
+	$inputChar=0;
 	$wpm="Not value";
 	$cpm="Not value";
 	$accuracy="Not value";
@@ -39,10 +40,11 @@
 		$user_text=str_replace("\n","",$user_text);
 		$total_time=microtime(true)-$start_time;
 		$char=strlen($les_text);
-		$word=substr_count($les_text,' ') + 1;
-		$wpm=round(($char/5)/($total_time / 60));
-		$cpm=round((($char/5)-$totalError)/($total_time / 60));
+		$inputChar=strlen($user_text);
 		$totalError = (GetError($les_text,$user_text));
+		$word=substr_count($les_text,' ') + 1;
+		$wpm=round(($inputChar/5)/($total_time / 60));
+		$cpm=round((($inputChar/5)/($total_time / 60))- $totalError);
 		$totalWords = ($word);
 		$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
 		$readonly='readonly="readonly"';			
@@ -118,11 +120,11 @@
             	<br />
                 <div id="inputText" style="position:static; width:823px; height:166px;">
                 <textarea id="area1"  onkeydown="return disableCtrlKeyCombination(event);" onKeyUp="return disableCtrlKeyCombination(event);"  style="font-family:Arial, Helvetica, sans-serif;" readonly rows="10" cols="133"><?PHP echo $les_text?></textarea>	
-                	<div id="textCorrection" style="position:relative ; z-index:999; top:-175px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;" onClick="textClick();">
+                	<div id="textCorrection" style="position:relative ; z-index:999; top:-175px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;">	<?PHP echo $les_text?>
     				</div>
                 </div>
                 <br /> 
-                <input class="in" type="submit" name="vstart" id="vStart" value="Start Test"/>
+                <input class="in" type="submit" name="vstart" id="vStart" value="Start Test" />
                 <input type="submit" name="done" id="done" value="Done" />
                 <br /> 
                 <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);" rows="10" cols="100" name="user_text" ><?PHP echo $welcome; ?></textarea>
