@@ -26,7 +26,7 @@ function setScore(correctWPM) {
 		api.Terminate();
 	}
 }
-
+/*
 function getCompletionState() {
 	var scoreStatus = api.GetValue('cmi.completion_status');
 	console.log(scoreStatus);
@@ -57,4 +57,4 @@ function findApiHost(win) {
 
 	// else give up
     return null;
-}
+}*/
