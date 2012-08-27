@@ -290,7 +290,7 @@ function moveCar () {
 	var playerPosition = carOffset;
 	var opponentPosition = oppOffset;
 	
-	/*****this is what does the up and down creating the "rumble"*****/
+	/*****this is what does the up and down creating the "rumble" *****/
 	if(!switchRand){
 		playerRand = -Math.floor(Math.random()+1);
 		opponentRand = Math.floor(Math.random()+1);

@@ -137,6 +137,7 @@
                 <div id="textCorrection" style="position: absolute; z-index:1; left: 10px; top: 10px; width:200px; height:100px;">
     			</div>
                 <br />  
+
                 <input type="submit" name="done" id="done" value="Done" />
                 <input type="hidden" name="startTime" value="<?PHP echo $time_start ?>" />
                 <input type="hidden" name="update" id="update" />
