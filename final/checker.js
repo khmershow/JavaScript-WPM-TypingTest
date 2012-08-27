@@ -1,3 +1,5 @@
+/*This checks two strings to see if they are identical. If they are not it highlights the first input red */
+
 function escape(s) {
     var n = s;
     n = n.replace(/&/g, "&amp;");

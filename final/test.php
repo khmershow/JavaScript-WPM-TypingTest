@@ -1,16 +1,5 @@
 <?PHP
-	$error=0;
-	function GetError($str1,$str2){
-		$error=0;
-		for($i=0;$i<strlen($str1);$i++){
-			if(isset($str2[$i])){
-				if($str1[$i] !=$str2[$i])
-				$error++;
-				} else
-			$error++;
-		}
-		return $error;
-	}
+	/*Define variables*/
 	$totalError=0;
 	$total_time=0;
 	$char=0;
@@ -25,15 +14,30 @@
 	$time_start=0;
 	$user_text="";
 	$start_time=0;
+	$error=0;
+	/*function to determine the number of errors */
+	function GetError($str1,$str2){
+		$error=0;
+		for($i=0;$i<strlen($str1);$i++){
+			if(isset($str2[$i])){
+				if($str1[$i] !=$str2[$i])
+				$error++;
+				} else
+			$error++;
+		}
+		return $error;
+	}
 	if(isset($_POST["startTime"])){
 		$start_time=$_POST["startTime"];
 	}
+	/* if you hit start, timer starts and text is adjusted */
 	if(isset($_POST["vstart"])){
 		$time_start=microtime(true);
 		$readonly="";
 		$welcome="";
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 	}
+	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 	if(isset($_POST["done"])){
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 		$user_text=str_replace("\r\n","",$_POST["user_text"]); 
@@ -50,10 +54,12 @@
 		$readonly='readonly="readonly"';			
 	}
 ?>
+<!-- Begin HTML-->
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Typing Test Alpha 0.0.1</title> 
+    <!--Load outside .js and add click functions and disable right click  -->
     <script type="text/javascript" src="timer.js"></script>
     <script type="text/javascript" src="checker.js"></script>
     <script type="text/javascript" src="copyPaste.js"></script>
@@ -86,7 +92,7 @@
     <div class="ac">
         <form method='post' action="test.php">
         <br />	
-        	
+        	<!--forms a table to display when done is clicked -->
              <?php if(isset($_POST["done"])){ ?> 
           						
                 <table width="449" cellpadding="6" cellspacing="0" class="ta">
@@ -118,7 +124,12 @@
                     <tr></tr>
                       <td>&nbsp;</td>
               </table>
-             			              
+             <!-- forms the display show anytime prior to done being clicked
+             inputText runs disableCtrlKeyCombo to stop cut and paste 
+             textCorrection is placed over it and is editted by diffString1
+             userText is the input form and calls the disableCtrlKeyCombo,
+             also calls diffString to change the color of the text in textCorrection to show incorrect input
+             -->			              
           <?PHP }else{?>
            	    Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
             	<br />

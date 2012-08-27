@@ -1,6 +1,10 @@
 function handler(options, success, response){
 }
 
+if(api != null){
+	api.Terminate();
+}
+
 var api = findApiHost(window);
 
 if(api != null){

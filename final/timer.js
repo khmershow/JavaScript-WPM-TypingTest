@@ -15,6 +15,7 @@ function StopTimer()
     TimerRunning=false;
 	
  }
+ //TheElement displays the actual timer, checks to see if time ran out or subtracts a second
 function loopTimer() {
 	
 	TheElement = document.getElementById("txt");
@@ -33,13 +34,15 @@ function loopTimer() {
 	
     secs--;
  }
-
+//initializes timer and runs looptimer once a second
  function StartTimer()
  {
     TimerRunning=true;
 	
 	TimerID = window.setInterval("loopTimer()",1000);
  }
+ 
+//if you run out of time it clicks done
 function Check()
  {
      if(mins==0 && secs==0)
