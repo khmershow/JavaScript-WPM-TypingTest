@@ -63,7 +63,7 @@
     <script type="text/javascript" src="timer.js"></script>
     <script type="text/javascript" src="checker.js"></script>
     <script type="text/javascript" src="copyPaste.js"></script>
-    <script type="text/javascript" src="ScormGrader.js"></script>
+    <script type="text/javascript" src="https://is.byu.edu/is/share/BrainHoney/ScormGrader.js"></script>
     <script type="text/javascript"> 
 		var startClicked = <?PHP echo (isset($_POST['vstart']))?"true":"false"; ?>;
 		if (startClicked==true){
