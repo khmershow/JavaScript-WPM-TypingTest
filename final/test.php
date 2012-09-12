@@ -88,7 +88,7 @@
 		document.oncontextmenu=new Function("return false") 
 	</script> 
 </head>
-<body onLoad="">
+<body onLoad="initializeAPI();">
     <div class="ac">
         <form method='post' action="test.php">
         <br />	
