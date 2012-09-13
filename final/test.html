@@ -1,0 +1,105 @@
+<!-- Begin HTML-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Typing Test Alpha 0.0.1</title> 
+    <!--Load outside .js and add click functions and disable right click  -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="timer.js"></script>
+    <script type="text/javascript" src="checker.js"></script>
+    <script type="text/javascript" src="copyPaste.js"></script>
+    <script type="text/javascript" src="WPM.js"></script>
+    <script type="text/javascript" src="https://is.byu.edu/is/share/BrainHoney/ScormGrader.js"></script>
+    <script type="text/javascript"> 
+		var intervalVar;
+		function startClicked(){
+			initText();
+			InitTimer();
+			
+		}
+		function textClick(){
+		var textButton = document.getElementById('userText');
+	 	textButton.focus();	
+		}
+		
+		function doneClicked(){
+			
+		}
+		var message="Sorry, right-click has been disabled"; 
+		function clickIE() {if (document.all) {(message);return false;}} 
+		function clickNS(e) {if 
+		(document.layers||(document.getElementById&&!document.all)) { 
+		if (e.which==2||e.which==3) {(message);return false;}}} 
+		if (document.layers) 
+		{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
+		else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;} 
+		document.oncontextmenu=new Function("return false");
+		function submitScores() {
+			if(initialized == true && doneClicked == true) {
+				setScore(cpm);
+				window.clearInterval(intervalVar);
+			}
+		}
+	</script> 
+</head>
+<body onLoad="var initialized = initializeAPI();">
+    <div class="ac">
+        <form method='post' action="test.html">
+        <br />	
+             <!-- 
+             inputText runs disableCtrlKeyCombo to stop cut and paste 
+             textCorrection is placed over it and is editted by diffString1
+             userText is the input form and calls the disableCtrlKeyCombo,
+             also calls diffString to change the color of the text in textCorrection to show incorrect input
+             -->			              
+        
+           	    Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
+            	<br />
+                <div id="inputText" style="position:static; width:823px; height:166px;">
+                <textarea id="area1"  onkeydown="return disableCtrlKeyCombination(event);" onKeyUp="return disableCtrlKeyCombination(event);"  style="font-family:Arial, Helvetica, sans-serif;" readonly rows="10" cols="133"></textarea>	
+                	<div id="textCorrection" style="position:relative ; z-index:999; top:-175px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;">	
+    				</div>
+                </div>
+                <br /> 
+                <input class="in" type="submit" name="vstart" id="vStart" value="Start Test" onClick="startClicked();" />
+                <input type="submit" name="done" id="done" value="Done" onClick="doneClicked();" />
+                <br /> 
+                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);" rows="10" cols="100" name="user_text" ><?PHP echo $welcome; ?></textarea>
+                <br />  
+                
+                <!--<input type="hidden" name="startTime" value="<?PHP echo $time_start ?>" />-->
+           
+           		<div id="scoreTable" >
+           		<table width="449" cellpadding="6" cellspacing="0" class="ta">
+                    <tr>
+                        <th width="162" class="th" style="width: 10%"><div align="left">Parameter</div></th>
+                        <th width="131" class="th" style="width: 10%"><div align="left">Your result</div></th>
+                    </tr>
+                    <tr> 
+                        <td class="td"><b>Total Words</b> (#)</td> 
+                        <td class="td" id="totalWords"><b></b></td>
+                 	</tr>
+                    <tr>
+                        <td class="td"><b>GWPM</b> (gross word per minutes)</td>
+                        <td class="td" id="wpm"><b></b></td>
+                    </tr>
+                    <tr> 
+                        <td class="td"><b>Errors</b> (#)</td> 
+                        <td class="td" id="totalError"><b></b></td>
+                    </tr>
+                    <tr>
+                        <td class="td"><b>CWPM</b> (correct words per minutes)</td> 
+                        <td class="td" id="cpm"><b></b></td>
+                    </tr>
+                  	<tr>
+                        <td class="td"><b>Accuracy</b> (%)</td> 
+                        <td class="td" id="accuracy"><b></b></td>
+                    </tr>
+                    <td>&nbsp;</td>
+              </table>
+              </div>
+      </form>
+    </div>
+</body>
+</html>
+ 

@@ -66,6 +66,7 @@
     <script type="text/javascript" src="https://is.byu.edu/is/share/BrainHoney/ScormGrader.js"></script>
     <script type="text/javascript"> 
 		var startClicked = <?PHP echo (isset($_POST['vstart']))?"true":"false"; ?>;
+		var intervalVar;
 		if (startClicked==true){
 			InitTimer();
 		}
@@ -75,7 +76,7 @@
 		}
 		var doneClicked = <?PHP echo (isset($_POST['done']))?"true":"false"; ?>;
 		if (doneClicked==true){
-			SetScore(<?PHP echo $cpm ?>);
+			intervalVar = window.setInterval("submitScores();", 500);
 		}
 		var message="Sorry, right-click has been disabled"; 
 		function clickIE() {if (document.all) {(message);return false;}} 
@@ -85,10 +86,16 @@
 		if (document.layers) 
 		{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
 		else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;} 
-		document.oncontextmenu=new Function("return false") 
+		document.oncontextmenu=new Function("return false");
+		function submitScores() {
+			if(initialized == true && doneClicked == true) {
+				setScore(<?PHP echo $cpm ?>);
+				window.clearInterval(intervalVar);
+			}
+		}
 	</script> 
 </head>
-<body onLoad="initializeAPI();">
+<body onLoad="var initialized = initializeAPI();">
     <div class="ac">
         <form method='post' action="test.php">
         <br />	
