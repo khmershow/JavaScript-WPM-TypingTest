@@ -53,4 +53,32 @@
 		$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
 		$readonly='readonly="readonly"';			
 	}
+	echo "<table width='449' cellpadding='6' cellspacing='0' class='ta'>";
+                    echo "<tr>";
+                        echo "<th width='162' class='th' style='width: 10%'><div align='left'>Parameter</div></th>";
+                        echo "<th width='131' class='th' style='width: 10%'><div align='left'>Your result</div></th>";
+                    echo "</tr>";
+                    echo "<tr>"; 
+                        echo "<td class='td'><b>Total Words</b> (#)</td>";
+                        echo "<td class='td' id='totalWords'><b>"$totalWords "</b></td>";
+                 	echo "</tr>";
+                    echo "<tr>";
+                        echo "<td class='td'><b>GWPM</b> (gross word per minutes)</td>";
+                        echo "<td class='td' id='wpm'><b>"$wpm"</b></td>";
+                    echo "</tr>";
+                    echo "<tr>"; 
+                        echo "<td class='td'><b>Errors</b> (#)</td>"; 
+                        echo "<td class='td' id='totalError'><b>"$totalError"</b></td>";
+                    echo "</tr>";
+                    echo "<tr>";
+                        echo "<td class='td'><b>CWPM</b> (correct words per minutes)</td>";
+                        echo "<td class='td' id='cpm'><b>"$cpm"</b></td>";
+                    echo "</tr>";
+                  	echo "<tr>";
+                        echo "<td class='td'><b>Accuracy</b> (%)</td>";
+                        echo "<td class='td' id='accuracy'><b>"$accuracy"</b></td>";
+                    echo "</tr>";
+                    echo "<td>&nbsp;</td>";
+              echo "</table>";
+	
 ?>
