@@ -3,12 +3,14 @@
 <html>
 	<head>
     	<meta charset="UTF-8">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="devErrorReport.js"></script>
 	</head>
  	<body>
     	<h2 style="color:teal">Test Type</h2>
-        <input type="radio" checked="checked" value="true" name="testType" id="practice" /> Practice 
-        <input type="radio" name="testType" value="false" id="test" /> Final
-        <div id="practiceDiv"  style="visibility:visible">
+        <input type="radio" checked="checked" value="true" name="testType" id="practiceRadio" /> Practice 
+        <input type="radio" name="testType" value="false" id="finalRadio" /> Final
+        <div id="practiceDiv">
             <h3 style="color:teal">Practice Exam (Instructor Input)</h3>
             
             <p>low and high WPM must be concentric around the midrange WPM</p>
@@ -43,7 +45,7 @@
             <input id="getJSONPractice" type="button" value="Finished" />
         </div>
         
-        <div id="finalDiv" style="visibility:hidden">
+        <div id="finalDiv" >
         	<input id="timeLimit" type="text" name="timeLimit" placeholder="time limit..." 	/>
             <br>
 			<textarea id="assesment" name="assessment" rows="8" cols="64" placeholder="input test here..."></textarea>
@@ -56,29 +58,25 @@
 
 <script type="text/javascript">
 	//radio button variables
-	var testRadio = document.getElementById("test");
-	var practiceRadio = document.getElementById("practice");
 	
-	var finalDiv = document.getElementById("finalDiv");
-	var practiceDiv = document.getElementById("practiceDiv");
+	$("#finalDiv").hide();
 	
-	eventRegistrar(testRadio, 'change', changeRadio);
-	eventRegistrar(practiceRadio, 'change', changeRadio);
+	$("#practiceRadio").change(
+		function(){
+			if(this.checked)
+				$("#finalDiv").hide();
+				$("#practiceDiv").show();
+			}	
+	);
 	
-	function changeRadio(){
-		alert("in");
-		if(testRadio.checked){
-			practiceDiv.setAttribute("style","visibility:hidden")
-			finalDiv.setAttribute("style","visibility:visible");
-		}else{
-			finalDiv.setAttribute("style","visibility:hidden")
-			practiceDiv.setAttribute("style","visibility:visible");
-		}
-		
-		
-	}
+	$("#finalRadio").change(
+		function(){
+			if(this.checked)
+				$("#practiceDiv").hide();
+				$("#finalDiv").show();
+			}	
+	);
 	
-	alert(practiceRadio.checked + "    " + testRadio.checked);
 	
 	
 	//practice variables
