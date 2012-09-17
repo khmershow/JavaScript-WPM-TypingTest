@@ -1,22 +1,6 @@
 <?PHP
 $return_json = "{";
-switch($_GET['action']) {
-	case "score_table":
-		$return_json .= "\"table_html\":".json_encode(getScoreTable())."";
-	break;
-	case "start_time":
-		//$_POST["vstart"];
-		//$_POST["startTime"];
-		$return_json .= "\"request_time\":\"".strtotime("now")."\",";
-		$return_json .= "\"welcome\":\"".json_encode($error)."\",";
-		$return_json .= "\"lesText\":\"".$error."\",";
-	
-	break;
-	default:
-	break;
-}
-function getScoreTable() {
-	/*Define variables*/
+/*Define variables*/
 	$totalError=0;
 	$total_time=0;
 	$char=0;
@@ -27,13 +11,25 @@ function getScoreTable() {
 	$readonly='readonly="readonly"';
 	$welcome='Press "Start Test"';
 	$les_text='Type the text that appears here in the box below.';
-	$cor_text="This is the final.";
 	$time_start=0;
 	$user_text="";
 	$start_time=0;
 	$error=0;
+	$word=0;
+	
+	
+	$wpmObj = new stdClass;
+	$wpmObj->totalError = $totalError;
+	$wpmObj->wpm= $wpm;
+	$wpmObj->cpm=$cpm;
+	$wpmObj->accuracy=$accuracy;
+	$wpmObj->welcome=$welcome;
+	$wpmObj->les_text=$les_text;
+	$wpmObj->word = $word;
+
+
 	/*function to determine the number of errors */
-	function GetError($str1,$str2){
+function GetError($str1,$str2){
 		$error=0;
 		for($i=0;$i<strlen($str1);$i++){
 			if(isset($str2[$i])){
@@ -43,9 +39,6 @@ function getScoreTable() {
 			$error++;
 		}
 		return $error;
-	}
-	if(isset($_POST["startTime"])){
-		$start_time=$_POST["startTime"];
 	}
 	/* if you hit start, timer starts and text is adjusted */
 	if(isset($_POST["vstart"])){
@@ -70,35 +63,51 @@ function getScoreTable() {
 		$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
 		$readonly='readonly="readonly"';			
 	}
+function getScoreTable() {
 	$ret_value = "";
 	$ret_value .= "<table width='449' cellpadding='6' cellspacing='0' class='ta'>\n";
     $ret_value .= "	<tr>\n";
     $ret_value .= "		<th width='162' class='th' style='width: 10%'><div align='left'>Parameter</div></th>\n";
-                        $ret_value .= "<th width='131' class='th' style='width: 10%'><div align='left'>Your result</div></th>";
-                    $ret_value .= "</tr>";
-                    $ret_value .= "<tr>"; 
-                        $ret_value .= "<td class='td'><b>Total Words</b> (#)</td>";
-                        $ret_value .= "<td class='td' id='totalWords'><b>" . $totalWords . "</b></td>";
-                 	$ret_value .= "</tr>";
-                    $ret_value .= "<tr>";
-                        $ret_value .= "<td class='td'><b>GWPM</b> (gross word per minutes)</td>";
-                        $ret_value .= "<td class='td' id='wpm'><b>" . $wpm . "</b></td>";
-                    $ret_value .= "</tr>";
-                    $ret_value .= "<tr>"; 
-                        $ret_value .= "<td class='td'><b>Errors</b> (#)</td>"; 
-                        $ret_value .= "<td class='td' id='totalError'><b>" . $totalError . "</b></td>";
-                    $ret_value .= "</tr>";
-                    $ret_value .= "<tr>";
-                        $ret_value .= "<td class='td'><b>CWPM</b> (correct words per minutes)</td>";
-                        $ret_value .= "<td class='td' id='cpm'><b>" . $cpm . "</b></td>";
-                    $ret_value .= "</tr>";
-                  	$ret_value .= "<tr>";
-                        $ret_value .= "<td class='td'><b>Accuracy</b> (%)</td>";
-                        $ret_value .= "<td class='td' id='accuracy'><b>" . $accuracy . "</b></td>";
-                    $ret_value .= "</tr>";
-                    $ret_value .= "<td>&nbsp;</td>";
-              $ret_value .= "</table>";
+    $ret_value .= "		<th width='131' class='th' style='width: 10%'><div align='left'>Your result</div></th>";
+    $ret_value .= "	</tr>";
+    $ret_value .= "	<tr>"; 
+    $ret_value .= "		<td class='td'><b>Total Words</b> (#)</td>";
+    $ret_value .= "		<td class='td' id='totalWords'><b>" . $totalWords . "</b></td>";
+    $ret_value .= "	</tr>";
+    $ret_value .= "	<tr>";
+    $ret_value .= "		<td class='td'><b>GWPM</b> (gross word per minutes)</td>";
+    $ret_value .= "		<td class='td' id='wpm'><b>" . $wpm . "</b></td>";
+    $ret_value .= "	</tr>";
+    $ret_value .= "	<tr>"; 
+    $ret_value .= "		<td class='td'><b>Errors</b> (#)</td>"; 
+    $ret_value .= "		<td class='td' id='totalError'><b>" . $totalError . "</b></td>";
+    $ret_value .= "	</tr>";
+    $ret_value .= "	<tr>";
+    $ret_value .= "		<td class='td'><b>CWPM</b> (correct words per minutes)</td>";
+    $ret_value .= "		<td class='td' id='cpm'><b>" . $cpm . "</b></td>";
+    $ret_value .= "	</tr>";
+    $ret_value .= "	<tr>";
+    $ret_value .= "		<td class='td'><b>Accuracy</b> (%)</td>";
+    $ret_value .= "		<td class='td' id='accuracy'><b>" . $accuracy . "</b></td>";
+    $ret_value .= "	</tr>";
+    $ret_value .= "<td>&nbsp;</td>";
+    $ret_value .= "</table>";
 	return $ret_value;
+}
+switch($_POST['action']) {
+	case "done":
+		$_POST["done"];
+		$return_json .= "\"table_html\":".json_encode(getScoreTable())."";
+	break;
+	case "vstart":
+		$_POST["vstart"];
+		$return_json .= "\"request_time\":\"".strtotime("now")."\",";
+		$return_json .= "\"welcome\":\"".json_encode($wpmObj->welcome)."\",";
+		$return_json .= "\"lesText\":\"".json_encode($wpmObj->les_text)."\",";
+	
+	break;
+	default:
+	break;
 }
 echo $return_json."}";
 ?>

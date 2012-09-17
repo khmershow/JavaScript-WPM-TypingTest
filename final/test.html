@@ -9,13 +9,13 @@
     <script type="text/javascript" src="checker.js"></script>
     <script type="text/javascript" src="copyPaste.js"></script>
     <script type="text/javascript" src="WPM.js"></script>
-    <script type="text/javascript" src="https://is.byu.edu/is/share/BrainHoney/ScormGrader.js"></script>
+    <!--<script type="text/javascript" src="https://is.byu.edu/is/share/BrainHoney/ScormGrader.js"></script>-->
     <script type="text/javascript"> 
 		var intervalVar;
 		function startClicked(){
 			//initText();
 			InitTimer();
-			$.post(portal.php,"start_time", function(data){$("#area1").append(data)},"json"); 
+			$.post("portal.php","start_time", function(data){$("#area1").append(data)},"json"); 
 			
 			
 		}
@@ -25,7 +25,7 @@
 		}
 		
 		function doneClicked(){
-			$.post(portal.php, function(data){
+			$.post("portal.php", function(data){
 			$("#scoreTable").append(data)},"html"); 
 			//addTableData();
 		}
@@ -46,11 +46,10 @@
 		}
 	</script> 
 </head>
-<body onLoad="var initialized = initializeAPI();">
+<body onLoad="">
     <div class="ac">
-        <form method='post' action="test.html">
         <br />	
-             <!-- 
+             <!-- var initialized = initializeAPI();
              inputText runs disableCtrlKeyCombo to stop cut and paste 
              textCorrection is placed over it and is editted by diffString1
              userText is the input form and calls the disableCtrlKeyCombo,
@@ -65,13 +64,13 @@
     				</div>
                 </div>
                 <br /> 
-                <input class="in" type="submit" name="vstart" id="vStart" value="Start Test" onClick="startClicked();" />
+                <input class="in" type="submit" action="vstart" id="vStart" value="Start Test" onClick="startClicked();" />
                 <input type="submit" name="done" id="done" value="Done" onClick="doneClicked();" />
                 <br /> 
                 <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);" rows="10" cols="100" name="user_text" ></textarea>
                 <br />  
                 
-                <!--<input type="hidden" name="startTime" value="<?PHP echo $time_start ?>" />-->
+                <input type="hidden" name="startTime" id="startTime" />
            
            		<div id="scoreTable" >
            		<!-- <table width="449" cellpadding="6" cellspacing="0" class="ta">
