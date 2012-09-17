@@ -1,4 +1,5 @@
 // JavaScript Document
+//var isDev = (window.location.hostname.test('/dev|test|localhost)/i'))?true:false;
 
 window.onerror = windowOnError;
 
