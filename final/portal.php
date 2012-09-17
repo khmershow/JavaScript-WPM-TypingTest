@@ -2,8 +2,15 @@
 $return_json = "{";
 switch($_GET['action']) {
 	case "score_table":
-		$return_json .= "\"request_time\":\"".strtotime("now")."\",";
 		$return_json .= "\"table_html\":".json_encode(getScoreTable())."";
+	break;
+	case "start_time":
+		//$_POST["vstart"];
+		//$_POST["startTime"];
+		$return_json .= "\"request_time\":\"".strtotime("now")."\",";
+		$return_json .= "\"welcome\":\"".json_encode($error)."\",";
+		$return_json .= "\"lesText\":\"".$error."\",";
+	
 	break;
 	default:
 	break;
@@ -20,7 +27,7 @@ function getScoreTable() {
 	$readonly='readonly="readonly"';
 	$welcome='Press "Start Test"';
 	$les_text='Type the text that appears here in the box below.';
-	$cor_text=file_get_contents( "typingtext/0/0.txt" );
+	$cor_text="This is the final.";
 	$time_start=0;
 	$user_text="";
 	$start_time=0;

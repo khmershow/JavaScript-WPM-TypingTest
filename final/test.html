@@ -13,8 +13,10 @@
     <script type="text/javascript"> 
 		var intervalVar;
 		function startClicked(){
-			initText();
+			//initText();
 			InitTimer();
+			$.post(portal.php,"start_time", function(data){$("#area1").append(data)},"json"); 
+			
 			
 		}
 		function textClick(){
@@ -23,9 +25,9 @@
 		}
 		
 		function doneClicked(){
-			$.post(testPHP.php, function(data){
-			$("#scoreTable").append(data)}); 
-			addTableData();
+			$.post(portal.php, function(data){
+			$("#scoreTable").append(data)},"html"); 
+			//addTableData();
 		}
 		var message="Sorry, right-click has been disabled"; 
 		function clickIE() {if (document.all) {(message);return false;}} 
@@ -58,7 +60,7 @@
            	    Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
             	<br />
                 <div id="inputText" style="position:static; width:823px; height:166px;">
-                <textarea id="area1"  onkeydown="return disableCtrlKeyCombination(event);" onKeyUp="return disableCtrlKeyCombination(event);"  style="font-family:Arial, Helvetica, sans-serif;" readonly rows="10" cols="133">Press start to begin</textarea>	
+                <textarea id="area1"  onkeydown="return disableCtrlKeyCombination(event);" onKeyUp="return disableCtrlKeyCombination(event);"  style="font-family:Arial, Helvetica, sans-serif;" readonly rows="10" cols="133"></textarea>	
                 	<div id="textCorrection" style="position:relative ; z-index:999; top:-175px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;">	
     				</div>
                 </div>
@@ -66,7 +68,7 @@
                 <input class="in" type="submit" name="vstart" id="vStart" value="Start Test" onClick="startClicked();" />
                 <input type="submit" name="done" id="done" value="Done" onClick="doneClicked();" />
                 <br /> 
-                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);" rows="10" cols="100" name="user_text" ><?PHP echo $welcome; ?></textarea>
+                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);" rows="10" cols="100" name="user_text" ></textarea>
                 <br />  
                 
                 <!--<input type="hidden" name="startTime" value="<?PHP echo $time_start ?>" />-->
