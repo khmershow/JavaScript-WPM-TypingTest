@@ -94,10 +94,45 @@ function getScoreTable() {
     $ret_value .= "</table>";
 	return $ret_value;
 }
+function noStrings(){
+echo ''?>
+<div><table width="449" cellpadding="6" cellspacing="0" class="ta">
+                    <tr>
+                        <th width="162" class="th" style="width: 10%"><div align="left">Parameter</div></th>
+                        <th width="131" class="th" style="width: 10%"><div align="left">Your result</div></th>
+                    </tr>
+                    <tr> 
+                        <td class="td"><b>Total Words</b> (#)</td> 
+                        <td class="td"><b><?PHP echo $totalWords?></b></td>
+                  </tr>
+                        <tr>
+                        <td class="td"><b>GWPM</b> (gross word per minutes)</td>
+                        <td class="td"><b><?PHP echo $wpm?></b></td>
+                        </tr>
+                        <tr> 
+                        <td class="td"><b>Errors</b> (#)</td> 
+                        <td class="td"><b><?PHP echo $totalError?></b></td>
+                        </tr>
+                        <tr>
+                        <td class="td"><b>CWPM</b> (correct words per minutes)</td> 
+                        <td class="td"><b><?PHP echo $cpm?></b></td>
+                        </tr>
+                  <tr>
+                        <td class="td"><b>Accuracy</b> (%)</td> 
+                        <td class="td"><b><?PHP echo $accuracy?></b></td>
+                        </tr>
+                        
+                    <tr></tr>
+                      <td>&nbsp;</td>
+              </table>
+</div>
+<?php	
+}
 switch($_POST['action']) {
 	case "done":
 		$_POST["done"];
-		$return_json .= "\"table_html\":".json_encode(getScoreTable())."";
+		$return_html .= noStrings();
+		//$return_json .= "\"table_html\":".json_encode(getScoreTable())."";
 	break;
 	case "vstart":
 		$_POST["vstart"];

@@ -15,7 +15,7 @@
 		function startClicked(){
 			//initText();
 			InitTimer();
-			$.post("portal.php","start_time", function(data){$("#area1").append(data)},"json"); 
+			$.post("portal.php","action=start_time", function(data){$("#area1").append(data)},"json"); 
 			
 			
 		}
@@ -25,9 +25,10 @@
 		}
 		
 		function doneClicked(){
-			$.post("portal.php", function(data){
+			$.post("portal.php","action=done",function(data){
 			$("#scoreTable").append(data)},"html"); 
-			//addTableData();
+			var object = $.parseJSON(table_html);
+			
 		}
 		var message="Sorry, right-click has been disabled"; 
 		function clickIE() {if (document.all) {(message);return false;}} 
