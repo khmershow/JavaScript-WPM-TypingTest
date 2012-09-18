@@ -64,75 +64,18 @@ function GetError($str1,$str2){
 		$readonly='readonly="readonly"';			
 	}
 function getScoreTable() {
-	$ret_value = "";
-	$ret_value .= "<table width='449' cellpadding='6' cellspacing='0' class='ta'>\n";
-    $ret_value .= "	<tr>\n";
-    $ret_value .= "		<th width='162' class='th' style='width: 10%'><div align='left'>Parameter</div></th>\n";
-    $ret_value .= "		<th width='131' class='th' style='width: 10%'><div align='left'>Your result</div></th>";
-    $ret_value .= "	</tr>";
-    $ret_value .= "	<tr>"; 
-    $ret_value .= "		<td class='td'><b>Total Words</b> (#)</td>";
-    $ret_value .= "		<td class='td' id='totalWords'><b>" . $totalWords . "</b></td>";
-    $ret_value .= "	</tr>";
-    $ret_value .= "	<tr>";
-    $ret_value .= "		<td class='td'><b>GWPM</b> (gross word per minutes)</td>";
-    $ret_value .= "		<td class='td' id='wpm'><b>" . $wpm . "</b></td>";
-    $ret_value .= "	</tr>";
-    $ret_value .= "	<tr>"; 
-    $ret_value .= "		<td class='td'><b>Errors</b> (#)</td>"; 
-    $ret_value .= "		<td class='td' id='totalError'><b>" . $totalError . "</b></td>";
-    $ret_value .= "	</tr>";
-    $ret_value .= "	<tr>";
-    $ret_value .= "		<td class='td'><b>CWPM</b> (correct words per minutes)</td>";
-    $ret_value .= "		<td class='td' id='cpm'><b>" . $cpm . "</b></td>";
-    $ret_value .= "	</tr>";
-    $ret_value .= "	<tr>";
-    $ret_value .= "		<td class='td'><b>Accuracy</b> (%)</td>";
-    $ret_value .= "		<td class='td' id='accuracy'><b>" . $accuracy . "</b></td>";
-    $ret_value .= "	</tr>";
-    $ret_value .= "<td>&nbsp;</td>";
-    $ret_value .= "</table>";
+	$wpmObj->word = $word;
+	$wpmObj->totalError = $totalError;
+	$wpmObj->wpm= $wpm;
+	$wpmObj->cpm=$cpm;
+	$wpmObj->accuracy=$accuracy;
 	return $ret_value;
 }
-function noStrings(){
-echo ''?>
-<div><table width="449" cellpadding="6" cellspacing="0" class="ta">
-                    <tr>
-                        <th width="162" class="th" style="width: 10%"><div align="left">Parameter</div></th>
-                        <th width="131" class="th" style="width: 10%"><div align="left">Your result</div></th>
-                    </tr>
-                    <tr> 
-                        <td class="td"><b>Total Words</b> (#)</td> 
-                        <td class="td"><b><?PHP echo $totalWords?></b></td>
-                  </tr>
-                        <tr>
-                        <td class="td"><b>GWPM</b> (gross word per minutes)</td>
-                        <td class="td"><b><?PHP echo $wpm?></b></td>
-                        </tr>
-                        <tr> 
-                        <td class="td"><b>Errors</b> (#)</td> 
-                        <td class="td"><b><?PHP echo $totalError?></b></td>
-                        </tr>
-                        <tr>
-                        <td class="td"><b>CWPM</b> (correct words per minutes)</td> 
-                        <td class="td"><b><?PHP echo $cpm?></b></td>
-                        </tr>
-                  <tr>
-                        <td class="td"><b>Accuracy</b> (%)</td> 
-                        <td class="td"><b><?PHP echo $accuracy?></b></td>
-                        </tr>
-                        
-                    <tr></tr>
-                      <td>&nbsp;</td>
-              </table>
-</div>
-<?php	
-}
+
 switch($_POST['action']) {
 	case "done":
 		$_POST["done"];
-		$return_html .= noStrings();
-		//$return_json .= "\"table_html\":".json_encode(getScoreTable())."";
+		$return_json .= "\"table_html\":".json_encode(getScoreTable())."";
 	break;
 	case "vstart":
 		$_POST["vstart"];
