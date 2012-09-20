@@ -34,14 +34,10 @@
 					//$("#scoreTable").append(data);
 					table = JSON.parse(data);
 					console.log(table);
-					console.log(table.scores.wpm);
-					var wpm = table.scores.wpm;
-					console.log(wpm);
 				}
 			);
-			
-			//x =document.getElementById('wpm');
-			//x.innerHTML = "";
+			document.getElementById("scoreTable").innerHTML = table.scores;
+      		StopTimer();
 			
 			 
 		}
@@ -89,7 +85,7 @@
                 <input type="hidden" name="startTime" id="startTime" />
            
            		<div id="scoreTable" >
-           		<table width="449" cellpadding="6" cellspacing="0" class="ta">
+           		<!--<table width="449" cellpadding="6" cellspacing="0" class="ta">
                     <tr>
                         <th width="162" class="th" style="width: 10%"><div align="left">Parameter</div></th>
                         <th width="131" class="th" style="width: 10%"><div align="left">Your result</div></th>
@@ -100,7 +96,7 @@
                  	</tr>
                     <tr>
                         <td class="td"><b>GWPM</b> (gross word per minutes)</td>
-                        <td class="td" id="wpm"><script language="javascript">document.write(wpm);</script></td>
+                        <td class="td" id="wpm"></td>
                     </tr>
                     <tr> 
                         <td class="td"><b>Errors</b> (#)</td> 
@@ -115,7 +111,7 @@
                         <td class="td" id="accuracy"><b></b></td>
                     </tr>
                     <td>&nbsp;</td>
-              </table>
+              </table>-->
               
               </div>
       </form>

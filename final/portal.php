@@ -64,13 +64,35 @@ function GetError($str1,$str2){
 		$readonly='readonly="readonly"';			
 	}
 function getScoreTable() {
-	global $wpmObj,$word,$totalError,$wpm,$cpm,$accuracy;
-	$wpmObj->word = $word;
-	$wpmObj->totalError = $totalError;
-	$wpmObj->wpm= $wpm;
-	$wpmObj->cpm=$cpm;
-	$wpmObj->accuracy=$accuracy;
-	return $wpmObj;
+	$results = "";
+	$results .= "<table width='449' cellpadding='6' cellspacing='0' class='ta'>";
+    $results .= "	<tr>";
+    $results .= "         <th width='162' class='th' style='width: 10%'><div align='left'>Parameter</div></th>";
+    $results .= "         <th width='131' class='th' style='width: 10%'><div align='left'>Your result</div></th>";
+    $results .= "	</tr>";
+    $results .= "   <tr>"; 
+    $results .= "         <td class='td'><b>Total Words</b> (#)</td>"; 
+    $results .= "         <td class='td' id='totalWords'><b>".$words."</b></td>";
+    $results .= "   </tr>";
+    $results .= "   <tr>";
+    $results .= "         <td class='td'><b>GWPM</b> (gross word per minutes)</td>";
+    $results .= "         <td class='td' id='wpm'><b>".$wpm."</b></td>";
+    $results .= "   </tr>";
+    $results .= "   <tr>";
+    $results .= "         <td class='td'><b>Errors</b> (#)</td>";
+    $results .= "         <td class='td' id='totalError'><b>".$totalError."</b></td>";
+    $results .= "   </tr>";
+    $results .= "   <tr>";
+    $results .= "         <td class='td'><b>CWPM</b> (correct words per minutes)</td>"; 
+    $results .= "         <td class='td' id='cpm'><b>".$cpm."</b></td>";
+    $results .= "   </tr>";
+    $results .= "   <tr>";
+    $results .= "         <td class='td'><b>Accuracy</b> (%)</td>";
+    $results .= "         <td class='td' id='accuracy'><b>".$accuracy."</b></td>";
+    $results .= "   </tr>";
+    $results .= "   <td>&nbsp;</td>";
+    $results .= "</table>";
+	return $results;
 }
 
 switch($_POST['action']) {
