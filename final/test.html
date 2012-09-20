@@ -16,7 +16,7 @@
 			//initText();
 			InitTimer();
 			$.post("portal.php","start_time", function(data){$("#area1").append(data)},"json");
-			var startText = jquery.parseJSON('{}') 
+			//var startText = jquery.parseJSON('{}') 
 			
 			
 		}
@@ -24,11 +24,26 @@
 		var textButton = document.getElementById('userText');
 	 	textButton.focus();	
 		}
-		
+		var table;
+		var x;
 		function doneClicked(){
-			$.post("portal.php", function(data){
-			$("#scoreTable").append(data)},"html"); 
-			//addTableData();
+			$.post(
+				"portal.php",
+				{action: "done" },
+				function(data){
+					//$("#scoreTable").append(data);
+					table = JSON.parse(data);
+					console.log(table);
+					console.log(table.scores.wpm);
+					var wpm = table.scores.wpm;
+					console.log(wpm);
+				}
+			);
+			
+			//x =document.getElementById('wpm');
+			//x.innerHTML = "";
+			
+			 
 		}
 		var message="Sorry, right-click has been disabled"; 
 		function clickIE() {if (document.all) {(message);return false;}} 
@@ -85,7 +100,7 @@
                  	</tr>
                     <tr>
                         <td class="td"><b>GWPM</b> (gross word per minutes)</td>
-                        <td class="td" id="wpm"><b></b></td>
+                        <td class="td" id="wpm"><script language="javascript">document.write(wpm);</script></td>
                     </tr>
                     <tr> 
                         <td class="td"><b>Errors</b> (#)</td> 

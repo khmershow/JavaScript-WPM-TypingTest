@@ -5,9 +5,9 @@ $return_json = "{";
 	$total_time=0;
 	$char=0;
 	$inputChar=0;
-	$wpm="Not value";
-	$cpm="Not value";
-	$accuracy="Not value";
+	$wpm=0;
+	$cpm=0;
+	$accuracy=0;
 	$readonly='readonly="readonly"';
 	$welcome='Press "Start Test"';
 	$les_text='Type the text that appears here in the box below.';
@@ -64,18 +64,19 @@ function GetError($str1,$str2){
 		$readonly='readonly="readonly"';			
 	}
 function getScoreTable() {
+	global $wpmObj,$word,$totalError,$wpm,$cpm,$accuracy;
 	$wpmObj->word = $word;
 	$wpmObj->totalError = $totalError;
 	$wpmObj->wpm= $wpm;
 	$wpmObj->cpm=$cpm;
 	$wpmObj->accuracy=$accuracy;
-	return $ret_value;
+	return $wpmObj;
 }
 
 switch($_POST['action']) {
 	case "done":
 		$_POST["done"];
-		$return_json .= "\"table_html\":".json_encode(getScoreTable())."";
+		$return_json .= "\"scores\":".json_encode(getScoreTable())."";
 	break;
 	case "vstart":
 		$_POST["vstart"];
