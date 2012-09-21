@@ -3,13 +3,13 @@
 <html>
 	<head>
     	<meta charset="UTF-8">
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script type="text/javascript" src="devErrorReport.js"></script>
 	</head>
  	<body>
     	<h2 style="color:teal">Test Type</h2>
-        <input type="radio" checked="checked" value="true" name="testType" id="practiceRadio" /> Practice 
-        <input type="radio" name="testType" value="false" id="finalRadio" /> Final
+        <input type="radio" name="testType" value="false" id="practiceRadio" /> Practice  <!--Radio buttons for deciding which div to show, final or practice-->
+        <input type="radio" name="testType" checked="checked" value="true" id="finalRadio" /> Final
         <div id="practiceDiv">
             <h3 style="color:teal">Practice Exam (Instructor Input)</h3>
             
@@ -21,7 +21,7 @@
             
             <input id="midWPM" type="text"  placeholder="midrange WPM..." 	/>
             <br>
-            
+            <!--WPM high value is calculated to avoid confusion. low, mid and high wpm need to be centered around mid-->
             <input id="highWPM" type="text" readonly="readonly" placeholder="high WPM..." 	/> <--- Is assigned automatically after filling in low and high WPM
             <br>
             
@@ -47,34 +47,52 @@
         
         <div id="finalDiv" >
         	<h3 style="color:teal">Final Exam (Instructor Input)</h3>
-        	<input id="timeLimit" type="text"  placeholder="time limit (seconds)..." 	/> <---Please enter the time in seconds
-            <br>
-			<textarea id="finalText" rows="8" cols="64" placeholder="input test here..."></textarea>
-			<br> 
-            <input id="finalSubmit" type="button"  value="Finished" />
+            
+            <input id="timeLimit" type="text"  placeholder="time limit (seconds)..." 	/> <---Please enter the time in seconds<br />
+            <br />
+            
+            
+            Total points: <input type="text" placeholder="Insert total point"/><br /><br />
+            
+            <input type="checkbox" id="minusForErrors" /> Subtract <input type="text" style="max-width:20px" id="errorValue" /> 
+            <select id="errorValueType">
+                <option value="percent">percent</option>
+                <option value="points">points</option>
+            </select>
+            per error
+          	<br /><br />
+                
+                <textarea id="finalText" rows="8" cols="64" placeholder="input test here..."></textarea><br />
+            
+            
+            
+   			<input id="finalSubmit" type="button"  value="Finished" />
         </div>
         <div id="result"></div>
+        <div id="jsonR"></div>
     </body>
 </html>
 
 <script type="text/javascript">	
 	
-	$("#finalDiv").hide(); //initally hides the final input information
+	$("#practiceDiv").hide(); 								//initally hides the final input information						
 	
-	$("#practiceRadio").change( //waits for a change in the "practice" radio. When changed it changes the scene to show the practice information (deafult page load)
+	$("#practiceRadio").change( 						//waits for a change in the "practice" radio. When changed it changes the scene to show the practice information (deafult page load)
 		function(){
-			if(this.checked)
+			if(this.checked){
 				$("#finalDiv").hide();
 				$("#practiceDiv").show();
-			}	
+			}
+		}
 	);
 	
-	$("#finalRadio").change( // when "final"radio is chosen, the practice information is hidden and the final information is shown
+	$("#finalRadio").change( 							// when "final"radio is chosen, the practice information is hidden and the final information is shown
 		function(){
-			if(this.checked)
+			if(this.checked){
 				$("#practiceDiv").hide();
 				$("#finalDiv").show();
 			}	
+		}
 	);
 	
 	
@@ -84,7 +102,7 @@
 	
 	function changeValue(){
 		
-		var lowWPM = $("#lowWPM").val()*1;//multiplied by 1 to convert from a string to an int
+		var lowWPM = $("#lowWPM").val()*1;				//multiplied by 1 to convert from a string to an int
 		var midWPM = $("#midWPM").val()*1;
 		
 		if( lowWPM != "" && midWPM != ""){
@@ -94,13 +112,13 @@
 		}
 	}
 	
-	$("#practiceSubmit").click(stringToJSONPractice);
+	$("#practiceSubmit").click(stringToJSONPractice);	//attaching event to the submit buttons
 	$("#finalSubmit").click(stringToJSONFinal);
 	
 	
 	function stringToJSONPractice(){
 		
-		var error = false;
+		var error = false;										//error originally set to false. If a field is not filled out properly, error will be set to true and a message will be displayed
 		var errorMessage = "These fields cannot be blank:\n";
 		var JSONString = "";
 		
@@ -126,17 +144,30 @@
 			errorMessage += "text\n";
 			error = true;	
 		}
-	
 		if(!error){
+			//JSON string created with all the necessary information
 			JSONString = '{ "lowWPM":' + JSON.stringify(lowWPM) + ', "midWPM":' + JSON.stringify(midWPM) +', "highWPM":' + JSON.stringify($("#highWPM").val()) + ', "title":' + JSON.stringify(title) + ', "practiceNum":' + JSON.stringify($("#practiceNum").val()) + ', "text":' + JSON.stringify(text) + '}';
-			$("#result").text(JSONString);
+			//posting to PHP portal which saves file
+			$.post(
+				"https://isdev.byu.edu/is/dev/Ryan/BrainHoney/testWPMPortal.php",
+				{
+					"type":"practice",
+					"JSONString":JSONString,
+					"bhCourseId":window.parent.bhCourseId,
+					"bhCourseTitle":window.parent.bhCourseTitle
+				},
+				function(data) {
+  					console.log(data);			//posts success or failure to console
+				}
+			);
 		}else{
-			alert(errorMessage);	
+			alert(errorMessage);		//creates an alert dialogue with fields needing to be filled out
 		}
-			
 	}
 					
 	function stringToJSONFinal(){
+		
+		//same comments as above but adjusted for final
 		
 		var error = false;
 		var errorMessage = "These fields cannot be blank:\n";
@@ -153,7 +184,19 @@
 		
 		if(!error){
 			JSONString = '{ "timeLimit":' + JSON.stringify($("#timeLimit").val())  + ', "text":' + JSON.stringify($("#finalText").val()) + '}';
-			$("#result").text(JSONString);
+			
+			$.post(
+				"https://isdev.byu.edu/is/dev/Ryan/BrainHoney/testWPMPortal.php",
+				{
+					"type":"final",
+					"JSONString":JSONString,
+					"bhCourseId":window.parent.bhCourseId,
+					"bhCourseTitle":window.parent.bhCourseTitle
+				},
+				function(data) {
+  					console.log(data);
+				}
+			);
 		}else{
 			alert(errorMessage);	
 		}
