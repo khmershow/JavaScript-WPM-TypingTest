@@ -17,16 +17,12 @@ $return_json = "{";
 	$error=0;
 	$word=0;
 	
-	
+function startup(){	
 	$wpmObj = new stdClass;
-	$wpmObj->totalError = $totalError;
-	$wpmObj->wpm= $wpm;
-	$wpmObj->cpm=$cpm;
-	$wpmObj->accuracy=$accuracy;
 	$wpmObj->welcome=$welcome;
 	$wpmObj->les_text=$les_text;
-	$wpmObj->word = $word;
-
+	return $wpmObj;
+}
 
 	/*function to determine the number of errors */
 function GetError($str1,$str2){
@@ -102,10 +98,7 @@ switch($_POST['action']) {
 	break;
 	case "vstart":
 		$_POST["vstart"];
-		$return_json .= "\"request_time\":\"".strtotime("now")."\",";
-		$return_json .= "\"welcome\":\"".json_encode($wpmObj->welcome)."\",";
-		$return_json .= "\"lesText\":\"".json_encode($wpmObj->les_text)."\",";
-	
+		$return_json .= "\"welcome\":\"".json_encode(startup())."\",";
 	break;
 	default:
 	break;

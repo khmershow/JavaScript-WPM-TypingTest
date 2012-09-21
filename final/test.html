@@ -12,12 +12,20 @@
     <!--<script type="text/javascript" src="https://is.byu.edu/is/share/BrainHoney/ScormGrader.js"></script>-->
     <script type="text/javascript"> 
 		var intervalVar;
+		var text_area;
 		function startClicked(){
 			//initText();
+			$.post(
+				"portal.php",
+				{action: "vstart" },
+				function(data){
+					text_area = JSON.parse(data);
+					console.log('hello world.');
+					//document.getElementById("txt").innerHTML = text_area.welcome.les_text;
+				},
+				"json"
+			);
 			InitTimer();
-			$.post("portal.php","start_time", function(data){$("#area1").append(data)},"json");
-			//var startText = jquery.parseJSON('{}') 
-			
 			
 		}
 		function textClick(){
@@ -31,13 +39,26 @@
 				"portal.php",
 				{action: "done" },
 				function(data){
-					//$("#scoreTable").append(data);
 					table = JSON.parse(data);
 					console.log(table);
+					document.getElementById("scoreTable").innerHTML = table.scores;
+					StopTimer();
 				}
 			);
-			document.getElementById("scoreTable").innerHTML = table.scores;
-      		StopTimer();
+			
+			 
+		}
+		function keypress(){
+			$.post(
+				"portal.php",
+				{action: "done" },
+				function(data){
+					table = JSON.parse(data);
+					console.log(table);
+					document.getElementById("scoreTable").innerHTML = table.scores;
+					StopTimer();
+				}
+			);
 			
 			 
 		}
