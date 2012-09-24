@@ -17,11 +17,15 @@
 			//initText();
 			$.post(
 				"portal.php",
-				{action: "vstart" },
+				{action: "start" },
 				function(data){
-					text_area = JSON.parse(data);
-					console.log('hello world.');
-					//document.getElementById("txt").innerHTML = text_area.welcome.les_text;
+					console.log(data);
+					if(typeof data === "string")
+						text_area = JSON.parse(data);
+					else
+						text_area = data;
+					console.log(text_area.welcome.les_text);
+					document.getElementById("area1").innerHTML = text_area.welcome.les_text;
 				},
 				"json"
 			);
