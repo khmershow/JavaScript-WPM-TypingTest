@@ -1,20 +1,10 @@
 <?PHP
 $return_json = "{";
 /*Define variables*/
-	$totalError=0;
-	$total_time=0;
-	$char=0;
-	$inputChar=0;
-	$wpm=0;
-	$cpm=0;
-	$accuracy=0;
 	$readonly='readonly="readonly"';
 	$les_text=file_get_contents( "typingtext/0/0.txt" );
 	$time_start=0;
-	$user_text="";
-	$start_time=0;
-	$error=0;
-	$word=0;
+	
 	
 function startup($les_text){	
 	$wpmObj = new stdClass;
@@ -43,6 +33,7 @@ function vstart(){
 	}
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
+		global $word, $wpm, $totalError, $cpm, $accuracy;
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 		$user_text=str_replace("\r\n","",$_POST["user_text"]); 
 		$user_text=str_replace("\n","",$user_text);
@@ -58,7 +49,7 @@ function done(){
 		$readonly='readonly="readonly"';			
 	}
 function getScoreTable() {
-	global $words, $wpm, $totalError, $cpm, $accuracy;
+	global $word, $wpm, $totalError, $cpm, $accuracy;
 	$results = "";
 	$results .= "<table width='449' cellpadding='6' cellspacing='0' class='ta'>";
     $results .= "	<tr>";
@@ -67,7 +58,7 @@ function getScoreTable() {
     $results .= "	</tr>";
     $results .= "   <tr>"; 
     $results .= "         <td class='td'><b>Total Words</b> (#)</td>"; 
-    $results .= "         <td class='td' id='totalWords'><b>".$words."</b></td>";
+    $results .= "         <td class='td' id='totalWords'><b>".$word."</b></td>";
     $results .= "   </tr>";
     $results .= "   <tr>";
     $results .= "         <td class='td'><b>GWPM</b> (gross word per minutes)</td>";

@@ -42,16 +42,20 @@
 		}
 		var table;
 		var x;
-		var userInput = [{user_text:textButton}];
+		//var input = new Object();
+		var userInput = document.getElementById('userText').value;
+		//var Jstring = jQuery.toJSON(input);
+		
 		function doneClicked(){
 			doneCount++;
 			if (doneCount == 1){
 				$.post(
 				"portal.php",
-				{action: "done" , ui: JSON.stringify(userInput) },
+				{action: "done" /*, ui: Jstring */},
 				function(data){
 					table = JSON.parse(data);
 					console.log(data);
+					console.log(userInput);
 					document.getElementById("scoreTable").innerHTML = table.scores;
 					StopTimer();
 				}
