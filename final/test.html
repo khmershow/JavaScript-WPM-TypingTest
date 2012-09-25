@@ -13,44 +13,50 @@
     <script type="text/javascript"> 
 		var intervalVar;
 		var text_area;
+		var startCount=0;
+		var doneCount = 0;
 		function startClicked(){
-			//initText();
+			startCount++;
+			if (startCount == 1){
 			$.post(
 				"portal.php",
 				{action: "start" },
 				function(data){
-					console.log(data);
 					if(typeof data === "string")
 						text_area = JSON.parse(data);
 					else
 						text_area = data;
-					console.log(text_area.welcome.les_text);
 					document.getElementById("area1").innerHTML = text_area.welcome.les_text;
 					document.getElementById("textCorrection").innerHTML = text_area.welcome.les_text;
 				},
 				"json"
 			);
 			InitTimer();
+			}
+			
 			
 		}
-		function textClick(){
 		var textButton = document.getElementById('userText');
-	 	textButton.focus();	
+		function textClick(){
+			textButton.focus();	
 		}
 		var table;
 		var x;
+		var userInput = [{user_text:textButton}];
 		function doneClicked(){
-			$.post(
+			doneCount++;
+			if (doneCount == 1){
+				$.post(
 				"portal.php",
-				{action: "done" },
+				{action: "done" , ui: JSON.stringify(userInput) },
 				function(data){
 					table = JSON.parse(data);
-					console.log(table);
+					console.log(data);
 					document.getElementById("scoreTable").innerHTML = table.scores;
 					StopTimer();
 				}
 			);
-			
+			}
 			 
 		}
 		
@@ -89,7 +95,7 @@
     				</div>
                 </div>
                 <br /> 
-                <input class="in" type="submit" action="vstart" id="vStart" value="Start Test" onClick="startClicked();" />
+                <input class="in" type="submit" action="vstart" id="vStart" value="Start Test" onClick="startClicked();"  />
                 <input type="submit" name="done" id="done" value="Done" onClick="doneClicked();" />
                 <br /> 
                 <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);" rows="10" cols="100" name="user_text" ></textarea>
@@ -98,34 +104,7 @@
                 <input type="hidden" name="startTime" id="startTime" />
            
            		<div id="scoreTable" >
-           		<!--<table width="449" cellpadding="6" cellspacing="0" class="ta">
-                    <tr>
-                        <th width="162" class="th" style="width: 10%"><div align="left">Parameter</div></th>
-                        <th width="131" class="th" style="width: 10%"><div align="left">Your result</div></th>
-                    </tr>
-                    <tr> 
-                        <td class="td"><b>Total Words</b> (#)</td> 
-                        <td class="td" id="totalWords"><b></b></td>
-                 	</tr>
-                    <tr>
-                        <td class="td"><b>GWPM</b> (gross word per minutes)</td>
-                        <td class="td" id="wpm"></td>
-                    </tr>
-                    <tr> 
-                        <td class="td"><b>Errors</b> (#)</td> 
-                        <td class="td" id="totalError"><b></b></td>
-                    </tr>
-                    <tr>
-                        <td class="td"><b>CWPM</b> (correct words per minutes)</td> 
-                        <td class="td" id="cpm"><b></b></td>
-                    </tr>
-                  	<tr>
-                        <td class="td"><b>Accuracy</b> (%)</td> 
-                        <td class="td" id="accuracy"><b></b></td>
-                    </tr>
-                    <td>&nbsp;</td>
-              </table>-->
-              
+           		             
               </div>
       </form>
     </div>

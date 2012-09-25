@@ -42,11 +42,11 @@ function vstart(){
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 	}
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
-	if(isset($_POST["done"])){
+function done(){
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 		$user_text=str_replace("\r\n","",$_POST["user_text"]); 
 		$user_text=str_replace("\n","",$user_text);
-		$total_time=microtime(true)-$start_time;
+		$total_time=microtime(true)-$time_start;
 		$char=strlen($les_text);
 		$inputChar=strlen($user_text);
 		$totalError = (GetError($les_text,$user_text));
@@ -58,6 +58,7 @@ function vstart(){
 		$readonly='readonly="readonly"';			
 	}
 function getScoreTable() {
+	global $words, $wpm, $totalError, $cpm, $accuracy;
 	$results = "";
 	$results .= "<table width='449' cellpadding='6' cellspacing='0' class='ta'>";
     $results .= "	<tr>";
@@ -91,7 +92,8 @@ function getScoreTable() {
 
 switch($_POST['action']) {
 	case "done":
-		$_POST["done"];
+		$user_text = json_decode(ui);
+		done();
 		$return_json .= "\"scores\":".json_encode(getScoreTable())."";
 	break;
 	case "start":
