@@ -9,17 +9,15 @@ $return_json = "{";
 	$cpm=0;
 	$accuracy=0;
 	$readonly='readonly="readonly"';
-	$welcome="Press \"Start Test\"";
-	$les_text="Type the text that appears here in the box below.";
+	$les_text=file_get_contents( "typingtext/0/0.txt" );
 	$time_start=0;
 	$user_text="";
 	$start_time=0;
 	$error=0;
 	$word=0;
 	
-function startup(){	
+function startup($les_text){	
 	$wpmObj = new stdClass;
-	$wpmObj->welcome = $welcome;
 	$wpmObj->les_text = $les_text;
 	return $wpmObj;
 }
@@ -37,11 +35,11 @@ function GetError($str1,$str2){
 		return $error;
 	}
 	/* if you hit start, timer starts and text is adjusted */
-	if(isset($_POST["vstart"])){
+function vstart(){
 		$time_start=microtime(true);
 		$readonly="";
 		$welcome="";
-		//$les_text=file_get_contents( "typingtext/0/0.txt" );
+		$les_text=file_get_contents( "typingtext/0/0.txt" );
 	}
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 	if(isset($_POST["done"])){
@@ -97,8 +95,8 @@ switch($_POST['action']) {
 		$return_json .= "\"scores\":".json_encode(getScoreTable())."";
 	break;
 	case "start":
-		$_POST["vstart"];
-		$return_json .= "\"welcome\":".json_encode(startup())."";
+		vstart();
+		$return_json .= "\"welcome\":".json_encode(startup($les_text))."";
 	break;
 	default:
 	break;

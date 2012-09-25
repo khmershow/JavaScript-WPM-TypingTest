@@ -26,6 +26,7 @@
 						text_area = data;
 					console.log(text_area.welcome.les_text);
 					document.getElementById("area1").innerHTML = text_area.welcome.les_text;
+					document.getElementById("textCorrection").innerHTML = text_area.welcome.les_text;
 				},
 				"json"
 			);
@@ -52,20 +53,7 @@
 			
 			 
 		}
-		function keypress(){
-			$.post(
-				"portal.php",
-				{action: "done" },
-				function(data){
-					table = JSON.parse(data);
-					console.log(table);
-					document.getElementById("scoreTable").innerHTML = table.scores;
-					StopTimer();
-				}
-			);
-			
-			 
-		}
+		
 		var message="Sorry, right-click has been disabled"; 
 		function clickIE() {if (document.all) {(message);return false;}} 
 		function clickNS(e) {if 
@@ -97,7 +85,7 @@
             	<br />
                 <div id="inputText" style="position:static; width:823px; height:166px;">
                 <textarea id="area1"  onkeydown="return disableCtrlKeyCombination(event);" onKeyUp="return disableCtrlKeyCombination(event);"  style="font-family:Arial, Helvetica, sans-serif;" readonly rows="10" cols="133"></textarea>	
-                	<div id="textCorrection" style="position:relative ; z-index:999; top:-175px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;">	
+                	<div id="textCorrection" style="position:relative ; z-index:999; top:-175px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;">Type the text that appears here in the box below. Click Start to begin.	
     				</div>
                 </div>
                 <br /> 
