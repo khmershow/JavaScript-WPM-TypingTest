@@ -42,20 +42,26 @@
 		}
 		var table;
 		var x;
-		//var input = new Object();
-		var userInput = document.getElementById('userText').value;
-		//var Jstring = jQuery.toJSON(input);
+		
+		function initializeVariables() {
+			var userInput = $('textarea#userText').val();
+			
+		}
+		
 		
 		function doneClicked(){
 			doneCount++;
+			userInput = $('textarea#userText').val();
+			var Jstring = JSON.stringify(userInput);
+			console.log(Jstring);
 			if (doneCount == 1){
 				$.post(
 				"portal.php",
-				{action: "done" /*, ui: Jstring */},
+				{action: "done" , ui: Jstring },
 				function(data){
 					table = JSON.parse(data);
 					console.log(data);
-					console.log(userInput);
+					
 					document.getElementById("scoreTable").innerHTML = table.scores;
 					StopTimer();
 				}
@@ -81,7 +87,7 @@
 		}
 	</script> 
 </head>
-<body onLoad="">
+<body onLoad="initializeVariables();">
     <div class="ac">
         <br />	
              <!-- var initialized = initializeAPI();

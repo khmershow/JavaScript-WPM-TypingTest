@@ -83,7 +83,8 @@ function getScoreTable() {
 
 switch($_POST['action']) {
 	case "done":
-		$user_text = json_decode(ui);
+		$user_obj = json_decode(ui);
+		$user_text = $user_obj->{'userInput'};
 		done();
 		$return_json .= "\"scores\":".json_encode(getScoreTable())."";
 	break;
