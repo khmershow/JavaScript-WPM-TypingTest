@@ -33,7 +33,7 @@ function vstart(){
 	}
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
-		global $word, $wpm, $totalError, $cpm, $accuracy;
+		global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time;
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 		$user_text=str_replace("\r\n","",$_POST["user_text"]); 
 		$user_text=str_replace("\n","",$user_text);
@@ -49,7 +49,7 @@ function done(){
 		$readonly='readonly="readonly"';			
 	}
 function getScoreTable() {
-	global $word, $wpm, $totalError, $cpm, $accuracy;
+	global $word, $wpm, $totalError, $cpm, $accuracy, $user_obj, $total_time, $user_text;
 	$results = "";
 	$results .= "<table width='449' cellpadding='6' cellspacing='0' class='ta'>";
     $results .= "	<tr>";
@@ -76,6 +76,14 @@ function getScoreTable() {
     $results .= "         <td class='td'><b>Accuracy</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$accuracy."</b></td>";
     $results .= "   </tr>";
+	$results .= "   <tr>";
+    $results .= "         <td class='td'><b>Total Time</b> </td>";
+    $results .= "         <td class='td' id='accuracy'><b>".$total_time."</b></td>";
+    $results .= "   </tr>";
+	$results .= "   <tr>";
+    $results .= "         <td class='td'><b>User Text</b> (%)</td>";
+    $results .= "         <td class='td' id='accuracy'><b>".$user_text."</b></td>";
+    $results .= "   </tr>";
     $results .= "   <td>&nbsp;</td>";
     $results .= "</table>";
 	return $results;
@@ -83,8 +91,9 @@ function getScoreTable() {
 
 switch($_POST['action']) {
 	case "done":
-		$user_obj = json_decode(ui);
-		$user_text = $user_obj->{'userInput'};
+		global $user_text;
+		$user_text = json_decode($_POST['ui']);
+		$_POST[$user_text];
 		done();
 		$return_json .= "\"scores\":".json_encode(getScoreTable())."";
 	break;

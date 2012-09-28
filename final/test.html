@@ -53,20 +53,16 @@
 			doneCount++;
 			userInput = $('textarea#userText').val();
 			var Jstring = JSON.stringify(userInput);
-			console.log(Jstring);
 			if (doneCount == 1){
 				$.post(
 				"portal.php",
 				{action: "done" , ui: Jstring },
 				function(data){
 					table = JSON.parse(data);
-					console.log(data);
-					
 					document.getElementById("scoreTable").innerHTML = table.scores;
 					StopTimer();
 				}
-			);
-			}
+			);}
 			 
 		}
 		
