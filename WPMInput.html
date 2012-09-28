@@ -47,41 +47,64 @@
         
         <div id="finalDiv" >
         	<h3 style="color:teal">Final Exam (Instructor Input)</h3>
-            
-            <input id="timeLimit" type="text"  placeholder="time limit (seconds)..." 	/> <---Please enter the time in seconds<br />
-            <br />
-            
-            
-            Total points: <input type="text" placeholder="Insert total point"/><br /><br />
-            
-            <input type="checkbox" id="minusForErrors" /> Subtract <input type="text" style="max-width:20px" id="errorValue" /> 
-            <select id="errorValueType">
-                <option value="percent">percent</option>
-                <option value="points">points</option>
-            </select>
-            per error
-          	<br /><br />
-                
-                <textarea id="finalText" rows="8" cols="64" placeholder="input test here..."></textarea><br />
-            
-            
-            
-   			<input id="finalSubmit" type="button"  value="Finished" />
+            <div class="align-left">
+                Time limit (seconds):
+            </div>
+            <div>
+                <input id="timeLimit" type="text"  placeholder="time limit (seconds)..." 	/>
+            </div>
+            <div class="align-left">
+                Total points:
+            </div>
+            <div>
+                <input id="totalPoints" type="text" placeholder="Insert total point"/>
+            </div>
+            <div>
+            	<h4 style="color:teal">Grading Options</h4>
+            </div>
+            <div class="align-left">
+                Expected words per minute:
+            </div>
+            <div>
+                <input id="ecpectedWPM" type="text" placeholder="Insert expected WPM"/>
+            </div>
+            <div>
+            	<input type="checkbox" id="incldueErrors" />Account for errors?
+            </div>
+            <div id="gradingOptions" contenteditable="false">
+                Subtract <input type="text" style="max-width:20px" id="errorValue" />
+                <select id="errorValueType">
+                    <option value="percent">percent</option>
+                    <option value="points">points</option>
+                </select>
+				per error
+            </div>
+            <div>
+            	<span><textarea id="finalText" rows="8" cols="64" placeholder="input test here..."></textarea></span>
+        	</div>
+        	<div>
+            	<span><input id="finalSubmit" type="button"  value="Finished" /></span>
+            </div>
         </div>
         <div id="result"></div>
         <div id="jsonR"></div>
     </body>
 </html>
 
-<script type="text/javascript">	
+<script type="text/javascript">							
 	
-	$("#practiceDiv").hide(); 								//initally hides the final input information						
+	$("#practiceDiv").hide(); 							//initally hides the final input information						
+	$("#gradingOptions").hide();
 	
-	$("#practiceRadio").change( 						//waits for a change in the "practice" radio. When changed it changes the scene to show the practice information (deafult page load)
+	$(".align-left").css("float","left");
+	$(".align-left").css("min-width","200px");
+	
+	$("#incldueErrors").change( 						
 		function(){
 			if(this.checked){
-				$("#finalDiv").hide();
-				$("#practiceDiv").show();
+				$("#gradingOptions").show();
+			}else{
+				$("#gradingOptions").hide();
 			}
 		}
 	);
