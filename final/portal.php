@@ -78,11 +78,11 @@ function getScoreTable() {
     $results .= "   </tr>";
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>Total Time</b> </td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$total_time."</b></td>";
+    $results .= "         <td class='td' ><b>".$total_time."</b></td>";
     $results .= "   </tr>";
 	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>User Text</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$user_text."</b></td>";
+    $results .= "         <td class='td'><b>User Text</b></td>";
+    $results .= "         <td class='td' ><b>".$user_text."</b></td>";
     $results .= "   </tr>";
     $results .= "   <td>&nbsp;</td>";
     $results .= "</table>";
@@ -93,7 +93,6 @@ switch($_POST['action']) {
 	case "done":
 		global $user_text;
 		$user_text = json_decode($_POST['ui']);
-		$_POST[$user_text];
 		done();
 		$return_json .= "\"scores\":".json_encode(getScoreTable())."";
 	break;
