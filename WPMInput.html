@@ -58,10 +58,10 @@
             </div>
             <div>
                 <input id="totalPoints" type="text" placeholder="Insert total point"/>
-            </div>
-            <div>
-            	<h4 style="color:teal">Grading Options</h4>
-            </div>
+            </div><br />
+			
+            <h4 style="color:teal">Grading Options</h4>
+            
             <div class="align-left">
                 Expected words per minute:
             </div>
@@ -71,13 +71,15 @@
             <div>
             	<input type="checkbox" id="incldueErrors" />Account for errors?
             </div>
-            <div id="gradingOptions" contenteditable="false">
-                Subtract <input type="text" style="max-width:20px" id="errorValue" />
-                <select id="errorValueType">
-                    <option value="percent">percent</option>
-                    <option value="points">points</option>
-                </select>
-				per error
+            <div id="spaceFill" style="height:1.5em">
+                <div id="gradingOptions" contenteditable="false">
+                    Subtract <input type="text" style="max-width:20px" id="errorValue" />
+                    <select id="errorValueType">
+                        <option value="percent">percent</option>
+                        <option value="points">points</option>
+                    </select>
+                    per error
+                </div>
             </div>
             <div>
             	<span><textarea id="finalText" rows="8" cols="64" placeholder="input test here..."></textarea></span>
@@ -91,7 +93,9 @@
     </body>
 </html>
 
-<script type="text/javascript">							
+<script type="text/javascript">	
+
+	var optionsChecked = false;						
 	
 	$("#practiceDiv").hide(); 							//initally hides the final input information						
 	$("#gradingOptions").hide();
@@ -102,9 +106,11 @@
 	$("#incldueErrors").change( 						
 		function(){
 			if(this.checked){
-				$("#gradingOptions").show();
+				$("#gradingOptions").show("fast");
+				optionsChecked = true;
 			}else{
 				$("#gradingOptions").hide();
+				optionsChecked = false;
 			}
 		}
 	);
@@ -195,18 +201,43 @@
 		var error = false;
 		var errorMessage = "These fields cannot be blank:\n";
 		var JSONString = "";
+		
+		var timeLimit = $("#timeLimit").val();
+		var totalPoints = $("#totalPoints").val();
+		var finalText = $("#finalText").val();
+		var expectedWPM = $("#ecpectedWPM").val();
+		
+		var errorValue = $("#errorValue").val();
+		var errorType = $("#errorValueType").val();
 			
-		if($("#timeLimit").val() == ""){
+		if(timeLimit == ""){
 			errorMessage += "time limit\n";
 			error = true;	
 		}
-		if($("#finalText").val() == ""){
+		if(totalPoints == ""){
+			errorMessage += "total points\n";
+			error = true;	
+		}
+		if(finalText == ""){
 			errorMessage += "text\n";
 			error = true;	
 		}
+		if(expectedWPM == ""){
+			errorMessage += "expected words per minute\n";
+			error = true;	
+		}
+		if(optionsChecked){
+			if(errorValue == ""){
+				errorMessage += "error value\n";
+				error = true;	
+			}
+		}else{
+			errorValue = null;
+			errorType = null;
+		}		
 		
 		if(!error){
-			JSONString = '{ "timeLimit":' + JSON.stringify($("#timeLimit").val())  + ', "text":' + JSON.stringify($("#finalText").val()) + '}';
+			JSONString = '{ "timeLimit":' + JSON.stringify(timeLimit)  + ', "totalPoint":' + JSON.stringify(totalPoints) + ', "errorType":' + JSON.stringify(errorType)  + ', "errorValue":' + JSON.stringify(errorValue) + ', "expectedWPM":' + JSON.stringify(expectedWPM) + ', "text":' + JSON.stringify(finalText) + '}';
 			
 			$.post(
 				"https://isdev.byu.edu/is/dev/Ryan/BrainHoney/testWPMPortal.php",

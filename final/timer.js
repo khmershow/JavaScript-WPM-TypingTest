@@ -13,33 +13,36 @@ function StopTimer()
     if(TimerRunning)
        clearInterval(TimerID);
     TimerRunning=false;
-	
+
  }
+ //TheElement displays the actual timer, checks to see if time ran out or subtracts a second
 function loopTimer() {
-	
+
 	TheElement = document.getElementById("txt");
     TheElement.value = Pad(mins)+":"+Pad(secs);
-	
+
     Check();
     
     if(mins<=0 && secs<=0)
        StopTimer();
-	       
+
     if(secs==0)
     {
        mins--;
        secs=60;
     }
-	
+
     secs--;
  }
-
+//initializes timer and runs looptimer once a second
  function StartTimer()
  {
     TimerRunning=true;
-	
+
 	TimerID = window.setInterval("loopTimer()",1000);
  }
+ 
+//if you run out of time it clicks done
 function Check()
  {
      if(mins==0 && secs==0)
@@ -56,4 +59,3 @@ function Pad(number) //pads the mins/secs with a 0 if its less than 10
        number=0 + "" + number;
     return number;
  }
-
