@@ -1,4 +1,4 @@
-<?
+<?PHP
 function _Cmp($a,$b){
 $line1=explode("|",$a);
 $line2=explode("|",$b);
@@ -8,7 +8,7 @@ return ($line1[5] >$line2[5]) ? -1 : 1;
 }
 function FillTable($A){?>
 <table class="ta ac"><tr><th class="th" style="width: 30%">Name</th><th class="th" style="width: 20%">Date, Time</th><th class="th" style="width: 15%">Duration (s)</th><th class="th" style="width: 17%">Accuracy (%)</th><th class="th" style="width: 10%">WPM</th><th class="th" style="width: 10%">CPM</th></tr>
-<?
+<?PHP
 for($i=0;$i<count($A);$i++){
 $line=explode("|",$A[$i ]);
 echo "<tr>";
@@ -171,7 +171,7 @@ $was_start=0;
 <hr />
 <div class="ac"><?php echo $total_time; ?>
 	<form method='post' action="original.php">
-    	Your Name: <input class="in" style="width:200px" type="text" name="name" value="<?=$name?>" />
+    	Your Name: <input class="in" style="width:200px" type="text" name="name" value="<?PHP echo $name?>" />
         max. 25 chars)
         <br /> <br /> 
         Select text: <select class="in" name="numtype" style="width:160px">
@@ -260,38 +260,38 @@ $was_start=0;
                         <tr> 
                         	<td class="td"><b>WPM</b> (word per minutes)
                             </td>
-                            <td class="td"><b><?=$wpm?></b>
+                            <td class="td"><b><?PHP echo $wpm?></b>
                             </td>
                         </tr>
                         <tr> 
                         	<td class="td"><b>CPM</b> (char per minutes)
                             </td> 
-                            <td class="td"><b><?=$cpm?></b>
+                            <td class="td"><b><?PHP echo $cpm?></b>
                             </td>
                         </tr>
                         <tr> 
                         	<td class="td"><b>Accuracy</b> (%)
                             </td>
-                            <td class="td"><b><?=$accuracy?></b>
+                            <td class="td"><b><?PHP echo $accuracy?></b>
                             </td>
                         </tr>
                    </table>
 		<?}else{?>
-			<textarea id="area1" onselectstart="return false" onpaste="return false" style="-moz-user-select: none;-khtml-user-select: none; user-select: none;" readonly="readonly" rows="5" cols="72"><?=$les_text?></textarea>
+			<textarea id="area1" onselectstart="return false" onpaste="return false" style="-moz-user-select: none;-khtml-user-select: none; user-select: none;" readonly="readonly" rows="5" cols="72"><?PHP echo $les_text?></textarea>
 			<br />
 			<input class="in" type="submit" name="start" value="Start Test" />
 			<br />
-			<textarea <?=$style_text.$readonly?> rows="5" cols="72" name="user_text"><?=$welcome?></textarea>
+			<textarea <?PHP echo $style_text.$readonly?> rows="5" cols="72" name="user_text"><?PHP echo $welcome?></textarea>
     		<br /> 
     		<input type="submit" name="done" value="Done" />
     	<?}?>
-     		<input type="hidden" name="was_start" value="<?=$was_start?>" />
-      		<input type="hidden" name="vnum" value="<?=$num?>" />
-       		<input type="hidden" name="vnumtype" value="<?=$num_type?>" />
-        	<input type="hidden" name="vstart" value="<?=$time_start?>" />
+     		<input type="hidden" name="was_start" value="<?PHP echo $was_start?>" />
+      		<input type="hidden" name="vnum" value="<?PHP echo $num?>" />
+       		<input type="hidden" name="vnumtype" value="<?PHP echo $num_type?>" />
+        	<input type="hidden" name="vstart" value="<?PHP echo $time_start?>" />
         </form>
     </div>
-<?
+<?PHP
 $LT=file($_SERVER['DOCUMENT_ROOT']."/typingtest/last_typist.txt");
 echo"<hr /><h3>Latest</h3>";
 FillTable($LT);
