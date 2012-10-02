@@ -8,8 +8,8 @@
 	</head>
  	<body>
     	<h2 style="color:teal">Test Type</h2>
-        <input type="radio" name="testType" value="false" id="practiceRadio" /> Practice  <!--Radio buttons for deciding which div to show, final or practice-->
-        <input type="radio" name="testType" checked="checked" value="true" id="finalRadio" /> Final
+        <input type="radio" name="testType" checked="checked" value="false" id="practiceRadio" /> Practice  <!--Radio buttons for deciding which div to show, final or practice-->
+        <input type="radio" name="testType" value="true" id="finalRadio" /> Final
         <div id="practiceDiv">
             <h3 style="color:teal">Practice Exam (Instructor Input)</h3>
             
@@ -97,7 +97,7 @@
 
 	var optionsChecked = false;						
 	
-	$("#practiceDiv").hide(); 							//initally hides the final input information						
+	$("#finalDiv").hide(); 							//initally hides the final input information						
 	$("#gradingOptions").hide();
 	
 	$(".align-left").css("float","left");
@@ -120,6 +120,15 @@
 			if(this.checked){
 				$("#practiceDiv").hide();
 				$("#finalDiv").show();
+			}	
+		}
+	);
+	
+	$("#practiceRadio").change( 							// when "final"radio is chosen, the practice information is hidden and the final information is shown
+		function(){
+			if(this.checked){
+				$("#finalDiv").hide();
+				$("#practiceDiv").show();
 			}	
 		}
 	);
