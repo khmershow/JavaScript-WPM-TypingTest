@@ -88,7 +88,7 @@ switch($POST_GET['action']) {
 		global $user_text;
 		$user_text =$_POST['ui'];
 		done();
-		$return_json .= "\"scores\":".json_encode(getScoreTable())."";
+		$return_json .= "\"scores\":".json_encode(getScoreTable()).", \"grade\":".json_encode($cpm)."";
 	break;
 	case "start":
 		vstart();
