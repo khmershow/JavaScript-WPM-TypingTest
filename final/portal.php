@@ -1,4 +1,5 @@
 <?PHP
+session_start();
 $return_json = "{";
 /*Define variables*/
 	$readonly='readonly="readonly"';
@@ -26,18 +27,18 @@ function GetError($str1,$str2){
 	}
 	/* if you hit start, timer starts and text is adjusted */
 function vstart(){
+	global $time_start, $_SESSION; 
 		$time_start=microtime(true);
+		$_SESSION['start'] = $time_start;
 		$readonly="";
 		$welcome="";
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 	}
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
-		global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time;
+		global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time, $time_start, $_SESSION;
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
-		//$user_text=str_replace("\r\n","",$_POST["user_text"]); 
-		//$user_text=str_replace("\r\n","",$user_text); 
-		//$user_text=str_replace("\n","",$user_text);
+		$time_start= ($_SESSION["start"]);
 		$total_time=microtime(true)-$time_start;
 		$char=strlen($les_text);
 		$inputChar=strlen($user_text);
@@ -50,7 +51,7 @@ function done(){
 		$readonly='readonly="readonly"';			
 	}
 function getScoreTable() {
-	global $word, $wpm, $totalError, $cpm, $accuracy, $user_obj, $total_time, $user_text;
+	global $word, $wpm, $totalError, $cpm, $accuracy, $user_obj, $total_time, $time_start ;
 	$results = "";
 	$results .= "<table width='449' cellpadding='6' cellspacing='0' class='ta'>";
     $results .= "	<tr>";
@@ -77,20 +78,12 @@ function getScoreTable() {
     $results .= "         <td class='td'><b>Accuracy</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$accuracy."</b></td>";
     $results .= "   </tr>";
-	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>Total Time</b> </td>";
-    $results .= "         <td class='td' ><b>".$total_time."</b></td>";
-    $results .= "   </tr>";
-	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>User Text</b></td>";
-    $results .= "         <td class='td' ><b>".$user_text."</b></td>";
-    $results .= "   </tr>";
-    $results .= "   <td>&nbsp;</td>";
+	$results .= "   <td>&nbsp;</td>";
     $results .= "</table>";
 	return $results;
 }
-
-switch($_POST['action']) {
+$POST_GET = array_merge($_POST, $_GET);
+switch($POST_GET['action']) {
 	case "done":
 		global $user_text;
 		$user_text =$_POST['ui'];
@@ -106,4 +99,5 @@ switch($_POST['action']) {
 }
 $return_json = preg_replace('/([\:,\[])\s*null\s*([,\}\]])/i', '\1"null"\2', $return_json);
 echo $return_json."}";
+session_write_close();
 ?>
