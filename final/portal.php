@@ -35,8 +35,9 @@ function vstart(){
 function done(){
 		global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time;
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
-		$user_text=str_replace("\r\n","",$_POST["user_text"]); 
-		$user_text=str_replace("\n","",$user_text);
+		//$user_text=str_replace("\r\n","",$_POST["user_text"]); 
+		//$user_text=str_replace("\r\n","",$user_text); 
+		//$user_text=str_replace("\n","",$user_text);
 		$total_time=microtime(true)-$time_start;
 		$char=strlen($les_text);
 		$inputChar=strlen($user_text);
@@ -92,7 +93,7 @@ function getScoreTable() {
 switch($_POST['action']) {
 	case "done":
 		global $user_text;
-		$user_text = json_decode($_POST['ui']);
+		$user_text =$_POST['ui'];
 		done();
 		$return_json .= "\"scores\":".json_encode(getScoreTable())."";
 	break;

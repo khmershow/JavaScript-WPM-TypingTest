@@ -56,7 +56,7 @@
 			if (doneCount == 1){
 				$.post(
 				"portal.php",
-				{action: "done" , ui: Jstring },
+				{action: "done" , ui: userInput },
 				function(data){
 					table = JSON.parse(data);
 					document.getElementById("scoreTable").innerHTML = table.scores;
