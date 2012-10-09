@@ -87,10 +87,32 @@
 <body onLoad="initializeVariables();">
     <div class="ac">
         <br />	
-        <input type="submit" id="vStart" value="Start" onClick="initializeAPI()"  />
-        <input type="submit"  id="done" value="Done" onClick="doneClicked();" />
-        <br /> 
-        <textarea id="userText" rows="10" cols="100" name="user_text" ></textarea>
+             <!-- var initialized = initializeAPI();
+             inputText runs disableCtrlKeyCombo to stop cut and paste 
+             textCorrection is placed over it and is editted by diffString1
+             userText is the input form and calls the disableCtrlKeyCombo,
+             also calls diffString to change the color of the text in textCorrection to show incorrect input
+             -->			              
+           	    Time remaining:<input id="txt" readonly type="text" value="" border="0" name="disp">
+            	<br />
+                <div id="inputText" style="position:static; width:823px; height:166px;">
+                <textarea id="area1"  onkeydown="return disableCtrlKeyCombination(event);" onKeyUp="return disableCtrlKeyCombination(event);"  style="font-family:Arial, Helvetica, sans-serif;" readonly rows="10" cols="133"></textarea>	
+                	<div id="textCorrection" style="position:relative ; z-index:999; top:-175px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;">Type the text that appears here in the box below. Click Start to begin.	
+    				</div>
+                </div>
+                <br /> 
+                <input class="in" type="submit" action="vstart" id="vStart" value="Start Test" onClick="startClicked();"  />
+                <input type="submit" name="done" id="done" value="Done" onClick="doneClicked();" />
+                <br /> 
+                <textarea id="userText" onKeyDown="return disableCtrlKeyCombination(event); " onKeyUp="diffString1(document.getElementById('area1').value,this.value);" rows="10" cols="100" name="user_text" ></textarea>
+                <br />  
+                
+                <input type="hidden" name="startTime" id="startTime" />
+           
+           		<div id="scoreTable" >
+           		             
+              </div>
+     	
     </div>
 </body>
 </html>
