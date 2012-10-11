@@ -3,9 +3,6 @@ function InlineAssessment(elementArg) {
 	//	static for class
 	this.allTypes = {
 		'wpm_test':
-			"<script type=\"text/javascript\" src=\"timer.js\"></script>\n" +
-    		"<script type=\"text/javascript\" src=\"checker.js\"></script>\n" +
-    		"<script type=\"text/javascript\" src=\"copyPaste.js\"></script>\n" +
 			"	Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
 			"	<br />\n" +
 			"	<div id=\"inputText\" style=\"position:static; width:823px; height:166px;\">\n" +
