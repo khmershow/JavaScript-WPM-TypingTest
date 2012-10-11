@@ -19,7 +19,18 @@ function InlineAssessment(elementArg) {
             "   <div id=\"scoreTable\" >" +             
             " 	</div>",
 			
-		'simple_text': "<input/><input type=\"button\" value=\"submit thingie\"/>"
+		'simple_text': "<input/><input type=\"button\" value=\"submit thingie\"/>",
+		'simple_menu':
+			"<select>" +
+			"	<option  value=\"100\">100%</ option>" +
+			" 	<option  value=\"90\">90%</ option>" +
+			" 	<option  value=\"80\">80%</ option>" +
+			"	<option  value=\"70\">70%</ option>" +
+			"	<option  value=\"60\">60%</ option>" +
+			"	<option  value=\"50\">50%</ option>" +
+			"	<option  value=\"10\">10%</ option>" +
+			"</select>" +
+			"<input type=\"submit\" value=\"Submit\" onClick=\"setScore(value)\">"
 	};
 	this.type;
 	this.id = inlineAssessmentIdCounter++;
@@ -33,6 +44,9 @@ function InlineAssessment(elementArg) {
 		this.element = elementArg;
 		this.setType( this.element );
 		this.display( this.element );
+		//use this when using the event handlers
+		this.element.aE = this;
+		console.log(this.element);
 		return this.element;
 	};
 	this.isElement = function(obj) {
@@ -106,6 +120,7 @@ InlineAssessment.prototype.getId = function() { return id; };
 InlineAssessment.prototype.getType = function() { return type; };
 InlineAssessment.prototype.getElement = function() { return element; };
 
+//do not change the name of assessmentElements
 var assessmentElements;
 $(document).ready(function(){
 	assessmentElements = $("INLINE_ASSESSMENT");
