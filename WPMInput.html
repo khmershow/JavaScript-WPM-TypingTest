@@ -1,0 +1,192 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+	<head>
+    	<meta charset="UTF-8">
+        <!---for test purposes only--->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="errorHandler.js"></script>
+                <!---for test purposes only--->
+	</head>
+ 	<body>
+    	<h2 style="color:teal">Test Type</h2>
+        <input type="radio" checked="checked" value="true" name="testType" id="practice" /> Practice 
+        <input type="radio" name="testType" value="false" id="test" /> Final
+        <div id="practiceDiv"  style="display:block">
+            <h3 style="color:teal">Practice Exam (Instructor Input)</h3>
+            
+            <p>low and high WPM must be concentric around the midrange WPM</p>
+            <p>These are only for the illustration that happens below and are not important to the test itself</p>
+            
+            <input id="lowWPM" type="text" name="lowWPM" placeholder="low WPM..." 	/>
+            <br>
+            
+            <input id="midWPM" type="text" name="midWPM" placeholder="midrange WPM..." 	/>
+            <br>
+            
+            <input id="highWPM" type="text" readonly="readonly" name="highWPM" placeholder="high WPM..." 	/> <---cannot be edited, will be calculated automatically
+            <br>
+            
+            <input id="PracticeTitle" type="text" name="title" placeholder="Practice title..." 	/>
+            <br>
+            
+            <p>Practice #</p>
+            
+            <select id="practiceNum" >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            </select>
+            <br/>
+                
+            <textarea id="practiceText" name="assesment" rows="8" cols="64" placeholder="the instructor will input the material for which the student will be assesed in this box"></textarea>
+      	
+        </div>
+        
+        <div id="finalDiv" style="display:none">
+        	<h3 style="color:teal">Final Exam (Instructor Input)</h3>
+        	<input id="finalTimeLimit" type="text" name="timeLimit" placeholder="time limit..." 	/>
+            <br>
+			<textarea id="finalText" name="assessment" rows="8" cols="64" placeholder="input test here..."></textarea>
+			<br> 
+            
+        </div>
+        <input id="getJSON" type="button" value="Finished" />
+        <div id="result" style="display:none"></div>
+        <div id="testDIV"></div>
+    </body>
+</html>
+
+<script type="text/javascript">
+	//radio button variables
+	var testRadio = document.getElementById("test");
+	var practiceRadio = document.getElementById("practice");
+	
+	var finalDiv = document.getElementById("finalDiv");
+	var practiceDiv = document.getElementById("practiceDiv");
+	
+	eventRegistrar(testRadio, 'change', changeRadio);
+	eventRegistrar(practiceRadio, 'change', changeRadio);
+	
+	function changeRadio(){
+		
+		if(practiceRadio.checked){
+			practiceDiv.style.display = "block";
+			finalDiv.style.display = "none";
+		}else{
+			finalDiv.style.display = "block";
+			practiceDiv.style.display = "none";
+		}
+		
+		
+	}
+	
+	
+	
+	//practice variables
+	var lowWPM       = document.getElementById("lowWPM");
+	var midWPM       = document.getElementById("midWPM");
+	var highWPM      = document.getElementById("highWPM");
+	
+	var title        = document.getElementById("PracticeTitle");
+	var practiceNum  = document.getElementById("practiceNum");
+	var text         = document.getElementById("practiceText");
+	
+	var getJSONString = document.getElementById("getJSON");
+	
+	eventRegistrar(getJSONString, 'click', stringToJSON);
+	
+	eventRegistrar(lowWPM, 'change', setHighWPM);
+	eventRegistrar(midWPM, 'change', setHighWPM);
+	
+	function setHighWPM(){
+		
+		if(lowWPM.value != "" && midWPM.value != ""){		
+				
+			if((1 * midWPM.value) > (1 * lowWPM.value))
+				highWPM.value = 2 * midWPM.value -lowWPM.value;		
+			else{
+				alert("the mid value must be higher than the low!");
+				lowWPM.value = "";
+				midWPM.value = "";
+				highWPM.value = "";
+			}
+		}
+	}
+	
+	//final variables
+	
+	var finalTimeLimit  = document.getElementById("finalTimeLimit");
+	var finalText	 = document.getElementById("finalText");
+	
+	var resultDiv = document.getElementById("result");
+	
+	function stringToJSON(theString){
+		
+		var error = false;
+		var errorMessage = "These fields cannot be blank:\n";
+		var JSONString = "";
+		
+		if(practiceRadio.checked){	
+			if(lowWPM.value == ""){
+				errorMessage += "low WPM\n";
+				error = true;	
+			}else{
+				lowWPM.value = 1*lowWPM.value;
+			}
+			if(midWPM.value == ""){
+				errorMessage += "mid WPM\n";
+				error = true;	
+			}else{
+				lowWPM.value = 1*lowWPM.value;
+				highWPM.value = 1*highWPM.value;
+			}
+			if(title.value == ""){
+				errorMessage += "title\n";
+				error = true;	
+			}
+			if(text.value == ""){
+				errorMessage += "text\n";
+				error = true;	
+			}	
+		}else{
+			if(finalTimeLimit.value == ""){
+				errorMessage += "Final Time Limit\n";
+				error = true;	
+			}
+			if(finalText.value == ""){
+				errorMessage += "Final Text\n";
+				error = true;	
+			}			
+		}
+		
+		if(!error){
+			if(practiceRadio.checked){
+				JSONString = '{"type": "practice", "lowWPM":' + JSON.stringify(lowWPM.value) + ', "midWPM":' + JSON.stringify(midWPM.value) +', "highWPM":' + JSON.stringify(highWPM.value) + ', "title":' + JSON.stringify(title.value) +
+					', "practiceNum":' + JSON.stringify(practiceNum.value) + ', "text":' + JSON.stringify(text.value) + '}';
+			}else{
+				JSONString = '{"type": "final", "timeLimit":' + JSON.stringify(finalTimeLimit.value) + ', "text":' + JSON.stringify(finalText.value) + '}';				
+			}
+			
+			resultDiv.style.display = "block";
+			resultDiv.innerHTML = JSONString;
+			alert(JSON.parse(JSONString).type);
+			
+		}else{
+			alert(errorMessage);	
+		}
+		
+	}
+	
+	/*universal event rigistration*/
+	function eventRegistrar(element, eventType, handlerFunction) {
+		if(element.addEventListener) {
+			element.addEventListener(eventType,handlerFunction,false);
+		} else {
+			element.attachEvent('on'+eventType,handlerFunction);
+		}
+	}
+</script>
