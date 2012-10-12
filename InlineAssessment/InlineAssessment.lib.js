@@ -151,12 +151,15 @@ function InlineAssessment(elementArg) {
 				" 	</div>",
 			'methods': {
 				'startClick': function() {
-					
+					var test;
 				}
 			}
 		},
-		'simple_text': "<input/><input type=\"button\" value=\"submit thingie\"/>"
+		'simple_text': {
+				'inputElementsString':"<input/><input type=\"button\" value=\"submit thingie\"/>"
+		}
 	};
+	
 	this.type;
 	this.id = inlineAssessmentIdCounter++;
 	
@@ -171,6 +174,7 @@ function InlineAssessment(elementArg) {
 		this.display( this.element );
 		return this.element;
 	};
+	
 	this.isElement = function(obj) {
 		try {
 			//Using W3 DOM2 (works for FF, Opera and Chrom)
@@ -185,6 +189,7 @@ function InlineAssessment(elementArg) {
 				(typeof obj.ownerDocument ==="object");
 		}
 	}
+	
 	this.setType = function() {
 		if(!this.element) {
 			throw "Error (Inline Assessment): You can't set the type before there is an element defined.";
@@ -198,6 +203,7 @@ function InlineAssessment(elementArg) {
 		this.DOMNodes = DOMNodesCreate;
 		return this.type;
 	}
+	
 	this.emptyElement = function() {
 		if(this.element) {
 			var loopLimit = 1000;
@@ -212,6 +218,7 @@ function InlineAssessment(elementArg) {
 		}
 		return true;
 	};
+	
 	this.display = function() {
 		this.emptyElement();
 		if( this.DOMNodes ) {
