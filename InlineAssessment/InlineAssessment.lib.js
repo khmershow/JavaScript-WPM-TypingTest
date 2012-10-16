@@ -47,7 +47,7 @@ function InlineAssessment(elementArg) {
 		this.element = elementArg;
 		this.setType( this.element );
 		this.display( this.element );
-		if (this.allTypes[this.type].methods > 0){
+		if (this.allTypes[this.type].methods.length > 0){
 			this.setEvents();
 		}
 		return this.element;
@@ -112,19 +112,23 @@ function InlineAssessment(elementArg) {
 	
 	this.setEvents = function(){
 		for(var i=0;i<this.allTypes[this.type].methods.length;i++) {
+			var inputElement = $("#"+this.allTypes[this.type].methods[i].id);
+			if(typeof inputElement == 'array') {
+				inputElement = inputElement[0];
+			}
 			switch(this.allTypes[this.type].methods[i].type) {
 				case "change":
-					$(this.allTypes[this.type].methods[i].id).change(this.allTypes[this.type].methods[i].handler);
+					inputElement.change(this.allTypes[this.type].methods[i].handler);
 				break;
-				default:alert($(this.allTypes[this.type].methods[i].id).val());
-					$(this.allTypes[this.type].methods[i].id).click(this.allTypes[this.type].methods[i].handler);
+				default: //click Event
+					inputElement.click(this.allTypes[this.type].methods[i].handler);
 				break;
 			}
 		}
 	}
 	
 	this.setElement( elementArg );
-	this.setEvents();
+	//this.setEvents();
 
 	if(!this.element) {
 		if(!this.setElement( elementArg )) {
