@@ -11,28 +11,45 @@ function InlineAssessment(elementArg) {
 				"		</div>" +
 				"    </div>" +
 				"   <br /> " + 
-				"   <input class=\"in\" type=\"submit\" action=\"vstart\" id=\"vStart\" value=\"Start Test\" onClick=\"startClicked();\"  />" +
+				"   <input class=\"in\" type=\"submit\" action=\"vstart\" id=\"vStart\" value=\"Start Test\" />" +
 				"	<input type=\"submit\" name=\"done\" id=\"done\" value=\"Done\" onClick=\"doneClicked();\" />" +
 				"    <br /> " + 
 				"   <textarea id=\"userText\" onKeyDown=\"return disableCtrlKeyCombination(event); \" onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 				"   <br />  " +
 				"   <div id=\"scoreTable\" >" +             
 				" 	</div>",
-			'methods': [
+			'methods': 
+			[
 				{
-						'name': "startClick",
-						'type': "click",
-						'id': "",
-						'handler': function() {
-						}
+					'name': "startClick",
+					'type': "click",
+					'id': "vStart",
+					'handler': function() {
+						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js")
+						initializeAPI();
+						alert("this works");
+						var e = document.getElementById(score);						
+						setScore(e.options[e.selectedIndex].value);
+					}
 				}
 			]
 		},
 		'simple_text': {
-				'inputElementsString':"<input/><input type=\"button\" value=\"submit thingie\"/>"
+				'inputElementsString':"<input/><input type=\"button\" id=\"vsubmit\" value=\"submit thingie\"/>",	
+					'methods': 
+			[
+				{
+					'name': "submitClick",
+					'type': "click",
+					'id': "vsubmit",
+					'handler': function() {
+						alert("this works");
+					}
+				}
+			]
 		},
 		'simple_menu': {
-				'inputElementString':"<select>" + 
+				'inputElementString':"<select id=\"score\">" + 
 					"	<option  value=\"100\">100%</ option>" +
 					"	<option  value=\"90\">90%</ option>" +
 					"	<option  value=\"80\">80%</ option>" +
@@ -41,7 +58,22 @@ function InlineAssessment(elementArg) {
 					"	<option  value=\"50\">50%</ option>" +
 					"	<option  value=\"10\">10%</ option>" +
 					"</select>" +
-					"<input type=\"submit\" value=\"Submit\" onClick=\"setScore(value)\">"	
+					"<input type=\"submit\" id=\"vsubmit\" value=\"Submit\" onClick=\"setScore(value)\">",	
+					'methods': 
+			[
+				{
+					'name': "submitClick",
+					'type': "click",
+					'id': "vsubmit",
+					'handler': function() {
+						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js")
+						initializeAPI();
+						alert("this works");
+						var e = document.getElementById(score);						
+						setScore(e.options[e.selectedIndex].value);
+					}
+				}
+			]
 		}
 	};
 	
@@ -57,7 +89,7 @@ function InlineAssessment(elementArg) {
 		this.element = elementArg;
 		this.setType( this.element );
 		this.display( this.element );
-		if (this.allTypes[this.type].methods > 0){
+		if (this.allTypes[this.type].methods.length > 0){
 			this.setEvents();
 		}
 		return this.element;
@@ -87,16 +119,7 @@ function InlineAssessment(elementArg) {
 		}
 		
 		var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
-		for(var i=0;i<this.allTypes[this.type].methods.length;i++) {
-			switch(this.allTypes[this.type].methods[i].type) {
-				case "change":
-					$(this.allTypes[this.type].methods[i].id).change(this.allTypes[this.type].methods[i].handler);
-				break;
-				default:
-					$(this.allTypes[this.type].methods[i].id).click(this.allTypes[this.type].methods[i].handler);
-				break;
-			}
-		}
+		
 		var DOMNodesCreate = $("<div>"+inputElementString+"</div>");
 		this.DOMNodes = DOMNodesCreate;
 		return this.type;
@@ -130,11 +153,24 @@ function InlineAssessment(elementArg) {
 	};
 	
 	this.setEvents = function(){
-		
-		
+		for(var i=0;i<this.allTypes[this.type].methods.length;i++) {
+			var inputElement = $("#"+this.allTypes[this.type].methods[i].id);
+			if(typeof inputElement == 'array') {
+				inputElement = inputElement[0];
+			}
+			switch(this.allTypes[this.type].methods[i].type) {
+				case "change":
+					inputElement.change(this.allTypes[this.type].methods[i].handler);
+				break;
+				default: //click Event
+					inputElement.click(this.allTypes[this.type].methods[i].handler);
+				break;
+			}
+		}
 	}
 	
 	this.setElement( elementArg );
+	//this.setEvents();
 
 	if(!this.element) {
 		if(!this.setElement( elementArg )) {
