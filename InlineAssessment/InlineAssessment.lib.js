@@ -26,40 +26,26 @@ function InlineAssessment(elementArg) {
 					'id': "vStart",
 					'handler': function() {
 						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js")
-						initializeAPI();
 						alert("this works");
+						initializeAPI();
 						var e = document.getElementById(score);						
 						setScore(e.options[e.selectedIndex].value);
 					}
 				}
 			]
 		},
-		'simple_text': {
-				'inputElementsString':"<input/><input type=\"button\" id=\"vsubmit\" value=\"submit thingie\"/>",	
-					'methods': 
-			[
-				{
-					'name': "submitClick",
-					'type': "click",
-					'id': "vsubmit",
-					'handler': function() {
-						alert("this works");
-					}
-				}
-			]
-		},
 		'simple_menu': {
-				'inputElementString':"<select id=\"score\">" + 
-					"	<option  value=\"100\">100%</ option>" +
-					"	<option  value=\"90\">90%</ option>" +
-					"	<option  value=\"80\">80%</ option>" +
-					"	<option  value=\"70\">70%</ option>" +
-					"	<option  value=\"60\">60%</ option>" +
-					"	<option  value=\"50\">50%</ option>" +
-					"	<option  value=\"10\">10%</ option>" +
-					"</select>" +
-					"<input type=\"submit\" id=\"vsubmit\" value=\"Submit\" onClick=\"setScore(value)\">",	
-					'methods': 
+			'inputElementsString':"<select id=\"score\" >" + 
+				"	<option  value=\"1\">100%</option>" +
+				"	<option  value=\".90\">90%</option>" +
+				"	<option  value=\".80\">80%</option>" +
+				"	<option  value=\".70\">70%</option>" +
+				"	<option  value=\".60\">60%</option>" +
+				"	<option  value=\".50\">50%</option>" +
+				"	<option  value=\".10\">10%</option>" +
+				"</select>" +
+				"<input type=\"submit\" id=\"vsubmit\" value=\"Submit\" onClick=\"setScore(value)\"/>",	
+			'methods': 
 			[
 				{
 					'name': "submitClick",
@@ -68,7 +54,24 @@ function InlineAssessment(elementArg) {
 					'handler': function() {
 						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js")
 						initializeAPI();
+						var e = document.getElementById(score);						
+						setScore(e.options[e.selectedIndex].value);
+					}
+				}
+			]
+		},
+		'simple_text': {
+			'inputElementsString':"<input/><input type=\"button\" id=\"vsubmit\" value=\"submit thingie\"/>",	
+			'methods': 
+			[
+				{
+					'name': "submitClick",
+					'type': "click",
+					'id': "vsubmit",
+					'handler': function() {
+						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js")
 						alert("this works");
+						initializeAPI();
 						var e = document.getElementById(score);						
 						setScore(e.options[e.selectedIndex].value);
 					}
@@ -97,7 +100,7 @@ function InlineAssessment(elementArg) {
 	
 	this.isElement = function(obj) {
 		try {
-			//Using W3 DOM2 (works for FF, Opera and Chrom)
+			//Using W3 DOM2 (works for FF, Opera and Chrome)
 			return obj instanceof HTMLElement;
 		}
 		catch(e){
