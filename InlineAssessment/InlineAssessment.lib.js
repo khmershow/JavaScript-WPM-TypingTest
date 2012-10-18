@@ -16,6 +16,7 @@ function InlineAssessment(elementArg) {
 				"    <br /> " + 
 				"   <textarea id=\"userText\" onKeyDown=\"return disableCtrlKeyCombination(event); \" onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 				"   <br />  " +
+				"	<input type=\"hidden\" id=\"initializer\" name=\"initialize\"/>" +
 				"   <div id=\"scoreTable\" >" +             
 				" 	</div>",
 			'methods': 
@@ -25,17 +26,28 @@ function InlineAssessment(elementArg) {
 					'type': "click",
 					'id': "vStart",
 					'handler': function() {
-						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js")
 						alert("this works");
-						initializeAPI();
 						var e = document.getElementById(score);						
 						setScore(e.options[e.selectedIndex].value);
+						
+					}
+				},
+				{
+					'name': "initialize",
+					'type': "initialize",
+					'id': "initializer",
+					'handler': function() {
+						alert("Initializing!");
+						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js");
+						initializeAPI();
+						
 					}
 				}
 			]
 		},
 		'simple_menu': {
-			'inputElementsString':"<select id=\"score\" >" + 
+			'inputElementsString':
+				"<select id=\"score\" >" + 
 				"	<option  value=\"1\">100%</option>" +
 				"	<option  value=\".90\">90%</option>" +
 				"	<option  value=\".80\">80%</option>" +
@@ -44,18 +56,29 @@ function InlineAssessment(elementArg) {
 				"	<option  value=\".50\">50%</option>" +
 				"	<option  value=\".10\">10%</option>" +
 				"</select>" +
-				"<input type=\"submit\" id=\"vsubmit\" value=\"Submit\" onClick=\"setScore(value)\"/>",	
+				"<input type=\"submit\" id=\"vsubmit\" value=\"Submit\" onClick=\"setScore(score.value)\"/>" +
+				"<input type=\"hidden\" id=\"initializer\" name=\"initialize\"/>",	
 			'methods': 
 			[
 				{
-					'name': "submitClick",
+					'name': "startClick",
 					'type': "click",
 					'id': "vsubmit",
 					'handler': function() {
-						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js")
-						initializeAPI();
+						alert("this works");
 						var e = document.getElementById(score);						
 						setScore(e.options[e.selectedIndex].value);
+						
+					}
+				},
+				{
+					'name': "initialize",
+					'type': "initialize",
+					'id': "initializer",
+					'handler': function() {
+						alert("Initializing!");
+						
+						
 					}
 				}
 			]
@@ -162,8 +185,8 @@ function InlineAssessment(elementArg) {
 				inputElement = inputElement[0];
 			}
 			switch(this.allTypes[this.type].methods[i].type) {
-				case "change":
-					inputElement.change(this.allTypes[this.type].methods[i].handler);
+				case "initialize":
+					inputElement.click(this.allTypes[this.type].methods[i].handler);
 				break;
 				default: //click Event
 					inputElement.click(this.allTypes[this.type].methods[i].handler);
