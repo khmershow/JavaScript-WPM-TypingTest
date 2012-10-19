@@ -16,7 +16,7 @@ function InlineAssessment(elementArg) {
 				"    <br /> " + 
 				"   <textarea id=\"userText\" onKeyDown=\"return disableCtrlKeyCombination(event); \" onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 				"   <br />  " +
-				"	<input type=\"hidden\" id=\"initializer\" name=\"initialize\"/>" +
+				"	<input type=\"hidden\" id=\"initializer\" value=\"initialize\"/>" +
 				"   <div id=\"scoreTable\" >" +             
 				" 	</div>",
 			'methods': 
@@ -38,8 +38,6 @@ function InlineAssessment(elementArg) {
 					'id': "initializer",
 					'handler': function() {
 						alert("Initializing!");
-						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js");
-						initializeAPI();
 						
 					}
 				}
