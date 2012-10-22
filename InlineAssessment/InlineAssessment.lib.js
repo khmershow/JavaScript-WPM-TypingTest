@@ -31,19 +31,18 @@ function InlineAssessment(elementArg) {
 			]
 		},
 		'simple_text': {
-				'inputElementsString':"<input/><input type=\"button\" value=\"submit thingie\"/>"
-		},
-		'simple_menu': {
-				'inputElementString':"<select>" + 
-					"	<option  value=\"100\">100%</ option>" +
-					"	<option  value=\"90\">90%</ option>" +
-					"	<option  value=\"80\">80%</ option>" +
-					"	<option  value=\"70\">70%</ option>" +
-					"	<option  value=\"60\">60%</ option>" +
-					"	<option  value=\"50\">50%</ option>" +
-					"	<option  value=\"10\">10%</ option>" +
-					"</select>" +
-					"<input type=\"submit\" value=\"Submit\" onClick=\"setScore(value)\">"	
+			'inputElementsString':"<input type=\"text\" id=\"submitString\"/><input type=\"button\" id=\"submitButton\" value=\"submit\"/>",
+			'methods': 
+				[
+					{
+						'name': "submitClick",
+						'type': "click",
+						'id': "submitButton",
+						'handler': function() {
+							alert($("#submitString").val());
+						}
+					}
+				]
 		}
 	};
 	
@@ -53,7 +52,6 @@ function InlineAssessment(elementArg) {
 	this.setElement = function( elementArg ) {
 		this.emptyElement();
 		if(!this.isElement(elementArg)) {
-			console.log(typeof elementArg);
 			throw 'Error (Inline Assessment): element must be a valid dom element.'; 
 		}
 		this.element = elementArg;
@@ -140,7 +138,6 @@ function InlineAssessment(elementArg) {
 	}
 	
 	this.setElement( elementArg );
-	//this.setEvents();
 
 	if(!this.element) {
 		if(!this.setElement( elementArg )) {

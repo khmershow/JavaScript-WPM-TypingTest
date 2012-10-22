@@ -6,7 +6,7 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script type="text/javascript" src="devErrorReport.js"></script>
 	</head>
- 	<body>
+ 	<body id="inputBody">
     	<h2 style="color:teal">Test Type</h2>
         <input type="radio" name="testType" checked="checked" value="false" id="practiceRadio" /> Practice  <!--Radio buttons for deciding which div to show, final or practice-->
         <input type="radio" name="testType" value="true" id="finalRadio" /> Final
@@ -196,6 +196,7 @@
 				},
 				function(data) {
   					console.log(data);			//posts success or failure to console
+					$("#inputBody").html("<h2>Assesment created successsfully</h2>");
 				}
 			);
 		}else{
@@ -258,6 +259,7 @@
 				},
 				function(data) {
   					console.log(data);
+					$("#inputBody").html("<h2>Assesment created successsfully</h2>");
 				}
 			);
 		}else{

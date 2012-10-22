@@ -11,7 +11,7 @@ header("Access-Control-Allow-Headers: *");
 	
 	//str_replace ( mixed $search , mixed $replace , mixed $subject [, int &$count ] )
 	
-	$myFile = $_POST["type"] . str_replace(" " , "", $_POST["bhCourseTitle"]). ".txt";								//	Define log file
+	$myFile = $_POST["type"] . str_replace(" " , "", $_POST["bhCourseId"]). ".txt";								//	Define log file
 	$fh = fopen($myFile, 'w');								//	Open the log for writing! (will overwrite previous information in file)
 	if(flock($fh, LOCK_EX)) {								//	Lock the file to force exclusive write
 		
