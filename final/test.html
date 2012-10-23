@@ -18,7 +18,8 @@
 			startCount++;
 			if (startCount == 1){
 			$.post(
-				"https://is.byu.edu/is/share/BrainHoney/portal.php",
+				//"https://is.byu.edu/is/share/BrainHoney/portal.php",
+				"portal.php",
 				{action: "start" },
 				function(data){
 					if(typeof data === "string")
@@ -55,7 +56,8 @@
 			var Jstring = JSON.stringify(userInput);
 			if (doneCount == 1){
 				$.post(
-				"https://is.byu.edu/is/share/BrainHoney/portal.php",
+				//"https://is.byu.edu/is/share/BrainHoney/portal.php",
+				"portal.php",
 				{action: "done" , ui: userInput },
 				function(data){
 					table = JSON.parse(data);
