@@ -68,7 +68,7 @@ function vstart(){
 	}
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
-		global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time, $time_start, $_SESSION;
+		global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time, $time_start, $_SESSION, $grade, $WPMgoal, $penalty, $perent_points;
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 		$time_start= ($_SESSION["start"]);
 		$total_time=microtime(true)-$time_start;
@@ -80,7 +80,13 @@ function done(){
 		$cpm=round((($inputChar/5)/($total_time / 60))- $totalError);
 		$totalWords = ($word);
 		$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
-		$readonly='readonly="readonly"';			
+		$readonly='readonly="readonly"';
+		
+		if($perent_points == "percent"){
+			$grade = ($wpm - ( $penalty * $totalError))/ $WPMgoal;
+		}else if($perent_points == "points"){
+			$grade = ($wpm / $WPMgoal) - ( $penalty * $totalError);	
+		}
 	}
 function getScoreTable() {
 	global $word, $wpm, $totalError, $cpm, $accuracy, $user_obj, $total_time, $time_start ;
@@ -120,7 +126,7 @@ switch($POST_GET['action']) {
 		global $user_text;
 		$user_text =$_POST['ui'];
 		done();
-		$return_json .= "\"scores\":".json_encode(getScoreTable()).", \"grade\":".json_encode($cpm)."";
+		$return_json .= "\"scores\":".json_encode(getScoreTable()).", \"grade\":".json_encode($grade)."";
 	break;
 	case "start":
 		vstart();
