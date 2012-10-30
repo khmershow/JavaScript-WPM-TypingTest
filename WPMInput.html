@@ -48,7 +48,22 @@
         
         <div id="finalDiv" style="display:none">
         	<h3 style="color:teal">Final Exam (Instructor Input)</h3>
-        	<input id="finalTimeLimit" type="text" name="timeLimit" placeholder="time limit..." 	/>
+            <h4> How would you like the errors to affect the grade? </h4> 
+            <input type="radio" checked="checked" value="true" name="gradeType" id="percent" /> Percentage 
+        	<input type="radio" name="gradeType" value="false" id="points" /> Points
+        	<br />
+            <div id="percentDiv" style="display:block">
+            Please enter the percentage to deduct per error as a decimal:
+            <br />
+            <input id="percentOff" type="text" name="percentOff" placeholder="percent..." />
+            </div>
+            <div id="pointsDiv" style="display:none">
+            Enter the points to deduct per error:
+            <br />
+            <input id="pointsOff" type="text" name="pointstOff" placeholder="points..." />
+            </div>
+            <br />
+           	<input id="finalTimeLimit" type="text" name="timeLimit" placeholder="time limit..." 	/>
             <br>
 			<textarea id="finalText" name="assessment" rows="8" cols="64" placeholder="input test here..."></textarea>
 			<br> 
@@ -121,6 +136,40 @@
 	
 	var finalTimeLimit  = document.getElementById("finalTimeLimit");
 	var finalText	 = document.getElementById("finalText");
+	var percentRadio = document.getElementById("percent");
+	var pointsRadio = document.getElementById("points");
+	
+	if(pointsRadio.checked){
+		var pointsPercent = "points";
+		var errorDeduction = document.getElementById("pointsOff");		
+	}else if(percentRadio.checked){
+		var pointsPercent = "percent";
+		var errorDeduction = document.getElementById("percentOff");
+	}
+
+	//radio button final variables
+	var percentRadio = document.getElementById("percent");
+	var pointsRadio = document.getElementById("points");
+	
+	var percentDiv = document.getElementById("percentDiv");
+	var pointsDiv = document.getElementById("pointsDiv");
+	
+	eventRegistrar(percentRadio, 'change', changeRadio2);
+	eventRegistrar(pointsRadio, 'change', changeRadio2);
+	
+	function changeRadio2(){
+		
+		if(pointsRadio.checked){
+			pointsDiv.style.display = "block";
+			percentDiv.style.display = "none";
+		}else{
+			percentDiv.style.display = "block";
+			pointsDiv.style.display = "none";
+		}
+	}
+	
+		
+	
 	
 	var resultDiv = document.getElementById("result");
 	
@@ -168,7 +217,7 @@
 				JSONString = '{"type": "practice", "lowWPM":' + JSON.stringify(lowWPM.value) + ', "midWPM":' + JSON.stringify(midWPM.value) +', "highWPM":' + JSON.stringify(highWPM.value) + ', "title":' + JSON.stringify(title.value) +
 					', "practiceNum":' + JSON.stringify(practiceNum.value) + ', "text":' + JSON.stringify(text.value) + '}';
 			}else{
-				JSONString = '{"type": "final", "timeLimit":' + JSON.stringify(finalTimeLimit.value) + ', "text":' + JSON.stringify(finalText.value) + '}';				
+				JSONString = '{"type": "final", "timeLimit":' + JSON.stringify(finalTimeLimit.value) + ', "text":' + JSON.stringify(finalText.value) + ',"percentPoints":' + JSON.stringify(pointsPercent) +',"errorDeduction":' + JSON.stringify(errorDeduction.value) + '}';				
 			}
 			
 			resultDiv.style.display = "block";

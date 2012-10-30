@@ -20,7 +20,7 @@
 			$.post(
 				"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
 				//"portal.php",
-				{action: "start", type: "typingTest", bhCourseTitle: "WPM" /*, JSONString: "1" */},
+				{action: "start", type: "typingTest", bhCourseTitle: "WPM" },
 				function(data){
 					if(typeof data === "string")
 						text_area = JSON.parse(data);

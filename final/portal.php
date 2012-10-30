@@ -64,7 +64,8 @@ function vstart(){
 		$_SESSION['start'] = $time_start;
 		$readonly="";
 		$welcome="";
-		$les_text=file_get_contents( "typingtext/0/0.txt" );
+		//$les_text=file_get_contents( "typingtext/0/0.txt" );
+		$jsonObj= json_decode(file_get_contents(""));
 	}
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
