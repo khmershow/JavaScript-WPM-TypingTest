@@ -1,31 +1,28 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html>
 	<head>
     	<meta charset="UTF-8">
-        <!---for test purposes only--->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        <script type="text/javascript" src="errorHandler.js"></script>
-                <!---for test purposes only--->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="devErrorReport.js"></script>
 	</head>
- 	<body>
+ 	<body id="inputBody"><!--The body is given an id so after this information submits successfully, it clears the screen and displays some sort of message-->
     	<h2 style="color:teal">Test Type</h2>
-        <input type="radio" checked="checked" value="true" name="testType" id="practice" /> Practice 
-        <input type="radio" name="testType" value="false" id="test" /> Final
-        <div id="practiceDiv"  style="display:block">
+        <input type="radio" name="testType" checked="checked" value="false" id="practiceRadio" /> Practice 	<!--Radio buttons for deciding which div to show, final or practice-->
+        <input type="radio" name="testType" value="true" id="finalRadio" /> Final
+        <div id="practiceDiv"><!--This div contains all the information require for a practice WPM test (surprise, surprise)-->
             <h3 style="color:teal">Practice Exam (Instructor Input)</h3>
             
             <p>low and high WPM must be concentric around the midrange WPM</p>
             <p>These are only for the illustration that happens below and are not important to the test itself</p>
             
-            <input id="lowWPM" type="text" name="lowWPM" placeholder="low WPM..." 	/>
+            <input id="lowWPM" type="text"  placeholder="low WPM..." 	/>
             <br>
             
-            <input id="midWPM" type="text" name="midWPM" placeholder="midrange WPM..." 	/>
+            <input id="midWPM" type="text"  placeholder="midrange WPM..." 	/>
             <br>
-            
-            <input id="highWPM" type="text" readonly="readonly" name="highWPM" placeholder="high WPM..." 	/> <---cannot be edited, will be calculated automatically
+            <!--WPM high value is calculated to avoid confusion. low, mid and high wpm need to be centered around mid-->
+            <input id="highWPM" type="text" readonly="readonly" placeholder="high WPM..." 	/> <--- Is assigned automatically after filling in low and high WPM
             <br>
             
             <input id="PracticeTitle" type="text" name="title" placeholder="Practice title..." 	/>
@@ -34,208 +31,240 @@
             <p>Practice #</p>
             
             <select id="practiceNum" >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
             </select>
             <br/>
                 
             <textarea id="practiceText" name="assesment" rows="8" cols="64" placeholder="the instructor will input the material for which the student will be assesed in this box"></textarea>
-      	
+            <br/>
+        	<br/>
+            <input id="practiceSubmit" type="button" value="Finished" />
         </div>
         
-        <div id="finalDiv" style="display:none">
+        <div id="finalDiv" >	<!--This div contains all the information require for a test WPM test (again surprise, surprise)-->
         	<h3 style="color:teal">Final Exam (Instructor Input)</h3>
-            <h4> How would you like the errors to affect the grade? </h4> 
-            <input type="radio" checked="checked" value="true" name="gradeType" id="percent" /> Percentage 
-        	<input type="radio" name="gradeType" value="false" id="points" /> Points
-        	<br />
-            <div id="percentDiv" style="display:block">
-            Please enter the percentage to deduct per error as a decimal:
-            <br />
-            <input id="percentOff" type="text" name="percentOff" placeholder="percent..." />
+            <div class="align-left">
+                Time limit (seconds):
             </div>
-            <div id="pointsDiv" style="display:none">
-            Enter the points to deduct per error:
-            <br />
-            <input id="pointsOff" type="text" name="pointstOff" placeholder="points..." />
+            <div>
+                <input id="timeLimit" type="text"  placeholder="time limit (seconds)..." 	/>
             </div>
-            <br />
-           	<input id="finalTimeLimit" type="text" name="timeLimit" placeholder="time limit..." 	/>
-            <br>
-			<textarea id="finalText" name="assessment" rows="8" cols="64" placeholder="input test here..."></textarea>
-			<br> 
+            <div class="align-left">
+                Total points:
+            </div>
+            <div>
+                <input id="totalPoints" type="text" placeholder="Insert total point"/>
+            </div><br />
+			
+            <h4 style="color:teal">Grading Options</h4><!--Grading options allow the professor to pick whether an error affects the percentage or the points the student gets, and allows them to specify the exact amount-->
             
+            <div class="align-left">
+                Expected words per minute:
+            </div>
+            <div>
+                <input id="ecpectedWPM" type="text" placeholder="Insert expected WPM"/>
+            </div>
+            <div>
+            	<input type="checkbox" id="incldueErrors" />Account for errors?
+            </div>
+            <div id="spaceFill" style="height:1.5em"><!---id states the obvious, this just fills the space--->
+                <div id="gradingOptions" contenteditable="false">
+                    Subtract <input type="text" style="max-width:20px" id="errorValue" />
+                    <select id="errorValueType">
+                        <option value="percent">percent</option>
+                        <option value="points">points</option>
+                    </select>
+                    per error
+                </div>
+            </div>
+            <div>
+            	<span><textarea id="finalText" rows="8" cols="64" placeholder="input test here..."></textarea></span>
+        	</div>
+        	<div>
+            	<span><input id="finalSubmit" type="button"  value="Finished" /></span>
+            </div>
         </div>
-        <input id="getJSON" type="button" value="Finished" />
-        <div id="result" style="display:none"></div>
-        <div id="testDIV"></div>
+        <div id="result"></div>
+        <div id="jsonR"></div>
     </body>
 </html>
 
-<script type="text/javascript">
-	//radio button variables
-	var testRadio = document.getElementById("test");
-	var practiceRadio = document.getElementById("practice");
+<script type="text/javascript">	
+
+	var optionsChecked = false;						
 	
-	var finalDiv = document.getElementById("finalDiv");
-	var practiceDiv = document.getElementById("practiceDiv");
+	$("#finalDiv").hide(); 							//initally hides the final input information						
+	$("#gradingOptions").hide();					//initially hides the grading options
 	
-	eventRegistrar(testRadio, 'change', changeRadio);
-	eventRegistrar(practiceRadio, 'change', changeRadio);
+	$(".align-left").css("float","left");			//formats the text so it ligns up
+	$(".align-left").css("min-width","200px");
 	
-	function changeRadio(){
-		
-		if(practiceRadio.checked){
-			practiceDiv.style.display = "block";
-			finalDiv.style.display = "none";
-		}else{
-			finalDiv.style.display = "block";
-			practiceDiv.style.display = "none";
-		}
-		
-		
-	}
-	
-	
-	
-	//practice variables
-	var lowWPM       = document.getElementById("lowWPM");
-	var midWPM       = document.getElementById("midWPM");
-	var highWPM      = document.getElementById("highWPM");
-	
-	var title        = document.getElementById("PracticeTitle");
-	var practiceNum  = document.getElementById("practiceNum");
-	var text         = document.getElementById("practiceText");
-	
-	var getJSONString = document.getElementById("getJSON");
-	
-	eventRegistrar(getJSONString, 'click', stringToJSON);
-	
-	eventRegistrar(lowWPM, 'change', setHighWPM);
-	eventRegistrar(midWPM, 'change', setHighWPM);
-	
-	function setHighWPM(){
-		
-		if(lowWPM.value != "" && midWPM.value != ""){		
-				
-			if((1 * midWPM.value) > (1 * lowWPM.value))
-				highWPM.value = 2 * midWPM.value -lowWPM.value;		
-			else{
-				alert("the mid value must be higher than the low!");
-				lowWPM.value = "";
-				midWPM.value = "";
-				highWPM.value = "";
+	$("#incldueErrors").change( 						//hides and shows grading options based on whether or not the checkbox is checked
+		function(){
+			if(this.checked){
+				$("#gradingOptions").show("fast");
+				optionsChecked = true;
+			}else{
+				$("#gradingOptions").hide();
+				optionsChecked = false;
 			}
 		}
-	}
+	);
 	
-	//final variables
+	$("#finalRadio").change( 							// when "final" radio is chosen, the practice information is hidden and the final information is shown
+		function(){
+			if(this.checked){
+				$("#practiceDiv").hide();
+				$("#finalDiv").show();
+			}	
+		}
+	);
 	
-	var finalTimeLimit  = document.getElementById("finalTimeLimit");
-	var finalText	 = document.getElementById("finalText");
-	var percentRadio = document.getElementById("percent");
-	var pointsRadio = document.getElementById("points");
+	$("#practiceRadio").change( 							// when "final" radio is chosen, the practice information is hidden and the final information is shown
+		function(){
+			if(this.checked){
+				$("#finalDiv").hide();
+				$("#practiceDiv").show();
+			}	
+		}
+	);
 	
-	if(pointsRadio.checked){
-		var pointsPercent = "points";
-		var errorDeduction = document.getElementById("pointsOff");		
-	}else if(percentRadio.checked){
-		var pointsPercent = "percent";
-		var errorDeduction = document.getElementById("percentOff");
-	}
-
-	//radio button final variables
-	var percentRadio = document.getElementById("percent");
-	var pointsRadio = document.getElementById("points");
 	
-	var percentDiv = document.getElementById("percentDiv");
-	var pointsDiv = document.getElementById("pointsDiv");
+	//the low, mid and high WPM values need to be concesntric around the mid, for the purpose the game, so the high is calculated to avoid confusion and errors
+	$("#lowWPM").change(changeValue); 
+	$("#midWPM").change(changeValue);
 	
-	eventRegistrar(percentRadio, 'change', changeRadio2);
-	eventRegistrar(pointsRadio, 'change', changeRadio2);
-	
-	function changeRadio2(){
+	function changeValue(){
 		
-		if(pointsRadio.checked){
-			pointsDiv.style.display = "block";
-			percentDiv.style.display = "none";
-		}else{
-			percentDiv.style.display = "block";
-			pointsDiv.style.display = "none";
+		var lowWPM = $("#lowWPM").val()*1;				//multiplied by 1 to convert from a string to an int
+		var midWPM = $("#midWPM").val()*1;
+		
+		if( lowWPM != "" && midWPM != ""){
+			if(lowWPM  <=  midWPM )
+				$("#highWPM").val(2*midWPM - lowWPM); 
+				
 		}
 	}
 	
+	$("#practiceSubmit").click(stringToJSONPractice);	//attaching event to the submit buttons
+	$("#finalSubmit").click(stringToJSONFinal);
+	
+	
+	function stringToJSONPractice(){					//creates a JSON string to be submitted to the portal, and then becomes a text file. Specifically for Practice as it has different inputs
 		
-	
-	
-	var resultDiv = document.getElementById("result");
-	
-	function stringToJSON(theString){
+		var error = false;										//error originally set to false. If a field is not filled out properly, error will be set to true and a message will be displayed
+		var errorMessage = "These fields cannot be blank:\n";
+		var JSONString = "";
+		
+		var lowWPM = $("#lowWPM").val();
+		var midWPM = $("#midWPM").val();
+		
+		var title = $("#PracticeTitle").val();
+		var text = $("#practiceText").val();
+					
+		if(lowWPM == ""){
+			errorMessage += "low WPM\n";
+			error = true;	
+		}
+		if( midWPM == ""){
+			errorMessage += "mid WPM\n";
+			error = true;	
+		}
+		if( title == ""){
+			errorMessage += "title\n";
+			error = true;	
+		}
+		if( text == ""){
+			errorMessage += "text\n";
+			error = true;	
+		}
+		if(!error){
+			//JSON string created with all the necessary information
+			JSONString = '{ "lowWPM":' + JSON.stringify(lowWPM) + ', "midWPM":' + JSON.stringify(midWPM) +', "highWPM":' + JSON.stringify($("#highWPM").val()) + ', "title":' + JSON.stringify(title) + ', "practiceNum":' + JSON.stringify($("#practiceNum").val()) + ', "text":' + JSON.stringify(text) + '}';
+			//posting to PHP portal which saves file
+			$.post(
+				"https://isdev.byu.edu/is/dev/Ryan/BrainHoney/testWPMPortal.php",
+				{
+					"type":"practice",
+					"JSONString":JSONString,
+					"bhCourseId":window.parent.bhCourseId,
+					"bhCourseTitle":window.parent.bhCourseTitle
+				},
+				function(data) {
+  					console.log(data);			//posts success or failure to console
+					$("#inputBody").html("<h2>Assesment created successsfully</h2>");
+				}
+			);
+		}else{
+			alert(errorMessage);		//creates an alert dialogue with fields needing to be filled out
+		}
+	}
+					
+	function stringToJSONFinal(){
+		
+		//same comments as above but adjusted for final
 		
 		var error = false;
 		var errorMessage = "These fields cannot be blank:\n";
 		var JSONString = "";
 		
-		if(practiceRadio.checked){	
-			if(lowWPM.value == ""){
-				errorMessage += "low WPM\n";
-				error = true;	
-			}else{
-				lowWPM.value = 1*lowWPM.value;
-			}
-			if(midWPM.value == ""){
-				errorMessage += "mid WPM\n";
-				error = true;	
-			}else{
-				lowWPM.value = 1*lowWPM.value;
-				highWPM.value = 1*highWPM.value;
-			}
-			if(title.value == ""){
-				errorMessage += "title\n";
-				error = true;	
-			}
-			if(text.value == ""){
-				errorMessage += "text\n";
-				error = true;	
-			}	
-		}else{
-			if(finalTimeLimit.value == ""){
-				errorMessage += "Final Time Limit\n";
-				error = true;	
-			}
-			if(finalText.value == ""){
-				errorMessage += "Final Text\n";
-				error = true;	
-			}			
+		var timeLimit = $("#timeLimit").val();
+		var totalPoints = $("#totalPoints").val();
+		var finalText = $("#finalText").val();
+		var expectedWPM = $("#ecpectedWPM").val();
+		
+		var errorValue = $("#errorValue").val();
+		var errorType = $("#errorValueType").val();
+			
+		if(timeLimit == ""){
+			errorMessage += "time limit\n";
+			error = true;	
 		}
+		if(totalPoints == ""){
+			errorMessage += "total points\n";
+			error = true;	
+		}
+		if(finalText == ""){
+			errorMessage += "text\n";
+			error = true;	
+		}
+		if(expectedWPM == ""){
+			errorMessage += "expected words per minute\n";
+			error = true;	
+		}
+		if(optionsChecked){
+			if(errorValue == ""){
+				errorMessage += "error value\n";
+				error = true;	
+			}
+		}else{
+			errorValue = null;
+			errorType = null;
+		}		
 		
 		if(!error){
-			if(practiceRadio.checked){
-				JSONString = '{"type": "practice", "lowWPM":' + JSON.stringify(lowWPM.value) + ', "midWPM":' + JSON.stringify(midWPM.value) +', "highWPM":' + JSON.stringify(highWPM.value) + ', "title":' + JSON.stringify(title.value) +
-					', "practiceNum":' + JSON.stringify(practiceNum.value) + ', "text":' + JSON.stringify(text.value) + '}';
-			}else{
-				JSONString = '{"type": "final", "timeLimit":' + JSON.stringify(finalTimeLimit.value) + ', "text":' + JSON.stringify(finalText.value) + ',"percentPoints":' + JSON.stringify(pointsPercent) +',"errorDeduction":' + JSON.stringify(errorDeduction.value) + '}';				
-			}
+			JSONString = '{ "timeLimit":' + JSON.stringify(timeLimit)  + ', "totalPoint":' + JSON.stringify(totalPoints) + ', "errorType":' + JSON.stringify(errorType)  + ', "errorValue":' + JSON.stringify(errorValue) + ', "expectedWPM":' + JSON.stringify(expectedWPM) + ', "text":' + JSON.stringify(finalText) + '}';
 			
-			resultDiv.style.display = "block";
-			resultDiv.innerHTML = JSONString;
-			alert(JSON.parse(JSONString).type);
-			
+			$.post(
+				"https://isdev.byu.edu/is/dev/Ryan/BrainHoney/testWPMPortal.php",
+				{
+					"type":"final",
+					"JSONString":JSONString,
+					"bhCourseId":window.parent.bhCourseId,
+					"bhCourseTitle":window.parent.bhCourseTitle
+				},
+				function(data) {
+  					console.log(data);
+					$("#inputBody").html("<h2>Assesment created successsfully</h2>");
+				}
+			);
 		}else{
 			alert(errorMessage);	
 		}
-		
 	}
 	
-	/*universal event rigistration*/
-	function eventRegistrar(element, eventType, handlerFunction) {
-		if(element.addEventListener) {
-			element.addEventListener(eventType,handlerFunction,false);
-		} else {
-			element.attachEvent('on'+eventType,handlerFunction);
-		}
-	}
 </script>

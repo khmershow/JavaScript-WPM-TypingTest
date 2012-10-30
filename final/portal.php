@@ -9,19 +9,19 @@ header("Access-Control-Allow-Headers: *");
 $return_json = "{\"file_lock\":";
 
 	$bytes_written = 0;										//	Initialize our file write counter
-	
+
 	//str_replace ( mixed $search , mixed $replace , mixed $subject [, int &$count ] )
-	
-	$myFile = $_POST["type"] . str_replace(" " , "", $_POST["bhCourseTitle"]). ".txt";								//	Define log file
+
+	$myFile = $_POST["type"] . str_replace(" " , "", $_POST["bhCourseId"]). ".txt";								//	Define log file
 	$fh = fopen($myFile, 'w');								//	Open the log for writing! (will overwrite previous information in file)
 	if(flock($fh, LOCK_EX)) {								//	Lock the file to force exclusive write
-		
+
 		$stringData = 1;									//	get the JSON string and write it to the file
 		$bytes_written += fwrite($fh, $stringData);
-		
+
 		flock($fh, LOCK_UN); 								//	Now that we've written all the data we can unlock the file!
 		fclose($fh);										//	... and close it.
-		
+
 		if($bytes_written > 0)								//	Now to let the client know what happened.
 			$return_json .= '{"status":"success","bytes_written":"'.$bytes_written.'"}';
 		else
@@ -37,8 +37,8 @@ $return_json .= ",";
 	$readonly='readonly="readonly"';
 	$les_text=file_get_contents( "typingtext/0/0.txt" );
 	$time_start=0;
-	
-	
+
+
 function startup($les_text){	
 	$wpmObj = new stdClass;
 	$wpmObj->les_text = $les_text;
@@ -64,12 +64,11 @@ function vstart(){
 		$_SESSION['start'] = $time_start;
 		$readonly="";
 		$welcome="";
-		//$les_text=file_get_contents( "typingtext/0/0.txt" );
-		$jsonObj= json_decode(file_get_contents(""));
+		$les_text=file_get_contents( "typingtext/0/0.txt" );
 	}
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
-		global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time, $time_start, $_SESSION, $grade, $WPMgoal, $penalty, $perent_points;
+		global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time, $time_start, $_SESSION;
 		$les_text=file_get_contents( "typingtext/0/0.txt" );
 		$time_start= ($_SESSION["start"]);
 		$total_time=microtime(true)-$time_start;
@@ -81,13 +80,7 @@ function done(){
 		$cpm=round((($inputChar/5)/($total_time / 60))- $totalError);
 		$totalWords = ($word);
 		$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
-		$readonly='readonly="readonly"';
-		
-		if($perent_points == "percent"){
-			$grade = ($wpm - ( $penalty * $totalError))/ $WPMgoal;
-		}else if($perent_points == "points"){
-			$grade = ($wpm / $WPMgoal) - ( $penalty * $totalError);	
-		}
+		$readonly='readonly="readonly"';			
 	}
 function getScoreTable() {
 	global $word, $wpm, $totalError, $cpm, $accuracy, $user_obj, $total_time, $time_start ;
@@ -127,12 +120,14 @@ switch($POST_GET['action']) {
 		global $user_text;
 		$user_text =$_POST['ui'];
 		done();
-		$return_json .= "\"scores\":".json_encode(getScoreTable()).", \"grade\":".json_encode($grade)."";
+		$return_json .= "\"scores\":".json_encode(getScoreTable()).", \"grade\":".json_encode($cpm)."";
 	break;
 	case "start":
 		vstart();
 		$return_json .= "\"welcome\":".json_encode(startup($les_text))."";
 	break;
+	case "load":
+		loadData();
 	default:
 	break;
 }

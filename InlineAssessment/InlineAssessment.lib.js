@@ -1,7 +1,7 @@
 var inlineAssessmentIdCounter = 0;
 function InlineAssessment(elementArg) {
 	//	static for class
-	this.allTypes = {
+	this.allTypes = {		//all the available types. Each one needs to have the same formatting, even if it is null ,e.g., 'methods': [NULL], so the coding can be consistent
 		'wpm_test': {
 			'inputElementsString': "Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
 				"	<br />\n" +
@@ -16,7 +16,6 @@ function InlineAssessment(elementArg) {
 				"    <br /> " + 
 				"   <textarea id=\"userText\" onKeyDown=\"return disableCtrlKeyCombination(event); \" onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 				"   <br />  " +
-				"	<input type=\"hidden\" id=\"initializer\" value=\"initialize\"/>" +
 				"   <div id=\"scoreTable\" >" +             
 				" 	</div>",
 			'methods': 
@@ -27,77 +26,23 @@ function InlineAssessment(elementArg) {
 					'id': "vStart",
 					'handler': function() {
 						alert("this works");
-						var e = document.getElementById(score);						
-						setScore(e.options[e.selectedIndex].value);
-						
-					}
-				},
-				{
-					'name': "initialize",
-					'type': "initialize",
-					'id': "initializer",
-					'handler': function() {
-						alert("Initializing!");
-						
-					}
-				}
-			]
-		},
-		'simple_menu': {
-			'inputElementsString':
-				"<select id=\"score\" >" + 
-				"	<option  value=\"1\">100%</option>" +
-				"	<option  value=\".90\">90%</option>" +
-				"	<option  value=\".80\">80%</option>" +
-				"	<option  value=\".70\">70%</option>" +
-				"	<option  value=\".60\">60%</option>" +
-				"	<option  value=\".50\">50%</option>" +
-				"	<option  value=\".10\">10%</option>" +
-				"</select>" +
-				"<input type=\"submit\" id=\"vsubmit\" value=\"Submit\" onClick=\"setScore(score.value)\"/>" +
-				"<input type=\"hidden\" id=\"initializer\" name=\"initialize\"/>",	
-			'methods': 
-			[
-				{
-					'name': "startClick",
-					'type': "click",
-					'id': "vsubmit",
-					'handler': function() {
-						alert("this works");
-						var e = document.getElementById(score);						
-						setScore(e.options[e.selectedIndex].value);
-						
-					}
-				},
-				{
-					'name': "initialize",
-					'type': "initialize",
-					'id': "initializer",
-					'handler': function() {
-						alert("Initializing!");
-						
-						
 					}
 				}
 			]
 		},
 		'simple_text': {
-			'inputElementsString':"<input/><input type=\"button\" id=\"vsubmit\" value=\"submit thingie\"/>",	
+			'inputElementsString':"<input type=\"text\" id=\"submitString\"/><input type=\"button\" id=\"submitButton\" value=\"submit\"/>",
 			'methods': 
-			[
-				{
-					'name': "submitClick",
-					'type': "click",
-					'id': "vsubmit",
-					'handler': function() {
-						$.getScript("https://is.byu.edu/is/share/BrainHoney/ScormGrader.js")
-						alert("this works");
-						initializeAPI();
-						var e = document.getElementById(score);						
-						setScore(e.options[e.selectedIndex].value);
+				[
+					{
+						'name': "submitClick",
+						'type': "click",
+						'id': "submitButton",
+						'handler': function() {
+							alert($("#submitString").val()); //this works properly for attaching events
+						}
 					}
-				}
-			]
+				]
 		}
 	};
 	
@@ -106,12 +51,11 @@ function InlineAssessment(elementArg) {
 	
 	this.setElement = function( elementArg ) {
 		this.emptyElement();
-		if(!this.isElement(elementArg)) {
-			console.log(typeof elementArg);
+		if(!this.isElement(elementArg)) {			//checks to make sure it is a valid DOM element
 			throw 'Error (Inline Assessment): element must be a valid dom element.'; 
 		}
 		this.element = elementArg;
-		this.setType( this.element );
+		this.setType( this.element ); 
 		this.display( this.element );
 		if (this.allTypes[this.type].methods.length > 0){
 			this.setEvents();
@@ -121,7 +65,7 @@ function InlineAssessment(elementArg) {
 	
 	this.isElement = function(obj) {
 		try {
-			//Using W3 DOM2 (works for FF, Opera and Chrome)
+			//Using W3 DOM2 (works for FF, Opera and Chrom)
 			return obj instanceof HTMLElement;
 		}
 		catch(e){
@@ -139,17 +83,18 @@ function InlineAssessment(elementArg) {
 			throw "Error (Inline Assessment): You can't set the type before there is an element defined.";
 			return false;
 		} else {
-			this.type = this.element.getAttribute("type");
+			this.type = this.element.getAttribute("type");		//retrieves the "type" from the HTML tag. This what defines pretty much everything!
 		}
 		
+		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
 		var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
 		
-		var DOMNodesCreate = $("<div>"+inputElementString+"</div>");
-		this.DOMNodes = DOMNodesCreate;
+		var DOMNodesCreate = $("<div>"+inputElementString+"</div>"); 		//wraps element string in a div
+		this.DOMNodes = DOMNodesCreate;										//adds to the proper place in the HTML page
 		return this.type;
 	}
 	
-	this.emptyElement = function() {
+	this.emptyElement = function() {			//clears up to 1000 elements from a given node. 
 		if(this.element) {
 			var loopLimit = 1000;
 			var loopCount = 0;
@@ -164,7 +109,7 @@ function InlineAssessment(elementArg) {
 		return true;
 	};
 	
-	this.display = function() {
+	this.display = function() {			//adds formatted information to the proper DOM node
 		this.emptyElement();
 		if( this.DOMNodes ) {
 			for(var i=0; i < this.DOMNodes.length; i++)
@@ -176,15 +121,15 @@ function InlineAssessment(elementArg) {
 		return this.element;
 	};
 	
-	this.setEvents = function(){
+	this.setEvents = function(){									//this allows for the dynamic creation of events. In the types object above, you can have an array of events with their respective information
 		for(var i=0;i<this.allTypes[this.type].methods.length;i++) {
 			var inputElement = $("#"+this.allTypes[this.type].methods[i].id);
 			if(typeof inputElement == 'array') {
 				inputElement = inputElement[0];
 			}
-			switch(this.allTypes[this.type].methods[i].type) {
-				case "initialize":
-					inputElement.click(this.allTypes[this.type].methods[i].handler);
+			switch(this.allTypes[this.type].methods[i].type) {	///only two types of events are included but more can be added. "Click" event is default
+				case "change":
+					inputElement.change(this.allTypes[this.type].methods[i].handler);
 				break;
 				default: //click Event
 					inputElement.click(this.allTypes[this.type].methods[i].handler);
@@ -194,7 +139,6 @@ function InlineAssessment(elementArg) {
 	}
 	
 	this.setElement( elementArg );
-	//this.setEvents();
 
 	if(!this.element) {
 		if(!this.setElement( elementArg )) {
@@ -206,15 +150,16 @@ function InlineAssessment(elementArg) {
 			//return false;
 		}
 	}
-	console.log(this);
+	console.log(this);			//logs the entire object in the console
 	return this;
 }
-InlineAssessment.prototype.getId = function() { return this.id; };
+InlineAssessment.prototype.getId = function() { return this.id; };					//additionally functionalities that may or may nto be needed
 InlineAssessment.prototype.getType = function() { return this.type; };
 InlineAssessment.prototype.getElement = function() { return this.element; };
 
 var assessmentElements;
-$(document).ready(function(){
+
+$(document).ready(function(){								//this is the main part of the function. It creates an array of inline assesments. As it creates the array, it formats them each properly. This means we can have multiple inline assesment tags on a single page
 	assessmentElements = $("INLINE_ASSESSMENT");
 	for(var a=0; a < assessmentElements.length; a++) {
 		assessmentElements[a] = new InlineAssessment(assessmentElements[a]);
