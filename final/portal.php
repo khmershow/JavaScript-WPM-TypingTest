@@ -133,8 +133,8 @@ switch($POST_GET['action']) {
 		vstart();
 		$return_json .= "\"welcome\":".json_encode(startup($les_text))."";
 	break;
-	case "load":
-		loadData();
+	case "create":
+		
 	default:
 	break;
 }

@@ -250,12 +250,13 @@
 			JSONString = '{ "timeLimit":' + JSON.stringify(timeLimit)  + ', "totalPoint":' + JSON.stringify(totalPoints) + ', "errorType":' + JSON.stringify(errorType)  + ', "errorValue":' + JSON.stringify(errorValue) + ', "expectedWPM":' + JSON.stringify(expectedWPM) + ', "text":' + JSON.stringify(finalText) + '}';
 			
 			$.post(
-				"https://isdev.byu.edu/is/dev/Ryan/BrainHoney/testWPMPortal.php",
+				"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
 				{
 					"type":"final",
 					"JSONString":JSONString,
 					"bhCourseId":window.parent.bhCourseId,
-					"bhCourseTitle":window.parent.bhCourseTitle
+					"bhCourseTitle":window.parent.bhCourseTitle,
+					action:"create"
 				},
 				function(data) {
   					console.log(data);
