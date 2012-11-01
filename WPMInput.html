@@ -187,7 +187,7 @@
 			JSONString = '{ "lowWPM":' + JSON.stringify(lowWPM) + ', "midWPM":' + JSON.stringify(midWPM) +', "highWPM":' + JSON.stringify($("#highWPM").val()) + ', "title":' + JSON.stringify(title) + ', "practiceNum":' + JSON.stringify($("#practiceNum").val()) + ', "text":' + JSON.stringify(text) + '}';
 			//posting to PHP portal which saves file
 			$.post(
-				"https://isdev.byu.edu/is/dev/Ryan/BrainHoney/testWPMPortal.php",
+				"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
 				{
 					"type":"practice",
 					"JSONString":JSONString,
