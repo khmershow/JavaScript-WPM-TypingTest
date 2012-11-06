@@ -64,12 +64,12 @@ function vstart(){
 		$_SESSION['start'] = $time_start;
 		$readonly="";
 		$welcome="";
-		$les_text=file_get_contents( "typingtext/0/0.txt" );
+		//$les_text=file_get_contents( "typingtext/0/0.txt" );
 	}
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
 		global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time, $time_start, $_SESSION, $grade, $goalWPM, $errorPenalty, $percentPoints;
-		$les_text=file_get_contents( "typingtext/0/0.txt" );
+		//$les_text=file_get_contents( "typingtext/0/0.txt" );
 		$time_start= ($_SESSION["start"]);
 		$total_time=microtime(true)-$time_start;
 		$char=strlen($les_text);
@@ -131,10 +131,15 @@ switch($POST_GET['action']) {
 	break;
 	case "start":
 		vstart();
-		$return_json .= "\"welcome\":".json_encode(startup($les_text))."";
+		$return_json .= "\"welcome\":".json_encode(startup($les_text)).", \"time\":".json_encode($timeLimit)."";
 	break;
 	case "create":
-		
+		global $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints;
+		$les_text = $_POST['text'];
+		$timeLimit = $_POST['timeLimit'];
+		$errorPenalty=$_POST['expectedWPM'];
+		$goalWPM=$_POST['expectedWPM'];
+		$percentPoints=$_POST['errorType'];
 	default:
 	break;
 }
