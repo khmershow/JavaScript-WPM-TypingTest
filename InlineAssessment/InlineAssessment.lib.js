@@ -18,6 +18,79 @@ function InlineAssessment(elementArg) {
 				"   <br />  " +
 				"   <div id=\"scoreTable\" >" +             
 				" 	</div>",
+			'configurationElementString':"<h2 style=\"color:teal\">Test Type</h2>" +
+        		"<input type=\"radio\" name=\"testType\" checked=\"checked\" value=\"false\" id=\"practiceRadio\" /> Practice" + 	
+        		"<input type=\"radio\" name=\"testType\" value=\"true\" id=\"finalRadio\" /> Final" +
+        		"<div id=\"practiceDiv\">" +
+            	"<h3 style=\"color:teal\">Practice Exam (Instructor Input)</h3>" + 
+	           	"<p>low and high WPM must be concentric around the midrange WPM</p>" +
+            	"<p>These are only for the illustration that happens below and are not important to the test itself</p>" +
+            	"<input id=\"lowWPM\" type=\"text\"  placeholder=\"low WPM...\" 	/>" +
+            	"<br>" + 
+				"<input id=\"midWPM\" type=\"text\"  placeholder=\"midrange WPM...\" 	/>" + 
+            	"<br>" + 
+              	"<input id=\"highWPM\" type=\"text\" readonly=\"readonly\" placeholder=\"high WPM...\" 	/>" + 
+            	"<br>" +
+            	"<input id=\"PracticeTitle\" type=\"text\" name=\"title\" placeholder=\"Practice title...\" />" +
+            	"<br>" +
+           		"<p>Practice #</p>" +
+            	"<select id=\"practiceNum\" >" +
+                "<option value=\"1\">1</option>" +
+                "<option value=\"2\">2</option>" +
+                "<option value=\"3\">3</option>" +
+                "<option value=\"4\">4</option>" +
+                "<option value=\"5\">5</option>" +
+            	"</select>" +
+            	"<br/>" +
+           		"<textarea id=\"practiceText\" name=\"assesment\" rows=\"8\" cols=\"64\" placeholder=\"the instructor will input the material for which the student will be assesed in this box\"></textarea>" +
+            	"<br/>" +
+        		"<br/>" +
+            	"<input id=\"practiceSubmit\" type=\"button\" value=\"Finished\" />" +
+        		"</div>" +
+         		"<div id=\"finalDiv\" >" +
+        		"<h3 style=\"color:teal\">Final Exam (Instructor Input)</h3>" +
+            	"<div class=\"align-left\">" +
+                "Time limit (seconds):" +
+            	"</div>" +
+            	"<div>" +
+                "<input id=\"timeLimit\" type=\"text\"  placeholder=\"time limit (seconds)...\" />" +
+            	"</div>" +
+            	"<div class=\"align-left\">" +
+                "Total points:" +
+            "</div>"+
+            "<div>"+
+                "<input id=\"totalPoints\" type=\"text\" placeholder=\"Insert total point\"/>" +
+            "</div><br />" +
+			
+            "<h4 style=\"color:teal\">Grading Options</h4>" +
+            "<div class=\"align-left\">" +
+                "Expected words per minute:" +
+            "</div>" +
+            "<div>" +
+                "<input id=\"ecpectedWPM\" type=\"text\" placeholder=\"Insert expected WPM\"/>" +
+           "</div>" +
+            "<div>" +
+            	"<input type=\"checkbox\" id=\"incldueErrors\" />Account for errors?" +
+            "</div>" +
+            "<div id=\"spaceFill\" style=\"height:1.5em\">" +
+                "<div id=\"gradingOptions\" contenteditable=\"false\">" +
+                    "Subtract <input type=\"text\" style=\"max-width:20px\" id=\"errorValue\" />" +
+                    "<select id=\"errorValueType\">" +
+                        "<option value=\"percent\">percent</option>" +
+                        "<option value=\"points\">points</option>" +
+                    "</select>" +
+                    "per error" +
+                "</div>" +
+            "</div>" +
+            "<div>" +
+            	"<span><textarea id=\"finalText\" rows=\"8\" cols=\"64\" placeholder=\"input test here...\"></textarea></span>" +
+        	"</div>" +
+        	"<div>" +
+            	"<span><input id=\"finalSubmit\" type=\"button\"  value=\"Finished\" /></span>" +
+            "</div>" +
+        "</div>" +
+        "<div id=\"result\"></div>" +
+        "<div id=\"jsonR\"></div>",
 			'methods': 
 			[
 				{
