@@ -130,16 +130,15 @@ switch($POST_GET['action']) {
 		$return_json .= "\"scores\":".json_encode(getScoreTable()).", \"grade\":".json_encode($grade)."";
 	break;
 	case "start":
-		vstart();
-		$return_json .= "\"welcome\":".json_encode(startup($les_text)).", \"time\":".json_encode($timeLimit)."";
-	break;
-	case "create":
 		global $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints;
 		$les_text = $_POST['text'];
 		$timeLimit = $_POST['timeLimit'];
 		$errorPenalty=$_POST['expectedWPM'];
 		$goalWPM=$_POST['expectedWPM'];
 		$percentPoints=$_POST['errorType'];
+		vstart();
+		$return_json .= "\"welcome\":".json_encode(startup($les_text)).", \"time\":".json_encode($timeLimit)."";
+	break;
 	default:
 	break;
 }

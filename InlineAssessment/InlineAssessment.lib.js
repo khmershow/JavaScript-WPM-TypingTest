@@ -1,5 +1,15 @@
 var inlineAssessmentIdCounter = 0;
+var teacherStudent = "Teacher";
+/*function teacherCheck(){
+	if(????????????????????????????){
+	teacherStudent = "Teacher";	
+	}
+}*/
+
 function InlineAssessment(elementArg) {
+	var text_area;
+	var startCount=0;
+	var doneCount = 0;
 	//	static for class
 	this.allTypes = {		//all the available types. Each one needs to have the same formatting, even if it is null ,e.g., 'methods': [NULL], so the coding can be consistent
 		'wpm_test': {
@@ -7,7 +17,7 @@ function InlineAssessment(elementArg) {
 				"	<br />\n" +
 				"	<div id=\"inputText\" style=\"position:static; width:823px; height:166px;\">\n" +
 				"	<textarea id=\"area1\"  onkeydown=\"return disableCtrlKeyCombination(event);\" onKeyUp=\"return disableCtrlKeyCombination(event);\"  style=\"font-family:Arial, Helvetica, sans-serif;\" readonly rows=\"10\" cols=\"133\"></textarea>"	+
-				"    	<div id=\"textCorrection\" style=\"position:relative ; z-index:999; top:-175px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
+				"    	<div id=\"textCorrection\" style=\"position:relative ; z-index:999; top:-168px;left:0px; width:inherit; height:inherit; background:white; overflow:auto; border:thin; border-style:solid; border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
 				"		</div>" +
 				"    </div>" +
 				"   <br /> " + 
@@ -97,8 +107,177 @@ function InlineAssessment(elementArg) {
 					'name': "startClick",
 					'type': "click",
 					'id': "vStart",
-					'handler': function() {
-						alert("this works");
+					'handler':function(){
+						startCount++;
+						if (startCount == 1){
+						$.post(
+							"portal.php",
+							//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
+							{action: "start", setup: "" },
+							function(data){
+								if(typeof data === "string")
+									text_area = JSON.parse(data);
+								else
+									text_area = data;
+								document.getElementById("area1").innerHTML = text_area.welcome.les_text;
+								document.getElementById("textCorrection").innerHTML = text_area.welcome.les_text;
+							},
+							"json"
+						);
+						InitTimer();
+						}
+					}
+				},
+				{
+					'name': "startClick",
+					'type': "click",
+					'id': "vStart",
+					'handler':function(){
+						var optionsChecked = false;						
+						$("#finalDiv").hide(); 		//initally hides the final input information						
+						$("#gradingOptions").hide();	//initially hides the grading options
+						$(".align-left").css("float","left");	//formats the text so it ligns up
+						$(".align-left").css("min-width","200px");
+						$("#incldueErrors").change( 		//hides and shows grading options based on whether or not the checkbox is checked
+							function(){
+								if(this.checked){
+									$("#gradingOptions").show("fast");
+									optionsChecked = true;
+								}else{
+									$("#gradingOptions").hide();
+									optionsChecked = false;
+								}
+							}
+						);
+						$("#finalRadio").change( 		// when "final" radio is chosen, the practice information is hidden and the final information is shown
+							function(){
+								if(this.checked){
+									$("#practiceDiv").hide();
+									$("#finalDiv").show();
+								}	
+							}
+						);
+						$("#practiceRadio").change( 	// when "final" radio is chosen, the practice information is hidden and the final information is shown
+							function(){
+								if(this.checked){
+									$("#finalDiv").hide();
+									$("#practiceDiv").show();
+								}	
+							}
+						);
+	//the low, mid and high WPM values need to be concesntric around the mid, for the purpose the game, so the high is calculated to avoid confusion and errors
+						$("#lowWPM").change(changeValue); 
+						$("#midWPM").change(changeValue);
+						function changeValue(){
+							var lowWPM = $("#lowWPM").val()*1;		//multiplied by 1 to convert from a string to an int
+							var midWPM = $("#midWPM").val()*1;
+							if( lowWPM != "" && midWPM != ""){
+								if(lowWPM  <=  midWPM )
+									$("#highWPM").val(2*midWPM - lowWPM); 
+							}
+						}
+						$("#practiceSubmit").click(stringToJSONPractice);	//attaching event to the submit buttons
+						$("#finalSubmit").click(finished);
+						function finished(){
+							stringToJSONFinal();
+							post(
+								"portal.php",
+								{action: "create" },
+								function(data){
+								},
+								"json"
+							);
+						}
+						function stringToJSONPractice(){					//creates a JSON string to be submitted to the portal, and then becomes a text file. Specifically for Practice as it has different inputs
+							var error = false;										//error originally set to false. If a field is not filled out properly, error will be set to true and a message will be displayed
+							var errorMessage = "These fields cannot be blank:\n";
+							var JSONString = "";
+							var lowWPM = $("#lowWPM").val();
+							var midWPM = $("#midWPM").val();
+							var title = $("#PracticeTitle").val();
+							var text = $("#practiceText").val();
+							if(lowWPM == ""){
+								errorMessage += "low WPM\n";
+								error = true;	
+							}
+							if( midWPM == ""){
+								errorMessage += "mid WPM\n";
+								error = true;	
+							}
+							if( title == ""){
+								errorMessage += "title\n";
+								error = true;	
+							}
+							if( text == ""){
+								errorMessage += "text\n";
+								error = true;	
+							}
+							if(!error){
+								//JSON string created with all the necessary information
+								JSONString = '{ "lowWPM":' + JSON.stringify(lowWPM) + ', "midWPM":' + JSON.stringify(midWPM) +', "highWPM":' + JSON.stringify($("#highWPM").val()) + ', "title":' + JSON.stringify(title) + ', "practiceNum":' + JSON.stringify($("#practiceNum").val()) + ', "text":' + JSON.stringify(text) + '}';
+								//posting to PHP portal which saves file
+								$.post(
+									"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
+									{"type":"practice", "JSONString":JSONString, "bhCourseId":window.parent.bhCourseId, "bhCourseTitle":window.parent.bhCourseTitle},
+									function(data) {
+					  					console.log(data);			//posts success or failure to console
+										$("#inputBody").html("<h2>Assesment created successsfully</h2>");
+									}
+								);
+							}else{
+								alert(errorMessage);		//creates an alert dialogue with fields needing to be filled out
+							}
+						}
+						function stringToJSONFinal(){
+							//same comments as above but adjusted for final
+							var error = false;
+							var errorMessage = "These fields cannot be blank:\n";
+							var JSONString = "";
+							var timeLimit = $("#timeLimit").val();
+							var totalPoints = $("#totalPoints").val();
+							var finalText = $("#finalText").val();
+							var expectedWPM = $("#ecpectedWPM").val();
+							var errorValue = $("#errorValue").val();
+							var errorType = $("#errorValueType").val();
+							if(timeLimit == ""){
+								errorMessage += "time limit\n";
+								error = true;	
+							}
+							if(totalPoints == ""){
+								errorMessage += "total points\n";
+								error = true;	
+							}
+							if(finalText == ""){
+								errorMessage += "text\n";
+								error = true;	
+							}
+							if(expectedWPM == ""){
+								errorMessage += "expected words per minute\n";
+								error = true;	
+							}
+							if(optionsChecked){
+								if(errorValue == ""){
+									errorMessage += "error value\n";
+									error = true;	
+								}
+							}else{
+								errorValue = null;
+								errorType = null;
+							}		
+							if(!error){
+								JSONString = '{ "timeLimit":' + JSON.stringify(timeLimit)  + ', "totalPoint":' + JSON.stringify(totalPoints) + ', "errorType":' + JSON.stringify(errorType)  + ', "expectedWPM":' + JSON.stringify(errorValue) + ', "expectedWPM":' + JSON.stringify(expectedWPM) + ', "text":' + JSON.stringify(finalText) + '}';
+								$.post(
+									"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
+									{"type":"final", "JSONString":JSONString, "bhCourseId":window.parent.bhCourseId, "bhCourseTitle":window.parent.bhCourseTitle, action:"create"},
+									function(data) {
+										console.log(data);
+										$("#inputBody").html("<h2>Assesment created successsfully</h2>");
+									}
+								);
+							}else{
+								alert(errorMessage);	
+							}
+						}
 					}
 				}
 			]
@@ -160,7 +339,11 @@ function InlineAssessment(elementArg) {
 		}
 		
 		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
+		if(teacherStudent == "Teacher"){
+			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].configurationElementString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
+		}else{
 		var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
+		}
 		
 		var DOMNodesCreate = $("<div>"+inputElementString+"</div>"); 		//wraps element string in a div
 		this.DOMNodes = DOMNodesCreate;										//adds to the proper place in the HTML page
