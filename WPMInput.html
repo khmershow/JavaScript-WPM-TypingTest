@@ -210,7 +210,7 @@
 					"bhCourseTitle":window.parent.bhCourseTitle
 				},
 				function(data) {
-  					console.log(data);			//posts success or failure to console
+  					console.log(JSONString);			//posts success or failure to console
 					$("#inputBody").html("<h2>Assesment created successsfully</h2>");
 				}
 			);
@@ -274,7 +274,7 @@
 					action:"create"
 				},
 				function(data) {
-  					console.log(data);
+  					console.log(JSONString);
 					$("#inputBody").html("<h2>Assesment created successsfully</h2>");
 				}
 			);

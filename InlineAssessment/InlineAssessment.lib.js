@@ -1,5 +1,6 @@
 var inlineAssessmentIdCounter = 0;
-var teacherStudent = "Teacher";
+//var teacherStudent = "Teacher";
+var teacherStudent = "Student";
 /*function teacherCheck(){
 	if(????????????????????????????){
 	teacherStudent = "Teacher";	
@@ -113,7 +114,7 @@ function InlineAssessment(elementArg) {
 						$.post(
 							"portal.php",
 							//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
-							{action: "start", setup: "" },
+							{action: "start", timeLimit:"120", totalPoint:"10", errorType:"percent", expectedWPM:"1", expectedWPM:"30", text:"This is the final." },
 							function(data){
 								if(typeof data === "string")
 									text_area = JSON.parse(data);
@@ -126,11 +127,49 @@ function InlineAssessment(elementArg) {
 						);
 						InitTimer();
 						}
+						var message="Sorry, right-click has been disabled"; 
+						function clickIE() {if (document.all) {(message);return false;}} 
+						function clickNS(e) {if 
+						(document.layers||(document.getElementById&&!document.all)) { 
+						if (e.which==2||e.which==3) {(message);return false;}}} 
+						if (document.layers) 
+						{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
+						else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;} 
+						document.oncontextmenu=new Function("return false");
+						function submitScores() {
+							if(initialized == true && doneClicked == true) {
+								setScore(cpm);
+								window.clearInterval(intervalVar);
+							}
+						}
+					}
+				},
+				{
+					'name': "doneClick",
+					'type': "click",
+					'id': "done",
+					'handler':function(){
+						doneCount++;
+						userInput = $('textarea#userText').val();
+						var Jstring = JSON.stringify(userInput);
+						if (doneCount == 1){
+							$.post(
+								"portal.php",
+								//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
+								{action: "done" , ui: userInput },
+								function(data){
+									table = JSON.parse(data);
+									document.getElementById("scoreTable").innerHTML = table.scores;
+									StopTimer();
+								}
+							);
+						}
+						setScore(table.grade);
 					}
 				},
 				{
 					'name': "startClick",
-					'type': "click",
+					'type': "onLoad",
 					'id': "vStart",
 					'handler':function(){
 						var optionsChecked = false;						
@@ -387,6 +426,7 @@ function InlineAssessment(elementArg) {
 				case "change":
 					inputElement.change(this.allTypes[this.type].methods[i].handler);
 				break;
+				
 				default: //click Event
 					inputElement.click(this.allTypes[this.type].methods[i].handler);
 				break;
