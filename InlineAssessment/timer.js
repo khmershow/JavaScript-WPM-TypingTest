@@ -1,10 +1,15 @@
 var mins, secs, TimerRunning=false, TimerID, TheElement;
 
  
- function InitTimer() //call the Init function when u need to start the timer
+ function InitTimer(seconds) //call the Init function when u need to start the timer
  {
-    mins=5;
-    secs=0;
+	if(seconds == 0){
+		mins=(seconds/60);
+		secs=(seconds%60);
+	}else{
+    	mins=5;
+    	secs=0;
+	}
     StopTimer();
     StartTimer();
  }
