@@ -3,7 +3,7 @@ var mins, secs, TimerRunning=false, TimerID, TheElement;
  
  function InitTimer(seconds) //call the Init function when u need to start the timer
  {
-	if(seconds == 0){
+	if(seconds != 0){
 		mins=(seconds/60);
 		secs=(seconds%60);
 	}else{
