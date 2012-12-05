@@ -1,10 +1,9 @@
 <?PHP
+session_start();
 // This file is meant to be called using Ajax from anywhere. It adds lines to a log file, so some injection attacks should be cleaned out...
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE");
 header("Access-Control-Allow-Headers: *");
-?>
-<?php 
 
 $return_json = "{\"file_lock\":";
 
@@ -29,9 +28,7 @@ $return_json = "{\"file_lock\":";
 	} else {
 		$return_json .= '{"status":"failure","message":"Error:file lock failed!"}';
 	}
-?>
-<?PHP
-session_start();
+
 $return_json .= ",";
 /*Define variables*/
 	$readonly='readonly="readonly"';

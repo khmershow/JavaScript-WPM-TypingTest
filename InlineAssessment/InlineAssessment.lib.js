@@ -122,10 +122,13 @@ function InlineAssessment(elementArg) {
 									text_area = data;
 								document.getElementById("area1").innerHTML = text_area.welcome.les_text;
 								document.getElementById("textCorrection").innerHTML = text_area.welcome.les_text;
+								var seconds =text_area.time.timeLimit; 
+								console.log(seconds);
+								InitTimer(seconds);
 							},
 							"json"
 						);
-						InitTimer();
+						
 						}
 						var message="Sorry, right-click has been disabled"; 
 						function clickIE() {if (document.all) {(message);return false;}} 
