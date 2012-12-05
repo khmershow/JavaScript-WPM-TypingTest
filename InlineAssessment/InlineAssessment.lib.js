@@ -122,8 +122,8 @@ function InlineAssessment(elementArg) {
 									text_area = data;
 								document.getElementById("area1").innerHTML = text_area.welcome.les_text;
 								document.getElementById("textCorrection").innerHTML = text_area.welcome.les_text;
-								var seconds =text_area.time.timeLimit; 
-								console.log(seconds);
+								var seconds = text_area.time; 
+								//console.log(seconds);
 								InitTimer(seconds);
 							},
 							"json"
