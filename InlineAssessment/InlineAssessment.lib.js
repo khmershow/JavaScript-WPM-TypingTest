@@ -114,7 +114,9 @@ function InlineAssessment(elementArg) {
 						$.post(
 							"portal.php",
 							//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
-							{action: "start", timeLimit:"120", totalPoint:"10", errorType:"percent", expectedWPM:"1", expectedWPM:"30", text:"This is the final." },
+							{action: "start", timeLimit:"120", totalPoint:"10", errorType:"percent", pointsOff:"1", expectedWPM:"30", text:"This is the final." },
+							//{action: "start", bhCourseID:window.parent.bhCourseId },
+							//For when the files save properly
 							function(data){
 								if(typeof data === "string")
 									text_area = JSON.parse(data);
@@ -154,7 +156,9 @@ function InlineAssessment(elementArg) {
 					'handler':function(){
 						doneCount++;
 						userInput = $('textarea#userText').val();
+						console.log(userInput);
 						var Jstring = JSON.stringify(userInput);
+						console.log(Jstring);
 						if (doneCount == 1){
 							$.post(
 								"portal.php",
@@ -309,8 +313,9 @@ function InlineAssessment(elementArg) {
 							if(!error){
 								JSONString = '{ "timeLimit":' + JSON.stringify(timeLimit)  + ', "totalPoint":' + JSON.stringify(totalPoints) + ', "errorType":' + JSON.stringify(errorType)  + ', "expectedWPM":' + JSON.stringify(errorValue) + ', "expectedWPM":' + JSON.stringify(expectedWPM) + ', "text":' + JSON.stringify(finalText) + '}';
 								$.post(
-									"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
-									{"type":"final", "JSONString":JSONString, "bhCourseId":window.parent.bhCourseId, "bhCourseTitle":window.parent.bhCourseTitle, action:"create"},
+									//"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
+									"portal.php",
+									{"type":"final", "JSONString":JSONString, /*"bhCourseId":window.parent.bhCourseId,*/"bhCourseID":"practiceClass", "bhCourseTitle":window.parent.bhCourseTitle, action:"create"},
 									function(data) {
 										console.log(data);
 										$("#inputBody").html("<h2>Assesment created successsfully</h2>");
