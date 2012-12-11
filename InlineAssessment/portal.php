@@ -5,15 +5,16 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE");
 header("Access-Control-Allow-Headers: *");
 
-
+error_reporting(E_ALL);
+ini_set('display_errors','On');
+$return_json ="{";
 function create(){
 	$return_json = "{\"file_lock\":";
 	
 		$bytes_written = 0;										//	Initialize our file write counter
 	
 		//str_replace ( mixed $search , mixed $replace , mixed $subject [, int &$count ] )
-	
-		$myFile = $_POST["type"] . str_replace(" " , "","courses.".$_POST["bhCourseId"]). ".txt";	//	Define log file
+		$myFile = $_POST["type"].str_replace(" " , "","courses.".$_POST["bhCourseId"]). ".txt";//Define log file
 		$fh = fopen($myFile, 'w');	//	Open the log for writing! (will overwrite previous information in file)
 		if(flock($fh, LOCK_EX)) {								//	Lock the file to force exclusive write
 	
@@ -45,6 +46,12 @@ function GetError($str1,$str2){
 		}
 		return $error;
 	}
+function startup($les_text){	
+	$wpmObj = new stdClass;
+	$wpmObj->les_text = $les_text;
+	return $wpmObj;
+}
+
 	/* if you hit start, timer starts and text is adjusted */
 function vstart(){
 	global $time_start, $_SESSION, $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID;
@@ -169,6 +176,9 @@ switch($POST_GET['action']) {
 		//
 		vstart();
 		$return_json .= "\"welcome\":".json_encode(startup($les_text)).", \"time\":".json_encode($timeLimit)."";
+	break;
+	case "create":
+		create();
 	break;
 	default:
 	break;
