@@ -1,11 +1,24 @@
 var inlineAssessmentIdCounter = 0;
-//var teacherStudent = "Teacher";
-var teacherStudent = "Student";
-/*function teacherCheck(){
-	if(????????????????????????????){
-	teacherStudent = "Teacher";	
-	}
-}*/
+var teacherStudent = "Teacher";
+var userID = 0;
+$.post(
+	"portal.php",
+	//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
+	{action: "start", teacherID: window.parent.bhUserId },
+	//{action: "start", bhCourseID:window.parent.bhCourseId },
+	//For when the files save properly
+	function(data){
+		if(typeof data === "string")
+			var courseInfo = JSON.parse(data);
+		else
+			var courseInfo = data;
+		userID = courseInfo.userID;
+	},
+	"json"
+);
+if(window.parent.bhUserId != userID ){
+	teacherStudent = "Student";	
+}
 
 function InlineAssessment(elementArg) {
 	var text_area;
@@ -260,7 +273,7 @@ function InlineAssessment(elementArg) {
 							}
 							if(!error){
 								//JSON string created with all the necessary information
-								JSONString = '{ "lowWPM":' + JSON.stringify(lowWPM) + ', "midWPM":' + JSON.stringify(midWPM) +', "highWPM":' + JSON.stringify($("#highWPM").val()) + ', "title":' + JSON.stringify(title) + ', "practiceNum":' + JSON.stringify($("#practiceNum").val()) + ', "text":' + JSON.stringify(text) + '}';
+								JSONString = '{ "lowWPM":' + JSON.stringify(lowWPM) + ', "midWPM":' + JSON.stringify(midWPM) +', "highWPM":' + JSON.stringify($("#highWPM").val()) + ', "title":' + JSON.stringify(title) + ', "practiceNum":' + JSON.stringify($("#practiceNum").val()) + ', "text":' + JSON.stringify(text) + ', "userID":' + JSON.stringify(window.parent.bhUserId) + '}';
 								//posting to PHP portal which saves file
 								$.post(
 									"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
@@ -311,7 +324,7 @@ function InlineAssessment(elementArg) {
 								errorType = null;
 							}		
 							if(!error){
-								JSONString = '{ "timeLimit":' + JSON.stringify(timeLimit)  + ', "totalPoint":' + JSON.stringify(totalPoints) + ', "errorType":' + JSON.stringify(errorType)  + ', "expectedWPM":' + JSON.stringify(errorValue) + ', "expectedWPM":' + JSON.stringify(expectedWPM) + ', "text":' + JSON.stringify(finalText) + '}';
+								JSONString = '{ "timeLimit":' + JSON.stringify(timeLimit)  + ', "totalPoint":' + JSON.stringify(totalPoints) + ', "errorType":' + JSON.stringify(errorType)  + ', "expectedWPM":' + JSON.stringify(errorValue) + ', "expectedWPM":' + JSON.stringify(expectedWPM) + ', "text":' + JSON.stringify(finalText) + '"userID":' + JSON.stringify(window.parent.bhUserId) + '}';
 								$.post(
 									//"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
 									"portal.php",

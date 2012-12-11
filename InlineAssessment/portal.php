@@ -46,6 +46,7 @@ function GetError($str1,$str2){
 		}
 		return $error;
 	}
+	/*Necessary for returning the json strings*/
 function startup($les_text){	
 	$wpmObj = new stdClass;
 	$wpmObj->les_text = $les_text;
@@ -57,6 +58,8 @@ function vstart(){
 	global $time_start, $_SESSION, $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID;
 		$time_start=microtime(true);
 		//$courseInfo=file_get_contents( "courses.".$bhCourseID.".txt" );
+		//$obj = json_decode($courseInfo);
+		$time_start = 
 		$_SESSION['start'] = $time_start;
 		$_SESSION['errorPenalty'] = ($errorPenalty/100);
 		$_SESSION['goalWPM'] = $goalWPM;
@@ -131,7 +134,7 @@ function getScoreTable() {
     $results .= "         <td class='td' id='accuracy'><b>".$accuracy."</b></td>";
     $results .= "   </tr>";
 	//testing only
-	$results .= "   <tr>";
+	/*$results .= "   <tr>";
     $results .= "         <td class='td'><b>Grade</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$grade."</b></td>";
     $results .= "   </tr>";
@@ -150,7 +153,7 @@ function getScoreTable() {
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>penalty</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$errorPenalty."</b></td>";
-    $results .= "   </tr>";
+    $results .= "   </tr>";*/
 	//
 	$results .= "   <td>&nbsp;</td>";
     $results .= "</table>";
