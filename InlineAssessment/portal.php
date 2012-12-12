@@ -34,6 +34,18 @@ function create(){
 	
 	$return_json .= ",";
 }
+
+function check($course){
+	global $courseID;
+	$filename = "courses.".$course.".txt";
+	if(file_exists($filename)){
+		$courseID = true;
+	}else{
+		$courseID = false;
+	}
+	
+}
+
 	/*function to determine the number of errors */
 function GetError($str1,$str2){
 		$error=0;
@@ -182,6 +194,12 @@ switch($POST_GET['action']) {
 	break;
 	case "create":
 		create();
+	break;
+	case "check":
+		global $courseID;
+		$bhCourseID = $_POST['courseID'];
+		check($bhCourseID);
+		$return_json .="\"courseID\":".json_encode($courseID)."";
 	break;
 	default:
 	break;

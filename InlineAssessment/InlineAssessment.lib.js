@@ -1,10 +1,10 @@
 var inlineAssessmentIdCounter = 0;
-var teacherStudent = "Teacher";
-var userID = 0;
+var teacherStudent = "";
+var courseID = "";
 $.post(
 	"portal.php",
 	//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
-	{action: "start", teacherID: window.parent.bhUserId },
+	{action: "check", courseID: window.parent.bhCourseId },
 	//{action: "start", bhCourseID:window.parent.bhCourseId },
 	//For when the files save properly
 	function(data){
@@ -12,12 +12,14 @@ $.post(
 			var courseInfo = JSON.parse(data);
 		else
 			var courseInfo = data;
-		userID = courseInfo.userID;
+			courseID = courseInfo.courseID;
 	},
 	"json"
 );
-if(window.parent.bhUserId != userID ){
+if(courseID == true){	
 	teacherStudent = "Student";	
+}else{
+	teacherStudent = "Teacher";
 }
 
 function InlineAssessment(elementArg) {
@@ -124,26 +126,25 @@ function InlineAssessment(elementArg) {
 					'handler':function(){
 						startCount++;
 						if (startCount == 1){
-						$.post(
-							"portal.php",
-							//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
-							{action: "start", timeLimit:"120", totalPoint:"10", errorType:"percent", pointsOff:"1", expectedWPM:"30", text:"This is the final." },
-							//{action: "start", bhCourseID:window.parent.bhCourseId },
-							//For when the files save properly
-							function(data){
-								if(typeof data === "string")
-									text_area = JSON.parse(data);
-								else
-									text_area = data;
-								document.getElementById("area1").innerHTML = text_area.welcome.les_text;
-								document.getElementById("textCorrection").innerHTML = text_area.welcome.les_text;
-								var seconds = text_area.time; 
-								//console.log(seconds);
-								InitTimer(seconds);
-							},
-							"json"
-						);
-						
+							$.post(
+								"portal.php",
+								//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
+								{action: "start", timeLimit:"120", totalPoint:"10", errorType:"percent", pointsOff:"1", expectedWPM:"30", text:"This is the final." },
+								//{action: "start", bhCourseID:window.parent.bhCourseId },
+								//For when the files save properly
+								function(data){
+									if(typeof data === "string")
+										text_area = JSON.parse(data);
+									else
+										text_area = data;
+									document.getElementById("area1").innerHTML = text_area.welcome.les_text;
+									document.getElementById("textCorrection").innerHTML = text_area.welcome.les_text;
+									var seconds = text_area.time; 
+									//console.log(seconds);
+									InitTimer(seconds);
+								},
+								"json"
+							);
 						}
 						var message="Sorry, right-click has been disabled"; 
 						function clickIE() {if (document.all) {(message);return false;}} 
@@ -151,7 +152,7 @@ function InlineAssessment(elementArg) {
 						(document.layers||(document.getElementById&&!document.all)) { 
 						if (e.which==2||e.which==3) {(message);return false;}}} 
 						if (document.layers) 
-						{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
+							{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
 						else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;} 
 						document.oncontextmenu=new Function("return false");
 						function submitScores() {
@@ -188,9 +189,9 @@ function InlineAssessment(elementArg) {
 					}
 				},
 				{
-					'name': "startClick",
-					'type': "onLoad",
-					'id': "vStart",
+					'name': "startup",
+					'type': "change",
+					'id': "practiceRadio",
 					'handler':function(){
 						var optionsChecked = false;						
 						$("#finalDiv").hide(); 		//initally hides the final input information						
@@ -339,7 +340,7 @@ function InlineAssessment(elementArg) {
 							}
 						}
 					}
-				}
+				}	
 			]
 		},
 		'simple_text': {
@@ -437,7 +438,7 @@ function InlineAssessment(elementArg) {
 		return this.element;
 	};
 	
-	this.setEvents = function(){									//this allows for the dynamic creation of events. In the types object above, you can have an array of events with their respective information
+	this.setEvents = function(){ //this allows for the dynamic creation of events. In the types object above, you can have an array of events with their respective information
 		for(var i=0;i<this.allTypes[this.type].methods.length;i++) {
 			var inputElement = $("#"+this.allTypes[this.type].methods[i].id);
 			if(typeof inputElement == 'array') {
@@ -447,7 +448,9 @@ function InlineAssessment(elementArg) {
 				case "change":
 					inputElement.change(this.allTypes[this.type].methods[i].handler);
 				break;
-				
+				case "onLoad":
+					inputElement.onload(this.allTypes[this.type].methods[i].handler);
+				break;
 				default: //click Event
 					inputElement.click(this.allTypes[this.type].methods[i].handler);
 				break;
