@@ -119,7 +119,7 @@ function InlineAssessment(elementArg) {
 						if (startCount == 1){
 							$.post(
 								"portal.php",
-								//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
+								//"https://isdev.byu.edu/is/share/BrainHoney/WPM/portal.php",
 								{action: "start", timeLimit:"120", totalPoint:"10", errorType:"percent", pointsOff:"1", expectedWPM:"30", text:"This is the final." },
 								//{action: "start", bhCourseID:window.parent.bhCourseId },
 								//For when the files save properly
