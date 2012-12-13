@@ -1,4 +1,4 @@
-<?PHP
+	<?PHP
 session_start();
 // This file is meant to be called using Ajax from anywhere. It adds lines to a log file, so some injection attacks should be cleaned out...
 header("Access-Control-Allow-Origin: *");
@@ -8,17 +8,33 @@ header("Access-Control-Allow-Headers: *");
 error_reporting(E_ALL);
 ini_set('display_errors','On');
 $return_json ="{";
-function create(){
+function create($filename){
 	$return_json = "{\"file_lock\":";
 	
 		$bytes_written = 0;										//	Initialize our file write counter
 	
 		//str_replace ( mixed $search , mixed $replace , mixed $subject [, int &$count ] )
-		$myFile = $_POST["type"].str_replace(" " , "","courses.".$_POST["bhCourseId"]). ".txt";//Define log file
+		$myFile = $filename;
+		$folders = array();
+		preg_match_all("/^(.*[\/\\\\])([^\/\\\\]+.json)$/i", $myFile, $folders);
+		//$myFile = (count($folders) > 2)?$folders[2][0]:$myFile;
+		$folders = (count($folders) > 1)?$folders[1][0]:"";
+		//print_r($folders);
+		$folders = explode("/", $folders);
+		//print_r($folders);
+		$folder_trail = "./";
+		foreach($folders as $folder) {
+			if(!is_dir($folder_trail.$folder) && $folder != "") {
+				mkdir($folder_trail.$folder);
+			}
+			$folder_trail .= $folder."/";
+		}
+		//$myFile = $_POST["type"].str_replace(" " , "","courses.".$_POST["bhCourseId"]). ".json";//Define log file
 		$fh = fopen($myFile, 'w');	//	Open the log for writing! (will overwrite previous information in file)
 		if(flock($fh, LOCK_EX)) {								//	Lock the file to force exclusive write
 	
 			$stringData = 1;									//	get the JSON string and write it to the file
+			$stringData = $_POST['JSONString'];
 			$bytes_written += fwrite($fh, $stringData);
 	
 			flock($fh, LOCK_UN); 			//	Now that we've written all the data we can unlock the file!
@@ -35,15 +51,34 @@ function create(){
 	$return_json .= ",";
 }
 
-function check($course){
-	global $courseID;
-	$filename = "courses.".$course.".txt";
+function check(){
+	global $_POST,$courseID;
+	//print_r($_POST);
+	$file_name_parts = array("itemID","domain","courseID","itemTitle","json");	//	These are the possible parts of the filename to check for
+	$filename = "courses/".$_POST['courseTitle']."/IDONTEXIST";					//	This is purely an example... this will never (and should never) exit as a valid file
+	$loopCount = 0;
+	$maxLoops = count($file_name_parts)-1;
+	while(!file_exists($filename) && $loopCount < $maxLoops) {
+		//	Loop until the file is found...
+		$filename = "courses/".$_POST['courseTitle'].((isset($_POST['courseTitle']))?"/":"");
+		foreach($file_name_parts as $part) {
+			//	Build the expected filename...
+			$filename .= ((isset($_POST[$part]))?$_POST[$part]:$part).".";
+		}
+		$filename = substr($filename, 0, strlen($filename)-1);					//	Get rid of that pesky trailing "."
+		//echo "Checking for ".$filename."\n";
+		$removed_part = array_shift($file_name_parts);							//	Remove thee first value from		 the filename
+		//echo "Removed ".$removed_part."\n";
+		$loopCount++;															//	Iterate the loop counter so that we don't get all infinite on the CPU
+	}
 	if(file_exists($filename)){
+		//echo "Found file: ".$filename."\n";
 		$courseID = true;
 	}else{
+		//echo "Did not find file: ".$filename."\n";
 		$courseID = false;
 	}
-	
+	return $filename;
 }
 
 	/*function to determine the number of errors */
@@ -193,12 +228,14 @@ switch($POST_GET['action']) {
 		$return_json .= "\"welcome\":".json_encode(startup($les_text)).", \"time\":".json_encode($timeLimit)."";
 	break;
 	case "create":
-		create();
+		$filename = check();
+		echo $filename;
+		create($filename);
 	break;
 	case "check":
 		global $courseID;
 		$bhCourseID = $_POST['courseID'];
-		check($bhCourseID);
+		check();
 		$return_json .="\"courseID\":".json_encode($courseID)."";
 	break;
 	default:

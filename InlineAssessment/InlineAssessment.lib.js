@@ -1,26 +1,17 @@
 var inlineAssessmentIdCounter = 0;
 var teacherStudent = "";
-var courseID = "";
-$.post(
-	"portal.php",
-	//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
-	{action: "check", courseID: window.parent.bhCourseId },
-	//{action: "start", bhCourseID:window.parent.bhCourseId },
-	//For when the files save properly
-	function(data){
-		if(typeof data === "string")
-			var courseInfo = JSON.parse(data);
-		else
-			var courseInfo = data;
-			courseID = courseInfo.courseID;
-	},
-	"json"
-);
-if(courseID == true){	
-	teacherStudent = "Student";	
-}else{
-	teacherStudent = "Teacher";
+var courseID = true;
+
+var bhDomain;
+if(window.parent)
+	bhDomain = window.parent.location.host;
+else
+	bhDomain = "NOTFOUND.";
+bhDomain = (bhDomain.indexOf("\.") != -1)?bhDomain.substring(0, bhDomain.indexOf("\.")):bhDomain;
+if(bhDomain == "") {
+	bhDomain = "NOTFOUND";
 }
+
 
 function InlineAssessment(elementArg) {
 	var text_area;
@@ -29,7 +20,7 @@ function InlineAssessment(elementArg) {
 	//	static for class
 	this.allTypes = {		//all the available types. Each one needs to have the same formatting, even if it is null ,e.g., 'methods': [NULL], so the coding can be consistent
 		'wpm_test': {
-			'inputElementsString': "Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
+			inputElementsString: "<form>Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
 				"	<br />\n" +
 				"	<div id=\"inputText\" style=\"position:static; width:823px; height:166px;\">\n" +
 				"	<textarea id=\"area1\"  onkeydown=\"return disableCtrlKeyCombination(event);\" onKeyUp=\"return disableCtrlKeyCombination(event);\"  style=\"font-family:Arial, Helvetica, sans-serif;\" readonly rows=\"10\" cols=\"133\"></textarea>"	+
@@ -43,10 +34,10 @@ function InlineAssessment(elementArg) {
 				"   <textarea id=\"userText\" onKeyDown=\"return disableCtrlKeyCombination(event); \" onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 				"   <br />  " +
 				"   <div id=\"scoreTable\" >" +             
-				" 	</div>",
-			'configurationElementString':"<h2 style=\"color:teal\">Test Type</h2>" +
-        		"<input type=\"radio\" name=\"testType\" checked=\"checked\" value=\"false\" id=\"practiceRadio\" /> Practice" + 	
-        		"<input type=\"radio\" name=\"testType\" value=\"true\" id=\"finalRadio\" /> Final" +
+				" 	</div></form>",
+			configurationElementString:"<form><h2 style=\"color:teal\">Test Type</h2>" +
+        		"<label for=\"practiceRadio\"><input type=\"radio\" name=\"testType\" checked=\"checked\" value=\"false\" id=\"practiceRadio\" />Practice</label>" + 	
+        		"<label for=\"finalRadio\"><input type=\"radio\" name=\"testType\" value=\"true\" id=\"finalRadio\" />Final</label>" +
         		"<div id=\"practiceDiv\">" +
             	"<h3 style=\"color:teal\">Practice Exam (Instructor Input)</h3>" + 
 	           	"<p>low and high WPM must be concentric around the midrange WPM</p>" +
@@ -116,7 +107,7 @@ function InlineAssessment(elementArg) {
             "</div>" +
         "</div>" +
         "<div id=\"result\"></div>" +
-        "<div id=\"jsonR\"></div>",
+        "<div id=\"jsonR\"></div></form>",
 			'methods': 
 			[
 				{
@@ -190,9 +181,10 @@ function InlineAssessment(elementArg) {
 				},
 				{
 					'name': "startup",
+					'fireAutomatically': true,
 					'type': "change",
 					'id': "practiceRadio",
-					'handler':function(){
+					'handler':function(e){
 						var optionsChecked = false;						
 						$("#finalDiv").hide(); 		//initally hides the final input information						
 						$("#gradingOptions").hide();	//initially hides the grading options
@@ -237,17 +229,7 @@ function InlineAssessment(elementArg) {
 							}
 						}
 						$("#practiceSubmit").click(stringToJSONPractice);	//attaching event to the submit buttons
-						$("#finalSubmit").click(finished);
-						function finished(){
-							stringToJSONFinal();
-							post(
-								"portal.php",
-								{action: "create" },
-								function(data){
-								},
-								"json"
-							);
-						}
+						$("#finalSubmit").click(stringToJSONFinal);
 						function stringToJSONPractice(){					//creates a JSON string to be submitted to the portal, and then becomes a text file. Specifically for Practice as it has different inputs
 							var error = false;										//error originally set to false. If a field is not filled out properly, error will be set to true and a message will be displayed
 							var errorMessage = "These fields cannot be blank:\n";
@@ -274,11 +256,20 @@ function InlineAssessment(elementArg) {
 							}
 							if(!error){
 								//JSON string created with all the necessary information
-								JSONString = '{ "lowWPM":' + JSON.stringify(lowWPM) + ', "midWPM":' + JSON.stringify(midWPM) +', "highWPM":' + JSON.stringify($("#highWPM").val()) + ', "title":' + JSON.stringify(title) + ', "practiceNum":' + JSON.stringify($("#practiceNum").val()) + ', "text":' + JSON.stringify(text) + ', "userID":' + JSON.stringify(window.parent.bhUserId) + '}';
+								jsonString = "" +
+									'{ ' + 
+										'lowWPM":' +	JSON.stringify(lowWPM) + ', ' +
+										'"midWPM":' + JSON.stringify(midWPM) +', ' +
+										'"highWPM":' + JSON.stringify($("#highWPM").val()) + ', ' +
+										'"title":' + JSON.stringify(title) + ', ' + 
+										'"practiceNum":' + JSON.stringify($("#practiceNum").val()) + ', ' +
+										'"text":' + JSON.stringify(text) + ', ' +
+										'"userID":' + JSON.stringify(window.parent.bhUserId) +
+									'}';
 								//posting to PHP portal which saves file
 								$.post(
 									"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
-									{"type":"practice", "JSONString":JSONString, "bhCourseId":window.parent.bhCourseId, "bhCourseTitle":window.parent.bhCourseTitle},
+									{"type":"practice", "JSONString":jsonString, "bhCourseId":window.parent.bhCourseId, "bhCourseTitle":window.parent.bhCourseTitle},
 									function(data) {
 					  					console.log(data);			//posts success or failure to console
 										$("#inputBody").html("<h2>Assesment created successsfully</h2>");
@@ -325,11 +316,31 @@ function InlineAssessment(elementArg) {
 								errorType = null;
 							}		
 							if(!error){
-								JSONString = '{ "timeLimit":' + JSON.stringify(timeLimit)  + ', "totalPoint":' + JSON.stringify(totalPoints) + ', "errorType":' + JSON.stringify(errorType)  + ', "expectedWPM":' + JSON.stringify(errorValue) + ', "expectedWPM":' + JSON.stringify(expectedWPM) + ', "text":' + JSON.stringify(finalText) + '"userID":' + JSON.stringify(window.parent.bhUserId) + '}';
+									jsonString = '{ ' +
+										'"timeLimit":' + JSON.stringify(timeLimit)  + ', ' +
+										'"totalPoint":' + JSON.stringify(totalPoints) + ', ' +
+										'"errorType":' + JSON.stringify(errorType)  + ', ' +
+										'"errorValue":' + JSON.stringify(errorValue) + ', ' +
+										'"expectedWPM":' + JSON.stringify(expectedWPM) + ', ' +
+										'"text":' + JSON.stringify(finalText) + ', ' +
+										'"userID":' + JSON.stringify(window.parent.bhUserId) +
+									'}';
+								var postVars = {
+									"type":"final",
+									"JSONString":jsonString, /*"bhCourseId":window.parent.bhCourseId,*/
+									"bhCourseID":"practiceClass",
+									action:"create",
+									domain: bhDomain,
+									courseTitle: (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
+									courseID: (window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
+									itemID: (window.parent.bhItemId)?window.parent.bhItemId:"NOTIEMID",
+									itemTitle: (window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE"
+								};
+								console.log(postVars);
 								$.post(
 									//"https://isdev.byu.edu/is/dev/David/wpmFinal/portal.php",
 									"portal.php",
-									{"type":"final", "JSONString":JSONString, /*"bhCourseId":window.parent.bhCourseId,*/"bhCourseID":"practiceClass", "bhCourseTitle":window.parent.bhCourseTitle, action:"create"},
+									postVars,
 									function(data) {
 										console.log(data);
 										$("#inputBody").html("<h2>Assesment created successsfully</h2>");
@@ -440,16 +451,17 @@ function InlineAssessment(elementArg) {
 	
 	this.setEvents = function(){ //this allows for the dynamic creation of events. In the types object above, you can have an array of events with their respective information
 		for(var i=0;i<this.allTypes[this.type].methods.length;i++) {
+			if(this.allTypes[this.type].methods[i].fireAutomatically === true) {
+				this.allTypes[this.type].methods[i].handler();
+			}
 			var inputElement = $("#"+this.allTypes[this.type].methods[i].id);
 			if(typeof inputElement == 'array') {
 				inputElement = inputElement[0];
 			}
-			switch(this.allTypes[this.type].methods[i].type) {	///only two types of events are included but more can be added. "Click" event is default
+			switch(this.allTypes[this.type].methods[i].type) {	///only two types of events are included but more can be added. "Click" event is default. 
+			//Onload has already been run.
 				case "change":
 					inputElement.change(this.allTypes[this.type].methods[i].handler);
-				break;
-				case "onLoad":
-					inputElement.onload(this.allTypes[this.type].methods[i].handler);
 				break;
 				default: //click Event
 					inputElement.click(this.allTypes[this.type].methods[i].handler);
@@ -479,9 +491,46 @@ InlineAssessment.prototype.getElement = function() { return this.element; };
 
 var assessmentElements;
 
-$(document).ready(function(){								//this is the main part of the function. It creates an array of inline assesments. As it creates the array, it formats them each properly. This means we can have multiple inline assesment tags on a single page
-	assessmentElements = $("INLINE_ASSESSMENT");
-	for(var a=0; a < assessmentElements.length; a++) {
-		assessmentElements[a] = new InlineAssessment(assessmentElements[a]);
-	}
-});
+$.post(
+	"portal.php",
+	//"https://isdev.byu.edu/is/share/BrainHoney/portal.php",
+	{
+		action: "check",
+		domain: bhDomain,
+		courseTitle: (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
+		courseID: (window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
+		itemID: (window.parent.bhItemId)?window.parent.bhItemId:"NOTIEMID",
+		itemTitle: (window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE"
+	},
+	//{action: "start", bhCourseID:window.parent.bhCourseId },
+	//For when the files save properly
+	function(data){
+		console.log(data);
+		if(typeof data === "string") {
+			var courseInfo = JSON.parse(data);
+		} else {
+			var courseInfo = data;
+		}
+		console.log(courseInfo);
+		courseID = courseInfo.courseID;
+		if(courseID === true){
+			teacherStudent = "Student";	
+		}else{
+			teacherStudent = "Teacher";
+		}
+		if(! $.isReady ) {
+			$(document).ready(function(){								//this is the main part of the function. It creates an array of inline assesments. As it creates the array, it formats them each properly. This means we can have multiple inline assesment tags on a single page
+				assessmentElements = $("INLINE_ASSESSMENT");
+				for(var a=0; a < assessmentElements.length; a++) {
+					assessmentElements[a] = new InlineAssessment(assessmentElements[a]);
+				}
+			});
+		} else {
+			assessmentElements = $("INLINE_ASSESSMENT");
+			for(var a=0; a < assessmentElements.length; a++) {
+				assessmentElements[a] = new InlineAssessment(assessmentElements[a]);
+			}
+		}
+	},
+	"json"
+);
